@@ -22,4 +22,7 @@ export class ClientInstance {
 
   @Property({ type: 'datetime', onUpdate: () => new Date() })
   updatedAt!: Date
+
+  @Property({ nullable: true, type: 'datetime' })
+  deletedAt!: Date
 }

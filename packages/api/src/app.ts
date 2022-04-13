@@ -67,7 +67,9 @@ function createRouter({ producer }: ApplicationContext) {
     '/client',
     withErrorWrapper(async (req: Request, res: Response) => {
       const em = RequestContext.getEntityManager()!
-      const list = await em.find(ClientInstance, {})
+      const list = await em.find(ClientInstance, {
+        deletedAt: null,
+      })
 
       res.json(list)
     })
@@ -79,9 +81,7 @@ function createRouter({ producer }: ApplicationContext) {
       const em = RequestContext.getEntityManager()!
       const client = new ClientInstance()
 
-      em.persist(client)
-
-      await em.flush()
+      await em.persistAndFlush(client)
       await publishClientAction('start', client)
       await publishEmailNotification('user@email.net')
 
@@ -95,9 +95,12 @@ function createRouter({ producer }: ApplicationContext) {
       const em = RequestContext.getEntityManager()!
       const client = await em.findOneOrFail(ClientInstance, {
         uuid: req.params.uuid,
+        deletedAt: null,
       })
 
-      await em.removeAndFlush(client)
+      client.deletedAt = new Date()
+
+      await em.persistAndFlush(client)
       await publishClientAction('delete', client)
 
       res.send('OK')
