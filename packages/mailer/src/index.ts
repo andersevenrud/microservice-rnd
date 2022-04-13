@@ -66,6 +66,7 @@ async function main() {
 
           switch (topic) {
             case 'mailNotification':
+              logger.info('Sending email notification...')
               await sendMail(transporter, msg)
               break
           }

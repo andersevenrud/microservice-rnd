@@ -27,7 +27,13 @@ async function main() {
     await producer.connect()
     await orm.connect()
 
-    const app = await createApplication({ consumer, producer, orm, logger })
+    const { app, subscribe } = await createApplication({
+      consumer,
+      producer,
+      orm,
+      logger,
+    })
+
     const server = app.listen(8080)
     const terminator = createHttpTerminator({ server })
 
@@ -44,6 +50,9 @@ async function main() {
     process.once('SIGUSR2', shutdown)
     process.once('SIGINT', shutdown)
     process.once('SIGTERM', shutdown)
+
+    // NOTE: Start late because this blocks the bootstrapping
+    await subscribe()
   } catch (e) {
     console.error(e)
     process.exit(1)

@@ -1,3 +1,4 @@
+import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
 import { Consumer, Producer, CompressionTypes } from 'kafkajs'
 import { Logger } from 'winston'
@@ -130,7 +131,9 @@ function createRouter({ producer }: ApplicationContext) {
 }
 
 function createExpress(ctx: ApplicationContext) {
-  const app = express()
+  const app = express() as unknown as expressWs.Application
+  const ews = expressWs(app)
+  const wss = ews.getWss()
   const router = createRouter(ctx)
 
   app.use(express.json())
@@ -138,6 +141,8 @@ function createExpress(ctx: ApplicationContext) {
   app.use((_, __, next) => {
     RequestContext.create(ctx.orm.em, next)
   })
+
+  app.ws('/logs', (ws, req) => {})
 
   app.use(router)
 
@@ -155,10 +160,28 @@ function createExpress(ctx: ApplicationContext) {
     }
   )
 
-  return app
+  return { app, wss }
 }
 
 export async function createApplication(ctx: ApplicationContext) {
-  const app = createExpress(ctx)
-  return app
+  const { app, wss } = createExpress(ctx)
+
+  const broadcast = (data: Buffer) =>
+    Array.from(wss.clients)
+      .filter((client) => client.readyState === 1)
+      .forEach((client) => client.send(data, { binary: true }))
+
+  const subscribe = async () => {
+    await ctx.consumer.subscribe({ topic: 'logs' })
+
+    await ctx.consumer.run({
+      eachMessage: async ({ message: { value } }) => {
+        if (value) {
+          broadcast(value)
+        }
+      },
+    })
+  }
+
+  return { app, subscribe }
 }

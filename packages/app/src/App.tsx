@@ -1,7 +1,9 @@
+import ReconnectingWebSocket from 'reconnecting-websocket'
 import { parse, formatDistance } from 'date-fns'
 import React, {
   useState,
   useEffect,
+  useRef,
   PropsWithChildren,
   ButtonHTMLAttributes,
 } from 'react'
@@ -64,6 +66,7 @@ const Button = ({
 )
 
 export default function App() {
+  const textbox = useRef<HTMLTextAreaElement | null>(null)
   const [list, setList] = useState<ClientInstance[]>([])
 
   const load = () => fetchClients().then((result) => setList(result))
@@ -75,12 +78,36 @@ export default function App() {
   const onClientAction = (client: ClientInstance, action: string) =>
     performClientAction(client.uuid, action)
 
+  const processMessage = async (data: Blob) => {
+    const str = await new Response(data).text()
+    const { level, message, ...extra } = JSON.parse(str)
+
+    if (textbox.current) {
+      const msg = `[${level}] ${message} ${JSON.stringify(extra)}\n`
+      textbox.current.value = msg + textbox.current.value
+    }
+  }
+
   useEffect(() => {
-    const interval = setInterval(() => load(), 1000)
+    const interval = setInterval(() => load(), 1000 * 100)
     load()
 
     return () => {
       clearInterval(interval)
+    }
+  }, [])
+
+  useEffect(() => {
+    const ws = new ReconnectingWebSocket(
+      window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
+    )
+
+    ws.addEventListener('message', (event) => {
+      processMessage(event.data)
+    })
+
+    return () => {
+      ws.close()
     }
   }, [])
 
@@ -164,6 +191,13 @@ export default function App() {
           ))}
         </tbody>
       </table>
+
+      <div>
+        <textarea
+          ref={textbox}
+          className="block w-full bg-black text-white p-2 h-96"
+        ></textarea>
+      </div>
     </div>
   )
 }

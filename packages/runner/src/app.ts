@@ -33,6 +33,7 @@ export async function createApplication({
     clients.map(async (client) => {
       try {
         logger.info('Trying to resume instance', { uuid: client.uuid })
+
         await updateState(client, 'starting')
         await manager.start(client.uuid)
       } catch (e) {
