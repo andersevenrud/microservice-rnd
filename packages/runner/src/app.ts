@@ -25,7 +25,10 @@ export async function createApplication({
     await em.persistAndFlush(client)
   }
 
-  const clients = await orm.em.fork().find(ClientInstance, {})
+  const clients = await orm.em.fork().find(ClientInstance, {
+    deletedAt: null,
+  })
+
   await Promise.all(
     clients.map(async (client) => {
       try {
