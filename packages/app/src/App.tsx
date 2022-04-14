@@ -89,7 +89,7 @@ export default function App() {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => load(), 1000 * 100)
+    const interval = setInterval(() => load(), 1000)
     load()
 
     return () => {
