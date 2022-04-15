@@ -1,4 +1,5 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import { throttle } from 'lodash-es'
 import { parse, formatDistance } from 'date-fns'
 import React, {
   useState,
@@ -69,33 +70,39 @@ export default function App() {
   const textbox = useRef<HTMLTextAreaElement | null>(null)
   const [list, setList] = useState<ClientInstance[]>([])
 
-  const load = () => fetchClients().then((result) => setList(result))
+  const load = throttle(
+    () => fetchClients().then((result) => setList(result)),
+    500
+  )
 
-  const onCreateClient = () => createClient()
+  const onCreateClient = () => createClient().then(() => load())
 
-  const onDeleteClient = (client: ClientInstance) => deleteClient(client.uuid)
+  const onDeleteClient = (client: ClientInstance) =>
+    deleteClient(client.uuid).then(() => load())
 
   const onClientAction = (client: ClientInstance, action: string) =>
-    performClientAction(client.uuid, action)
+    performClientAction(client.uuid, action).then(() => load())
 
-  const processMessage = async (data: Blob) => {
-    const str = await new Response(data).text()
-    const { level, message, meta } = JSON.parse(str)
+  const processMessage = (raw: string) => {
+    const { topic, timestamp, data } = JSON.parse(raw)
 
-    if (textbox.current) {
-      const msg = `[${level}] ${message} ${JSON.stringify(meta)}\n`
-      textbox.current.value = msg + textbox.current.value
+    switch (topic) {
+      case 'clientAction':
+      case 'clientMessage':
+        load()
+        break
+
+      case 'logs':
+        if (textbox.current) {
+          const { level, message, meta } = data
+          const msg = `[${level}] ${timestamp} - ${message} - ${JSON.stringify(
+            meta
+          )}\n`
+          textbox.current.value = msg + textbox.current.value
+        }
+        break
     }
   }
-
-  useEffect(() => {
-    const interval = setInterval(() => load(), 1000)
-    load()
-
-    return () => {
-      clearInterval(interval)
-    }
-  }, [])
 
   useEffect(() => {
     const ws = new ReconnectingWebSocket(
@@ -105,6 +112,8 @@ export default function App() {
     ws.addEventListener('message', (event) => {
       processMessage(event.data)
     })
+
+    load()
 
     return () => {
       ws.close()
