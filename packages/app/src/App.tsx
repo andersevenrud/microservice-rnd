@@ -90,8 +90,8 @@ function Logs() {
             </div>
             <div className="pt-4 space-y-2">
               <div className="mb-4">{data.message}</div>
-              <div className="p-2 text-sm bg-gray-100 text-gray-500">
-                <pre>{JSON.stringify(data.meta)}</pre>
+              <div className="p-4 text-sm bg-gray-100 text-gray-500 overflow-auto">
+                <pre>{JSON.stringify(data.meta, null, 4)}</pre>
               </div>
             </div>
           </div>
