@@ -14,12 +14,14 @@ class KafkaTransport extends Transport {
 
   async log(info: any, callback: (error?: Error) => void) {
     try {
+      const { level, message, ...meta } = info
+
       await this.producer.send({
         topic: 'logs',
         compression: CompressionTypes.GZIP,
         messages: [
           {
-            value: JSON.stringify(info),
+            value: JSON.stringify({ level, message, meta }),
             headers: {
               service: this.name,
             },

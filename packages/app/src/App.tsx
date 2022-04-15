@@ -80,10 +80,10 @@ export default function App() {
 
   const processMessage = async (data: Blob) => {
     const str = await new Response(data).text()
-    const { level, message, ...extra } = JSON.parse(str)
+    const { level, message, meta } = JSON.parse(str)
 
     if (textbox.current) {
-      const msg = `[${level}] ${message} ${JSON.stringify(extra)}\n`
+      const msg = `[${level}] ${message} ${JSON.stringify(meta)}\n`
       textbox.current.value = msg + textbox.current.value
     }
   }
