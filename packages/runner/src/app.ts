@@ -12,59 +12,24 @@ interface ApplicationContext {
   logger: Logger
 }
 
-export async function createApplication({
-  logger,
-  manager,
-  consumer,
-  orm,
-}: ApplicationContext) {
-  const updateState = async (client: ClientInstance, state: string) => {
+const stateUpdater =
+  (orm: MikroORM) => async (client: ClientInstance, state: string) => {
     const em = orm.em.fork()
     client.lastActiveAt = new Date()
     client.state = state
     await em.persistAndFlush(client)
   }
 
-  const clients = await orm.em.fork().find(ClientInstance, {
-    deletedAt: null,
-  })
-
-  await Promise.all(
-    clients.map(async (client) => {
-      try {
-        logger.info('Trying to resume instance', { uuid: client.uuid })
-
-        await updateState(client, 'starting')
-        await manager.start(client.uuid)
-      } catch (e) {
-        const { message, stack } = e as Error
-        logger.error(message, { client, stack })
-      }
-    })
-  )
+async function createConsumer({
+  consumer,
+  logger,
+  orm,
+  manager,
+}: ApplicationContext) {
+  const updateState = stateUpdater(orm)
 
   await consumer.subscribe({ topic: 'clientAction' })
   await consumer.subscribe({ topic: 'clientMessage' })
-
-  const interval = setInterval(async () => {
-    try {
-      const em = orm.em.fork()
-      const list = await manager.list()
-      const clients = await em.find(ClientInstance, {})
-      const online = list
-        .filter((item: any) => item.pm2_env?.status === 'online')
-        .map((item: any) => item.name.split(':')[1])
-
-      for (const client of clients) {
-        client.online = online.includes(client.uuid)
-        em.persist(client)
-      }
-
-      await em.flush()
-    } catch (e) {
-      console.error(e)
-    }
-  }, 2500)
 
   await consumer.run({
     eachMessage: async ({ topic, message }) => {
@@ -134,6 +99,55 @@ export async function createApplication({
       }
     },
   })
+}
+
+async function resumeClients({ orm, logger, manager }: ApplicationContext) {
+  const updateState = stateUpdater(orm)
+
+  const clients = await orm.em.fork().find(ClientInstance, {
+    deletedAt: null,
+  })
+
+  await Promise.all(
+    clients.map(async (client) => {
+      try {
+        logger.info('Trying to resume instance', { uuid: client.uuid })
+
+        await updateState(client, 'starting')
+        await manager.start(client.uuid)
+      } catch (e) {
+        const { message, stack } = e as Error
+        logger.error(message, { client, stack })
+      }
+    })
+  )
+}
+
+async function checkClientHealth({ orm, manager }: ApplicationContext) {
+  try {
+    const em = orm.em.fork()
+    const list = await manager.list()
+    const clients = await em.find(ClientInstance, {})
+    const online = list
+      .filter((item: any) => item.pm2_env?.status === 'online')
+      .map((item: any) => item.name.split(':')[1])
+
+    for (const client of clients) {
+      client.online = online.includes(client.uuid)
+      em.persist(client)
+    }
+
+    await em.flush()
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export async function createApplication(ctx: ApplicationContext) {
+  const interval = setInterval(() => checkClientHealth(ctx), 2500)
+
+  await resumeClients(ctx)
+  await createConsumer(ctx)
 
   return async () => {
     clearInterval(interval)
