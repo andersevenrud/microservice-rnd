@@ -3,6 +3,7 @@ import { capitalize } from 'lodash-es'
 import { parse, formatDistance } from 'date-fns'
 import React, {
   useEffect,
+  useState,
   PropsWithChildren,
   ButtonHTMLAttributes,
 } from 'react'
@@ -45,7 +46,7 @@ const Heading = ({ children }: PropsWithChildren<any>) => (
 
 const StatusIndicator = ({ status }: { status: string }) => (
   <div
-    title={status ? 'online' : 'offline'}
+    title={capitalize(status)}
     className={classNames('w-4 h-4 rounded-full', statusClassNames[status])}
   ></div>
 )
@@ -101,8 +102,11 @@ function Logs() {
   )
 }
 
-function List() {
-  const { list, load } = useGlobalProvider()
+function ListBox({ item }: { item: ClientInstance }) {
+  const [expanded, setExpanded] = useState(false)
+  const { load } = useGlobalProvider()
+
+  const onToggle = () => setExpanded(!expanded)
 
   const onDeleteClient = (client: ClientInstance) =>
     deleteClient(client.uuid).then(() => load())
@@ -111,75 +115,122 @@ function List() {
     performClientAction(client.uuid, action).then(() => load())
 
   return (
-    <div className="grid md:grid-cols-2 gap-4">
+    <Box>
+      <div className="border-b border-gray-200 pb-4">
+        <div
+          className="flex items-center space-x-2 text-lg text-gray-800 cursor-pointer"
+          onClick={onToggle}
+        >
+          <div className="flex items-center text-gray-500 text-xs">
+            <i
+              className={classNames(
+                'fa',
+                `fa-chevron-${expanded ? 'up' : 'down'}`
+              )}
+            />
+          </div>
+          <div className="flex-grow">
+            <span>{item.uuid}</span>
+          </div>
+          <div>
+            <StatusIndicator status={item.online ? 'success' : 'error'} />
+          </div>
+        </div>
+
+        {expanded && (
+          <div className="text-sm text-gray-500 space-y-2 mt-4">
+            <div>
+              Active <Timestamp date={item.lastActiveAt} />
+            </div>
+            <div>
+              Created <Timestamp date={item.createdAt} />
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div className="flex items-center space-x-4 pt-4">
+        <div>{capitalize(item.state)}</div>
+        <div className="flex flex-grow space-x-2 justify-end">
+          <Button
+            title="Start"
+            disabled={[
+              'starting',
+              'started',
+              'restarting',
+              'stopping',
+            ].includes(item.state)}
+            onClick={() => onClientAction(item, 'start')}
+          >
+            <i className="fa fa-play" />
+          </Button>
+          <Button
+            title="Stop"
+            disabled={['stopping', 'stopped'].includes(item.state)}
+            onClick={() => onClientAction(item, 'stop')}
+          >
+            <i className="fa fa-stop" />
+          </Button>
+          <Button
+            title="Restart"
+            disabled={[
+              'stopping',
+              'restarting',
+              'starting',
+              'stopped',
+            ].includes(item.state)}
+            onClick={() => onClientAction(item, 'restart')}
+          >
+            <i className="fa fa-rotate-right" />
+          </Button>
+          <Button
+            title="Delete"
+            disabled={!['started', 'stopped'].includes(item.state)}
+            className="bg-red-400 text-white"
+            onClick={() => onDeleteClient(item)}
+          >
+            <i className="fa fa-ban" />
+          </Button>
+        </div>
+      </div>
+    </Box>
+  )
+}
+
+function List() {
+  const { list } = useGlobalProvider()
+
+  return (
+    <div className="grid md:grid-cols-2 gap-4 items-baseline">
       {list.map((item) => (
-        <Box key={item.id}>
-          <div className="border-b border-gray-200 pb-4">
-            <div className="flex items-center text-lg text-gray-800">
-              <div className="flex-grow">
-                <span>{item.uuid}</span>
-              </div>
-              <div>
-                <StatusIndicator status={item.online ? 'success' : 'error'} />
-              </div>
-            </div>
-
-            <div className="text-sm text-gray-500 leading-6">
-              <div>
-                Active <Timestamp date={item.lastActiveAt} />
-              </div>
-              <div>
-                Created <Timestamp date={item.createdAt} />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-4 pt-4">
-            <div>{capitalize(item.state)}</div>
-            <div className="flex flex-grow space-x-2 justify-end">
-              <Button
-                title="Start"
-                disabled={[
-                  'starting',
-                  'started',
-                  'restarting',
-                  'stopping',
-                ].includes(item.state)}
-                onClick={() => onClientAction(item, 'start')}
-              >
-                <i className="fa fa-play" />
-              </Button>
-              <Button
-                title="Stop"
-                disabled={['stopping', 'stopped'].includes(item.state)}
-                onClick={() => onClientAction(item, 'stop')}
-              >
-                <i className="fa fa-stop" />
-              </Button>
-              <Button
-                title="Restart"
-                disabled={[
-                  'stopping',
-                  'restarting',
-                  'starting',
-                  'stopped',
-                ].includes(item.state)}
-                onClick={() => onClientAction(item, 'restart')}
-              >
-                <i className="fa fa-rotate-right" />
-              </Button>
-              <Button
-                title="Delete"
-                disabled={!['started', 'stopped'].includes(item.state)}
-                className="bg-red-400 text-white"
-                onClick={() => onDeleteClient(item)}
-              >
-                <i className="fa fa-ban" />
-              </Button>
-            </div>
-          </div>
-        </Box>
+        <ListBox key={item.uuid} item={item} />
       ))}
+    </div>
+  )
+}
+
+function Actions() {
+  const { load } = useGlobalProvider()
+
+  const onCreateClient = () => createClient().then(() => load())
+
+  const onReload = () => load()
+
+  return (
+    <div className="flex justify-end">
+      <div className="space-x-4">
+        <Button className="bg-white" onClick={onReload}>
+          <i className="fa fa-rotate-right" />
+          <span>Reload</span>
+        </Button>
+        <Button
+          className="text-white bg-blue-500 font-bold"
+          onClick={onCreateClient}
+        >
+          <i className="fa fa-plus" />
+          <span>Create</span>
+        </Button>
+      </div>
     </div>
   )
 }
@@ -187,10 +238,8 @@ function List() {
 function Page() {
   const { load, addLog } = useGlobalProvider()
 
-  const onCreateClient = () => createClient().then(() => load())
-
-  const processMessage = (raw: string) => {
-    const data = JSON.parse(raw)
+  const onMessage = (event: MessageEvent<any>) => {
+    const data = JSON.parse(event.data)
 
     if (['clientAction', 'clientMessage'].includes(data.topic)) {
       load()
@@ -204,39 +253,22 @@ function Page() {
       window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
     )
 
-    ws.addEventListener('message', (event) => {
-      processMessage(event.data)
-    })
+    ws.addEventListener('message', onMessage)
 
     load()
 
     return () => {
+      ws.removeEventListener('message', onMessage)
       ws.close()
     }
   }, [])
 
   return (
-    <div className="p-2 space-y-4">
-      <div className="flex items-center">
-        <div className="flex-grow">
-          <Heading>Clients</Heading>
-        </div>
-
-        <div>
-          <Button
-            className="text-white bg-blue-500 font-bold"
-            onClick={onCreateClient}
-          >
-            <i className="fa fa-plus" />
-            <span>Create new client</span>
-          </Button>
-        </div>
-      </div>
-
+    <div className="space-y-4">
+      <Actions />
+      <Heading>Clients</Heading>
       <List />
-
       <Heading>Latest logs</Heading>
-
       <Logs />
     </div>
   )
@@ -246,8 +278,22 @@ export default function App() {
   return (
     <GlobalProvider>
       <div className="bg-gray-100 max-w-screen min-h-screen">
-        <div className="py-8 max-w-7xl mx-auto">
+        <div className="sticky top-0 left-0 right-0 bg-white p-4 border-b border-gray-200 shadow-sm">
+          <h1 className="text-xl">Kafkaesque</h1>
+        </div>
+
+        <div className="py-8 max-w-7xl mx-auto px-2 7xl:px-0">
           <Page />
+        </div>
+
+        <div className="text-gray-400 text-xs text-center p-8">
+          <a
+            href="https://github.com/andersevenrud/rnd-microservice-arch"
+            target="_blank"
+            rel="noreferrer"
+          >
+            A research project by Anders Evenrud
+          </a>
         </div>
       </div>
     </GlobalProvider>
