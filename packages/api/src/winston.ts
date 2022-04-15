@@ -1,6 +1,6 @@
 import winston from 'winston'
 import Transport from 'winston-transport'
-import { Producer } from 'kafkajs'
+import { Producer, CompressionTypes } from 'kafkajs'
 
 class KafkaTransport extends Transport {
   private readonly producer: Producer
@@ -14,6 +14,7 @@ class KafkaTransport extends Transport {
     try {
       await this.producer.send({
         topic: 'logs',
+        compression: CompressionTypes.GZIP,
         messages: [
           {
             value: JSON.stringify(info),
