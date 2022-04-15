@@ -1,0 +1,12 @@
+{
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "private": true,
+  "workspaces": [
+    "packages/api",
+    "packages/app",
+    "packages/mailer",
+    "packages/runner"
+  ]
+}

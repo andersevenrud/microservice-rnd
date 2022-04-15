@@ -6,7 +6,7 @@ on:
   pull_request:
 jobs:
   lint:
-    name: Lint
+    name: Lint all packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,27 +15,8 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-          cache: 'npm'
-      - name: lint:api
-        working-directory: ./packages/runner
-        run: |
-          npm ci --silent --no-audit --no-fund
-          npm run lint
-      - name: lint:app
-        working-directory: ./packages/runner
-        run: |
-          npm ci --silent --no-audit --no-fund
-          npm run lint
-      - name: lint:mailer
-        working-directory: ./packages/runner
-        run: |
-          npm ci --silent --no-audit --no-fund
-          npm run lint
-      - name: lint:runner
-        working-directory: ./packages/runner
-        run: |
-          npm ci --silent --no-audit --no-fund
-          npm run lint
+      - run: yarn install
+      - run: yarn workspaces run lint
   commit:
     name: Conventional Commits check
     runs-on: ubuntu-latest
