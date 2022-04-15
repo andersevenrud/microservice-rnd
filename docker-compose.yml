@@ -69,7 +69,6 @@ services:
     command: ./entrypoint.sh
     working_dir: /usr/src/mailer
     depends_on:
-      - db
       - kafka
       - mailhog
     volumes:
