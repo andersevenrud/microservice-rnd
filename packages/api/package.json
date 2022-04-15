@@ -6,7 +6,8 @@
   "scripts": {
     "migrate": "ts-node scripts/migrate.ts",
     "topics": "ts-node scripts/topics.ts",
-    "start": "nodemon -e js,ts,tsx --watch src src/index.ts",
+    "dev": "nodemon -e js,ts,tsx --watch src src/index.ts",
+    "start": "ts-node src/index.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",

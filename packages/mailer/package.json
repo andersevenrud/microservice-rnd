@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "start": "nodemon -e js,ts,tsx --watch src src/index.ts",
+    "dev": "nodemon -e js,ts,tsx --watch src src/index.ts",
+    "start": "ts-node src/index.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
