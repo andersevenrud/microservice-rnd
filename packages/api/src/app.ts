@@ -166,18 +166,27 @@ function createExpress(ctx: ApplicationContext) {
 export async function createApplication(ctx: ApplicationContext) {
   const { app, wss } = createExpress(ctx)
 
-  const broadcast = (data: Buffer) =>
+  const broadcast = (data: string) =>
     Array.from(wss.clients)
       .filter((client) => client.readyState === 1)
-      .forEach((client) => client.send(data, { binary: true }))
+      .forEach((client) => client.send(data))
 
   const subscribe = async () => {
     await ctx.consumer.subscribe({ topic: 'logs' })
+    await ctx.consumer.subscribe({ topic: 'clientAction' })
+    await ctx.consumer.subscribe({ topic: 'clientMessage' })
 
     await ctx.consumer.run({
-      eachMessage: async ({ message: { value } }) => {
+      eachMessage: async ({ topic, message: { timestamp, value } }) => {
         if (value) {
-          broadcast(value)
+          const data = JSON.parse(value.toString())
+          broadcast(
+            JSON.stringify({
+              topic,
+              timestamp,
+              data,
+            })
+          )
         }
       },
     })
