@@ -1,23 +1,23 @@
-version: '2'
+version: "2"
 
 services:
   db:
     image: mariadb
     environment:
-      MARIADB_ROOT_PASSWORD: db
-      MARIADB_DATABASE: db
-      MARIADB_USER: db
-      MARIADB_PASSWORD: db
+      - MARIADB_ROOT_PASSWORD=db
+      - MARIADB_DATABASE=db
+      - MARIADB_USER=db
+      - MARIADB_PASSWORD=db
     volumes:
       - db-data:/var/lib/mysql
   zookeeper:
-    image: 'bitnami/zookeeper:latest'
+    image: bitnami/zookeeper:latest
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
       - zookeeper-data:/bitnami/zookeeper
   kafka:
-    image: 'bitnami/kafka:latest'
+    image: bitnami/kafka:latest
     environment:
       - KAFKA_BROKER_ID=1
       - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
@@ -35,13 +35,13 @@ services:
     logging:
       driver: none
   adminer:
-    image: 'adminer'
+    image: adminer
     environment:
       - ADMINER_DEFAULT_SERVER=db
     depends_on:
       - db
   kowl:
-    image: 'quay.io/cloudhut/kowl:master'
+    image: quay.io/cloudhut/kowl:master
     environment:
       - KAFKA_BROKERS=kafka:9092
     depends_on:
@@ -51,47 +51,47 @@ services:
     command: ./entrypoint.sh
     working_dir: /usr/src/runner
     user: node
+    volumes:
+      - ./packages/runner:/usr/src/runner
     depends_on:
       - db
       - kafka
-    volumes:
-      - ./packages/runner:/usr/src/runner
   cli:
     image: node:16-alpine
     working_dir: /usr/src/api
+    volumes:
+      - ./packages/api:/usr/src/api
     depends_on:
       - db
       - kafka
-    volumes:
-      - ./packages/api:/usr/src/api
   mailer:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/mailer
+    volumes:
+      - ./packages/mailer:/usr/src/mailer
     depends_on:
       - kafka
       - mailhog
-    volumes:
-      - ./packages/mailer:/usr/src/mailer
   api:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/api
+    volumes:
+      - ./packages/api:/usr/src/api
     depends_on:
       - db
       - kafka
-    volumes:
-      - ./packages/api:/usr/src/api
   app:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/app
+    volumes:
+      - ./packages/app:/usr/src/app
     depends_on:
       - db
       - kafka
       - runner
-    volumes:
-      - ./packages/app:/usr/src/app
   nginx:
     image: nginx:alpine
     ports:
