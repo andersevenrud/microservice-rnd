@@ -45,16 +45,17 @@ services:
     depends_on:
       - kafka
   runner:
-    image: node:14-alpine
+    image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/runner
+    user: node
     depends_on:
       - db
       - kafka
     volumes:
       - ./packages/runner:/usr/src/runner
   cli:
-    image: node:14-alpine
+    image: node:16-alpine
     working_dir: /usr/src/api
     depends_on:
       - db
@@ -62,7 +63,7 @@ services:
     volumes:
       - ./packages/api:/usr/src/api
   mailer:
-    image: node:14-alpine
+    image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/mailer
     depends_on:
@@ -72,7 +73,7 @@ services:
     volumes:
       - ./packages/mailer:/usr/src/mailer
   api:
-    image: node:14-alpine
+    image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/api
     depends_on:
@@ -81,7 +82,7 @@ services:
     volumes:
       - ./packages/api:/usr/src/api
   app:
-    image: node:14-alpine
+    image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/app
     depends_on:
