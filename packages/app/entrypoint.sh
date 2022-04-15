@@ -1,4 +1,4 @@
 #/!bin/sh
 
-npm install --silent --no-audit --no-fund
+npm ci --silent --no-audit --no-fund
 exec npm run dev
