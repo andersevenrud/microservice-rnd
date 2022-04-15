@@ -14,6 +14,8 @@ services:
     image: 'bitnami/zookeeper:latest'
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper-data:/bitnami/zookeeper
   kafka:
     image: 'bitnami/kafka:latest'
     environment:
@@ -107,3 +109,4 @@ services:
 volumes:
   kafka-data:
   db-data:
+  zookeeper-data:
