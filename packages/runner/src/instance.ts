@@ -1,14 +1,15 @@
 import minimist from 'minimist'
 import { Kafka, CompressionTypes } from 'kafkajs'
 import { createWinston } from './winston'
+import config from './config'
 
 async function main() {
   try {
     const { uuid } = minimist(process.argv.slice(2))
 
     const kafka = new Kafka({
-      clientId: 'kafka',
-      brokers: ['kafka:9092'],
+      ...config.kafka,
+      clientId: 'instance',
     })
 
     const producer = kafka.producer()
