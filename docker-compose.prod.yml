@@ -50,26 +50,49 @@ services:
     build:
       context: ./packages/runner
     user: node
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       - db
       - kafka
   cli:
     image: node:16-alpine
-    working_dir: /usr/src/api
+    working_dir: /usr/src/cli
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     volumes:
-      - ./packages/api:/usr/src/api
+      - ./packages/api:/usr/src/cli
     depends_on:
       - db
       - kafka
   mailer:
     build:
       context: ./packages/mailer
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+      - APP_URL=http://localhost:8080/
+      - MAILER_HOST=mailhog
+      - MAILER_PORT=1025
     depends_on:
       - kafka
       - mailhog
   api:
     build:
       context: ./packages/api
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     depends_on:
       - db
       - kafka

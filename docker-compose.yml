@@ -51,6 +51,12 @@ services:
     command: ./entrypoint.sh
     working_dir: /usr/src/runner
     user: node
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     volumes:
       - ./packages/runner:/usr/src/runner
     depends_on:
@@ -58,9 +64,15 @@ services:
       - kafka
   cli:
     image: node:16-alpine
-    working_dir: /usr/src/api
+    working_dir: /usr/src/cli
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     volumes:
-      - ./packages/api:/usr/src/api
+      - ./packages/api:/usr/src/cli
     depends_on:
       - db
       - kafka
@@ -68,6 +80,11 @@ services:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/mailer
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+      - APP_URL=http://localhost:8080/
+      - MAILER_HOST=mailhog
+      - MAILER_PORT=1025
     volumes:
       - ./packages/mailer:/usr/src/mailer
     depends_on:
@@ -77,6 +94,12 @@ services:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/api
+    environment:
+      - DB_HOSTNAME=db
+      - DB_NAME=db
+      - DB_USERNAME=db
+      - DB_PASSWORD=db
+      - KAFKA_BROKERS=kafka:9092
     volumes:
       - ./packages/api:/usr/src/api
     depends_on:

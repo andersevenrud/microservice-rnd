@@ -1,23 +1,18 @@
 import waitOn from 'wait-on'
-import { Kafka, RetryOptions } from 'kafkajs'
+import { Kafka } from 'kafkajs'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { MikroORM } from '@mikro-orm/core'
 import { createWinston } from './winston'
 import { createApplication } from './app'
 import { PM2Manager } from './manager'
 import mikroConfig from '../mikro-orm.config'
+import config from './config'
 
 async function main() {
   try {
-    await waitOn({
-      resources: ['tcp:kafka:9092', 'tcp:db:3306'],
-    })
+    await waitOn(config.waitOn)
 
-    const kafka = new Kafka({
-      clientId: 'runner',
-      brokers: ['kafka:9092'],
-    })
-
+    const kafka = new Kafka(config.kafka)
     const manager = new PM2Manager()
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()

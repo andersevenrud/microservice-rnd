@@ -6,17 +6,13 @@ import { createHttpTerminator } from 'http-terminator'
 import { createWinston } from './winston'
 import { createApplication } from './app'
 import mikroConfig from '../mikro-orm.config'
+import config from './config'
 
 async function main() {
   try {
-    await waitOn({
-      resources: ['tcp:kafka:9092', 'tcp:db:3306'],
-    })
+    await waitOn(config.waitOn)
 
-    const kafka = new Kafka({
-      clientId: 'api',
-      brokers: ['kafka:9092'],
-    })
+    const kafka = new Kafka(config.kafka)
 
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()

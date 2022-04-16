@@ -1,14 +1,12 @@
 import { Options } from '@mikro-orm/core'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { ClientInstance } from './src/entities'
+import config from './src/config'
 
-const config: Options<MariaDbDriver> = {
+const cfg: Options<MariaDbDriver> = {
   entities: [ClientInstance],
   type: 'mariadb',
-  dbName: 'db',
-  host: 'db',
-  user: 'db',
-  password: 'db',
+  ...config.db,
 }
 
-export default config
+export default cfg

@@ -12,6 +12,7 @@ import {
   MjmlButton,
   MjmlImage,
 } from 'mjml-react'
+import config from './config'
 
 export interface MessageContext {
   html: string
@@ -53,7 +54,7 @@ export const createWelcomeMessage = () =>
             <MjmlButton
               padding="20px"
               backgroundColor="#346DB7"
-              href="http://localhost:8080/"
+              href={config.appUrl}
             >
               View my instance
             </MjmlButton>

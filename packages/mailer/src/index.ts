@@ -4,6 +4,7 @@ import { Kafka } from 'kafkajs'
 import { createWinston } from './winston'
 import { MessageContext } from './messages'
 import * as mail from './messages'
+import config from './config'
 
 interface MailNotification {
   to: string
@@ -20,7 +21,7 @@ async function sendMail(
 ) {
   if (messageTemplates[template]) {
     const { subject, html, text } = messageTemplates[template]()
-    const from = 'no-reply@mailer.app'
+    const from = config.from
 
     await transporter.sendMail({
       from,
@@ -36,21 +37,10 @@ async function sendMail(
 
 async function main() {
   try {
-    await waitOn({
-      resources: ['tcp:kafka:9092', 'tcp:mailhog:1025'],
-    })
+    await waitOn(config.waitOn)
 
-    const kafka = new Kafka({
-      clientId: 'runner',
-      brokers: ['kafka:9092'],
-    })
-
-    const transporter = nodemailer.createTransport({
-      host: 'mailhog',
-      port: 1025,
-      secure: false,
-    })
-
+    const kafka = new Kafka(config.kafka)
+    const transporter = nodemailer.createTransport(config.mailer)
     const producer = kafka.producer()
     const consumer = kafka.consumer({ groupId: 'mailer' })
     const logger = createWinston('mailer', producer)
