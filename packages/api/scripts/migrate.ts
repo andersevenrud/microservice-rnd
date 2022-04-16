@@ -3,12 +3,14 @@ import { MikroORM } from '@mikro-orm/core'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import mikroConfig from '../mikro-orm.config'
 
+const dbHost = process.env.DB_HOST || 'db'
+
 const createMikro = () => MikroORM.init<MariaDbDriver>(mikroConfig)
 
 async function main() {
   try {
     await waitOn({
-      resources: ['tcp:db:3306'],
+      resources: [`tcp:${dbHost}:3306`],
     })
 
     const orm = await createMikro()
