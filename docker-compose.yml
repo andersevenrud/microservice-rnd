@@ -72,7 +72,7 @@ services:
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
     volumes:
-      - ./packages/api:/usr/src/cli
+      - ./packages/cli:/usr/src/cli
     depends_on:
       - db
       - kafka

@@ -7,6 +7,7 @@
     "packages/api",
     "packages/app",
     "packages/mailer",
-    "packages/runner"
+    "packages/runner",
+    "packages/cli"
   ]
 }

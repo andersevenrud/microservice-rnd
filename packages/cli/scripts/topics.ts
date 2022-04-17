@@ -1,18 +1,15 @@
 import waitOn from 'wait-on'
 import { Kafka } from 'kafkajs'
-
-const brokers = (process.env.KAFKA_BROKERS || '').split(',')
+import config from '../src/config'
 
 async function main() {
   try {
     await waitOn({
-      resources: [...brokers.map((s) => `tcp:${s}`)],
+      resources: config.kafka.brokers.map((str) => `tcp:${str}`),
+      log: true,
     })
 
-    const kafka = new Kafka({
-      clientId: 'cli',
-      brokers,
-    })
+    const kafka = new Kafka(config.kafka)
 
     const admin = kafka.admin()
 
