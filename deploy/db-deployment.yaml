@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    backend: db
+  name: db
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      backend: db-pod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        backend: db-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: db
+          image: mariadb
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MARIADB_DATABASE
+              value: db
+            - name: MARIADB_PASSWORD
+              value: db
+            - name: MARIADB_ROOT_PASSWORD
+              value: db
+            - name: MARIADB_USER
+              value: db
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db-data
+      volumes:
+        - name: db-data
+          persistentVolumeClaim:
+            claimName: db-data

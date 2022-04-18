@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    admin: mailhog
+  name: mailhog
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      admin: mailhog-pod
+  template:
+    metadata:
+      labels:
+        admin: mailhog-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: mailhog
+          image: mailhog/mailhog
+          ports:
+            - name: smtp
+              containerPort: 1025
+            - name: http
+              containerPort: 8025

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app
+  name: app
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-pod
+  template:
+    metadata:
+      labels:
+        app: app-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: app
+          image: microservice-rnd-app

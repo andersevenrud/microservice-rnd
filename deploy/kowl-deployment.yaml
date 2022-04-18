@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    admin: kowl
+  name: kowl
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      admin: kowl-pod
+  template:
+    metadata:
+      labels:
+        admin: kowl-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: kowl
+          image: quay.io/cloudhut/kowl:master
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KAFKA_BROKERS
+              value: kafka:9092

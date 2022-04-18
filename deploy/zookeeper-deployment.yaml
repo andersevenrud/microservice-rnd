@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    backend: zookeeper
+  name: zookeeper
+  namespace: rnd
+spec:
+  serviceName: zookeeper
+  replicas: 1
+  selector:
+    matchLabels:
+      backend: zookeeper-pod
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        backend: zookeeper-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: zookeeper
+          image: bitnami/zookeeper:latest
+          ports:
+          - containerPort: 2181
+            name: client
+          - containerPort: 2888
+            name: peer
+          - containerPort: 3888
+            name: leader-election
+          env:
+            - name: ALLOW_ANONYMOUS_LOGIN
+              value: "yes"
+          volumeMounts:
+            - mountPath: /bitnami/zookeeper
+              name: zookeeper-data
+      volumes:
+        - name: zookeeper-data
+          persistentVolumeClaim:
+            claimName: zookeeper-data
