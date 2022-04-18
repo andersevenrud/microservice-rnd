@@ -11,6 +11,7 @@ export default {
       // NOTE: This is purely for development purposes.
       `tcp:${mailerHost}:${mailerPort}`,
     ],
+    log: true,
   },
   kafka: {
     clientId: 'mailer',

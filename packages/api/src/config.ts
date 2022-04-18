@@ -4,6 +4,7 @@ const brokers = (process.env.KAFKA_BROKERS || '').split(',')
 export default {
   waitOn: {
     resources: [...brokers.map((s) => `tcp:${s}`), `tcp:${dbHost}:3306`],
+    log: true,
   },
 
   kafka: {
