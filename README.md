@@ -14,6 +14,10 @@ Includes a process runner service over PM2 to demonstrate launching of sub-proce
 
 ## Installation
 
+### Docker Compose
+
+> Runs on http://localhost:8080
+
 ```bash
 # Run migrations
 docker-compose run --rm cli npm run migrate
@@ -23,9 +27,20 @@ docker-compose run --rm cli npm run topics
 docker-compose up
 ```
 
-## Usage
+### Kubernetes
 
-Runs on port `8080`.
+> Runs on http://rnd.lvh.me
+
+```bash
+minikube start
+minikube addons enable ingress
+kubectl config set-context --current --namespace=rnd
+tilt up
+```
+
+Open the interface and click the migration buttons in the top navigation bar.
+
+## Usage
 
 > Note the trailing slash must be used to avoid redirects.
 

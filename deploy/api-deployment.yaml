@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api
+  name: api
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-pod
+  template:
+    metadata:
+      labels:
+        app: api-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: api
+          image: microservice-rnd-api
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOSTNAME
+              value: db
+            - name: DB_NAME
+              value: db
+            - name: DB_PASSWORD
+              value: db
+            - name: DB_USERNAME
+              value: db
+            - name: KAFKA_BROKERS
+              value: kafka:9092

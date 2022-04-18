@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    admin: adminer
+  name: adminer
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      admin: adminer-pod
+  template:
+    metadata:
+      labels:
+        admin: adminer-pod
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: adminer
+          image: adminer
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ADMINER_DEFAULT_SERVER
+              value: db
