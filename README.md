@@ -18,12 +18,16 @@ Includes a process runner service over PM2 to demonstrate launching of sub-proce
 
 > Runs on http://localhost:8080
 
+First run migrations:
+
 ```bash
-# Run migrations
 docker-compose run --rm cli npm run migrate
 docker-compose run --rm cli npm run topics
+```
 
-# Start solutions
+Then start up solution:
+
+```bash
 docker-compose up
 ```
 
@@ -31,14 +35,22 @@ docker-compose up
 
 > Runs on http://rnd.lvh.me
 
+Requires the following minikube setup:
+
 ```bash
 minikube start
 minikube addons enable ingress
+```
+
+Then switch kubernetes context and start up solution:
+
+```bash
 kubectl config set-context --current --namespace=rnd
 tilt up
 ```
 
-Open the interface and click the migration buttons in the top navigation bar.
+Open the interface and click the migration buttons in the top navigation bar
+in order to make apps being able to connect to certain services.
 
 ## Usage
 
