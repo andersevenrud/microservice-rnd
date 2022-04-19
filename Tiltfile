@@ -36,7 +36,6 @@ k8s_yaml([
   'deploy/mailhog-deployment.yaml',
   'deploy/mailhog-service.yaml',
 
-  'deploy/zookeeper-pvc.yaml',
   'deploy/zookeeper-deployment.yaml',
   'deploy/zookeeper-service.yaml',
 
@@ -44,7 +43,6 @@ k8s_yaml([
   'deploy/db-deployment.yaml',
   'deploy/db-service.yaml',
 
-  'deploy/kafka-pvc.yaml',
   'deploy/kafka-deployment.yaml',
   'deploy/kafka-service.yaml',
 
