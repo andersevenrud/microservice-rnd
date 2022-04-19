@@ -18,6 +18,7 @@ async function main() {
     const producer = kafka.producer()
     const consumer = kafka.consumer({
       groupId: 'runner',
+      allowAutoTopicCreation: false,
     })
     const logger = createWinston('runner', producer)
 

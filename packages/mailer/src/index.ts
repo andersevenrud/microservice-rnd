@@ -42,7 +42,11 @@ async function main() {
     const kafka = new Kafka(config.kafka)
     const transporter = nodemailer.createTransport(config.mailer)
     const producer = kafka.producer()
-    const consumer = kafka.consumer({ groupId: 'mailer' })
+    const consumer = kafka.consumer({
+      groupId: 'mailer',
+      allowAutoTopicCreation: false,
+    })
+
     const logger = createWinston('mailer', producer)
 
     await producer.connect()

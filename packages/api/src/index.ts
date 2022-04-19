@@ -16,7 +16,11 @@ async function main() {
 
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()
-    const consumer = kafka.consumer({ groupId: 'api' })
+    const consumer = kafka.consumer({
+      groupId: 'api',
+      allowAutoTopicCreation: false,
+    })
+
     const logger = createWinston(producer)
 
     await consumer.connect()
