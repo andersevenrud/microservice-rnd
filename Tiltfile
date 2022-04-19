@@ -21,6 +21,7 @@ k8s_yaml([
   'deploy/mailer-deployment.yaml',
   'deploy/runner-deployment.yaml',
 
+  'deploy/app-hpa.yaml',
   'deploy/app-deployment.yaml',
   'deploy/app-service.yaml',
 
