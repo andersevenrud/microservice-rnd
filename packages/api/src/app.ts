@@ -1,6 +1,6 @@
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
-import { Consumer, Producer, CompressionTypes } from 'kafkajs'
+import { Kafka, Producer, CompressionTypes } from 'kafkajs'
 import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
 import { RequestContext } from '@mikro-orm/core'
@@ -9,8 +9,8 @@ import { ClientInstance } from './entities'
 export interface ApplicationContext {
   logger: Logger
   producer: Producer
-  consumer: Consumer
   orm: MikroORM
+  kafka: Kafka
 }
 
 class ExpressError extends Error {
@@ -164,6 +164,7 @@ function createExpress(ctx: ApplicationContext) {
 }
 
 export async function createApplication(ctx: ApplicationContext) {
+  const { kafka } = ctx
   const { app, wss } = createExpress(ctx)
 
   const broadcast = (data: string) =>
@@ -171,11 +172,17 @@ export async function createApplication(ctx: ApplicationContext) {
       .filter((client) => client.readyState === 1)
       .forEach((client) => client.send(data))
 
-  const subscribe = async () => {
-    await ctx.consumer.subscribe({ topic: 'logs' })
-    await ctx.consumer.subscribe({ topic: 'clientState' })
+  const consumer = kafka.consumer({
+    groupId: `api-logging-proxy-${process.env.HOSTNAME}`,
+    allowAutoTopicCreation: false,
+  })
 
-    await ctx.consumer.run({
+  const subscribe = async () => {
+    await consumer.connect()
+    await consumer.subscribe({ topic: 'logs' })
+    await consumer.subscribe({ topic: 'clientState' })
+
+    await consumer.run({
       eachMessage: async ({ topic, message: { timestamp, value } }) => {
         if (value) {
           const data = JSON.parse(value.toString())
@@ -191,5 +198,5 @@ export async function createApplication(ctx: ApplicationContext) {
     })
   }
 
-  return { app, subscribe }
+  return { app, subscribe, consumer }
 }

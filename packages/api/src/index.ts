@@ -16,22 +16,17 @@ async function main() {
 
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()
-    const consumer = kafka.consumer({
-      groupId: 'api',
-      allowAutoTopicCreation: false,
-    })
 
     const logger = createWinston(producer)
 
-    await consumer.connect()
     await producer.connect()
     await orm.connect()
 
-    const { app, subscribe } = await createApplication({
-      consumer,
+    const { app, subscribe, consumer } = await createApplication({
       producer,
       orm,
       logger,
+      kafka,
     })
 
     const server = app.listen(8080)
@@ -44,6 +39,7 @@ async function main() {
 
       await terminator.terminate()
       await producer.disconnect()
+      await consumer.disconnect()
       await orm.close()
     }
 
