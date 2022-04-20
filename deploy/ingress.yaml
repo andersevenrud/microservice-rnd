@@ -5,7 +5,13 @@ metadata:
   namespace: rnd
   labels:
     www: ingress
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
 spec:
+  tls:
+  - hosts:
+    - rnd.lvh.me
+    secretName: selfsigned-root-secret
   rules:
   - host: rnd.lvh.me
     http:
@@ -15,13 +21,6 @@ spec:
         backend:
           service:
             name: app
-            port:
-              number: 8080
-      - path: /adminer
-        pathType: Prefix
-        backend:
-          service:
-            name: adminer
             port:
               number: 8080
 ---
@@ -34,11 +33,23 @@ metadata:
     www: ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
 spec:
+  tls:
+  - hosts:
+    - rnd.lvh.me
+    secretName: selfsigned-root-secret
   rules:
   - host: rnd.lvh.me
     http:
       paths:
+      - path: /adminer(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: adminer
+            port:
+              number: 8080
       - path: /api(/|$)(.*)
         pathType: Prefix
         backend:

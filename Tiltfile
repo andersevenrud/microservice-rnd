@@ -1,5 +1,6 @@
 load('ext://uibutton', 'cmd_button', 'bool_input', 'location')
 load('ext://current_namespace', 'current_namespace')
+load('ext://cert_manager', 'deploy_cert_manager')
 
 namespace = current_namespace()
 if not namespace:
@@ -13,6 +14,8 @@ docker_build('microservice-rnd-app', 'packages/app')
 docker_build('microservice-rnd-api', 'packages/api')
 docker_build('microservice-rnd-mailer', 'packages/mailer')
 docker_build('microservice-rnd-runner', 'packages/runner')
+
+deploy_cert_manager()
 
 k8s_yaml([
   'deploy/namespace.yaml',
@@ -47,6 +50,7 @@ k8s_yaml([
   'deploy/kafka-deployment.yaml',
   'deploy/kafka-service.yaml',
 
+  'deploy/cert-selfsigned.yaml',
   'deploy/ingress.yaml'
 ])
 
