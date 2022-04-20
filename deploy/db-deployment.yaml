@@ -20,7 +20,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: db
-          image: mariadb
+          image: mariadb:10.8
           ports:
             - containerPort: 3306
           env:

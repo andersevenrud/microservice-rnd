@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: zookeeper
-          image: bitnami/zookeeper:latest
+          image: bitnami/zookeeper:3.8.0
           ports:
           - containerPort: 2181
             name: client

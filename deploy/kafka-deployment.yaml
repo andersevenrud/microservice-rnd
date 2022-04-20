@@ -21,7 +21,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: kafka
-          image: bitnami/kafka:latest
+          image: bitnami/kafka:3.0.1
           ports:
             - name: internal
               containerPort: 9092

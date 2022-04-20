@@ -18,7 +18,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: mailhog
-          image: mailhog/mailhog
+          image: mailhog/mailhog:v1.0.1
           ports:
             - name: smtp
               containerPort: 1025
