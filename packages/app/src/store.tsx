@@ -51,7 +51,8 @@ export const GlobalProvider = ({ children }: PropsWithChildren<any>) => {
 
   const load = throttle(
     () => fetchClients().then((result) => setList(result)),
-    500
+    500,
+    { leading: false, trailing: true }
   )
 
   return (

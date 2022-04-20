@@ -241,7 +241,7 @@ function Page() {
   const onMessage = (event: MessageEvent<any>) => {
     const data = JSON.parse(event.data)
 
-    if (['clientAction', 'clientMessage'].includes(data.topic)) {
+    if (['clientState'].includes(data.topic)) {
       load()
     } else {
       addLog(data)

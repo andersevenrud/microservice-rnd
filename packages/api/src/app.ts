@@ -173,8 +173,7 @@ export async function createApplication(ctx: ApplicationContext) {
 
   const subscribe = async () => {
     await ctx.consumer.subscribe({ topic: 'logs' })
-    await ctx.consumer.subscribe({ topic: 'clientAction' })
-    await ctx.consumer.subscribe({ topic: 'clientMessage' })
+    await ctx.consumer.subscribe({ topic: 'clientState' })
 
     await ctx.consumer.run({
       eachMessage: async ({ topic, message: { timestamp, value } }) => {

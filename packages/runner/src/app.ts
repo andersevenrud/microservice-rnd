@@ -1,6 +1,6 @@
 import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
-import { Producer, Consumer } from 'kafkajs'
+import { Producer, Consumer, CompressionTypes } from 'kafkajs'
 import { ClientInstance } from './entities'
 import { PM2Manager } from './manager'
 
@@ -13,20 +13,33 @@ interface ApplicationContext {
 }
 
 const stateUpdater =
-  (orm: MikroORM) => async (client: ClientInstance, state: string) => {
+  ({ orm, producer }: ApplicationContext) =>
+  async (client: ClientInstance, state: string) => {
+    const oldState = client.state
     const em = orm.em.fork()
     client.lastActiveAt = new Date()
     client.state = state
     await em.persistAndFlush(client)
+
+    if (oldState !== state) {
+      await producer.send({
+        topic: 'clientState',
+        compression: CompressionTypes.GZIP,
+        messages: [
+          {
+            value: JSON.stringify({
+              state,
+              args: { uuid: client.uuid },
+            }),
+          },
+        ],
+      })
+    }
   }
 
-async function createConsumer({
-  consumer,
-  logger,
-  orm,
-  manager,
-}: ApplicationContext) {
-  const updateState = stateUpdater(orm)
+async function createConsumer(ctx: ApplicationContext) {
+  const { consumer, logger, orm, manager } = ctx
+  const updateState = stateUpdater(ctx)
 
   await consumer.subscribe({ topic: 'clientAction' })
   await consumer.subscribe({ topic: 'clientMessage' })
@@ -101,8 +114,9 @@ async function createConsumer({
   })
 }
 
-async function resumeClients({ orm, logger, manager }: ApplicationContext) {
-  const updateState = stateUpdater(orm)
+async function resumeClients(ctx: ApplicationContext) {
+  const { orm, logger, manager } = ctx
+  const updateState = stateUpdater(ctx)
 
   const clients = await orm.em.fork().find(ClientInstance, {
     deletedAt: null,
@@ -123,7 +137,11 @@ async function resumeClients({ orm, logger, manager }: ApplicationContext) {
   )
 }
 
-async function checkClientHealth({ orm, manager }: ApplicationContext) {
+async function checkClientHealth({
+  orm,
+  producer,
+  manager,
+}: ApplicationContext) {
   try {
     const em = orm.em.fork()
     const list = await manager.list()
@@ -132,12 +150,28 @@ async function checkClientHealth({ orm, manager }: ApplicationContext) {
       .filter((item: any) => item.pm2_env?.status === 'online')
       .map((item: any) => item.name.split(':')[1])
 
+    const messages = []
     for (const client of clients) {
-      client.online = online.includes(client.uuid)
+      const isOnline = online.includes(client.uuid)
+      if (client.online !== isOnline) {
+        messages.push({
+          value: JSON.stringify({
+            online: isOnline,
+            args: { uuid: client.uuid },
+          }),
+        })
+      }
+      client.online = isOnline
       em.persist(client)
     }
 
     await em.flush()
+
+    await producer.send({
+      topic: 'clientState',
+      compression: CompressionTypes.GZIP,
+      messages,
+    })
   } catch (e) {
     console.error(e)
   }

@@ -18,6 +18,15 @@ async function main() {
     await admin.createTopics({
       topics: [
         {
+          topic: 'clientState',
+          configEntries: [
+            {
+              name: 'retention.ms',
+              value: '604800000',
+            },
+          ],
+        },
+        {
           topic: 'clientAction',
           configEntries: [
             {
