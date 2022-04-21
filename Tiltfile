@@ -77,6 +77,12 @@ k8s_resource(new_name = 'cert', objects = [
   'selfsigned-ca',
   'selfsigned-issuer',
 ], labels = 'www')
+k8s_resource(new_name = 'pv', objects = [
+  'db-data:persistentvolumeclaim',
+], labels = 'storage')
+k8s_resource(new_name = 'scale', objects = [
+  'app:horizontalpodautoscaler',
+], labels = 'www')
 
 pod_exec_script = '''
 set -eu
