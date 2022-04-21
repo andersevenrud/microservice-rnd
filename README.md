@@ -47,14 +47,10 @@ docker-compose up
 
 > HTTPs is available via a self-signed certificate.
 
-Requires the following minikube setup:
+Requires the following minikube addons to be set up:
 
-```bash
-minikube start
-minikube addons enable ingress
-```
-
-Then switch kubernetes context and start up solution:
+* [`ingress`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/)
+* [`ingress-dns`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/)
 
 ```bash
 kubectl config set-context --current --namespace=rnd
