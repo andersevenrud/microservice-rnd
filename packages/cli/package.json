@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "migrate": "ts-node scripts/migrate.ts",
-    "topics": "ts-node scripts/topics.ts",
-    "cleanup": "ts-node scripts/cleanup.ts",
     "dev": "nodemon -e js,ts,tsx --watch src --watch scripts src/cron.ts",
-    "cron": "ts-node src/cron.ts",
+    "migrate": "ts-node --transpile-only scripts/migrate.ts",
+    "topics": "ts-node --transpile-only scripts/topics.ts",
+    "cleanup": "ts-node --transpile-only scripts/cleanup.ts",
+    "start": "ts-node --transpile-only src/cron.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
