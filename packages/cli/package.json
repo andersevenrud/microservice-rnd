@@ -7,7 +7,8 @@
     "migrate": "ts-node scripts/migrate.ts",
     "topics": "ts-node scripts/topics.ts",
     "cleanup": "ts-node scripts/cleanup.ts",
-    "cron": "nodemon -e js,ts,tsx --watch src --watch scripts src/cron.ts",
+    "dev": "nodemon -e js,ts,tsx --watch src --watch scripts src/cron.ts",
+    "cron": "ts-node src/cron.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",

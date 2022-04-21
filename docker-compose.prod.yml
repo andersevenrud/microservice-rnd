@@ -62,7 +62,9 @@ services:
   cli:
     build:
       context: ./packages/cli
-    command: ./entrypoint.sh
+    command:
+      - ./entrypoint.sh
+      - prod
     environment:
       - DB_HOSTNAME=db
       - DB_NAME=db
