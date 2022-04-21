@@ -12,6 +12,16 @@ Includes a process runner service over PM2 to demonstrate launching of sub-proce
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
+## Requirements
+
+One of the following configurations:
+
+1. Local [Docker Compose](#docker-compose)
+    * `docker-compose`
+2. Local [Kubernetes Cluster](#kubernetes)
+    * `minikube`
+    * [`tilt`](https://tilt.dev/)
+
 ## Installation
 
 ### Docker Compose
