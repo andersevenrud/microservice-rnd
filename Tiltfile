@@ -65,6 +65,18 @@ k8s_resource(workload = 'kowl', labels = 'admin')
 k8s_resource(workload = 'db', labels = 'backend')
 k8s_resource(workload = 'kafka', labels = 'backend')
 k8s_resource(workload = 'zookeeper', labels = 'backend')
+k8s_resource(new_name = 'ingress', objects = [
+  'ingress-root',
+  'ingress-api',
+  'ingress-adminer',
+  'ingress-mailhog',
+  'ingress-kowl'
+], labels = 'www')
+k8s_resource(new_name = 'cert', objects = [
+  'selfsigned-cluster-issuer',
+  'selfsigned-ca',
+  'selfsigned-issuer',
+], labels = 'www')
 
 pod_exec_script = '''
 set -eu
