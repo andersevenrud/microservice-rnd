@@ -33,7 +33,9 @@ docker-compose up
 
 ### Kubernetes
 
-> Runs on http://rnd.lvh.me (and `/<admin-service>.rnd.lvh.me`)
+> Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`)
+
+> HTTPs is available via a self-signed certificate.
 
 Requires the following minikube setup:
 
