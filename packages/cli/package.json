@@ -6,6 +6,8 @@
   "scripts": {
     "migrate": "ts-node scripts/migrate.ts",
     "topics": "ts-node scripts/topics.ts",
+    "cleanup": "ts-node scripts/cleanup.ts",
+    "cron": "nodemon -e js,ts,tsx --watch src --watch scripts src/cron.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
@@ -16,12 +18,14 @@
     "@mikro-orm/mariadb": "^5.1.1",
     "@mikro-orm/migrations": "^5.1.2",
     "kafkajs": "^1.16.0",
+    "node-cron": "^3.0.0",
     "ts-node": "^10.7.0",
     "typescript": "^4.6.3",
     "wait-on": "^6.0.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
+    "@types/node-cron": "^3.0.1",
     "@types/wait-on": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",

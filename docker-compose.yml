@@ -64,6 +64,7 @@ services:
       - kafka
   cli:
     image: node:16-alpine
+    command: ./entrypoint.sh
     working_dir: /usr/src/cli
     environment:
       - DB_HOSTNAME=db

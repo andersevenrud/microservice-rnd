@@ -51,9 +51,12 @@ k8s_yaml([
   'deploy/kafka-service.yaml',
 
   'deploy/cert-selfsigned.yaml',
-  'deploy/ingress.yaml'
+  'deploy/ingress.yaml',
+
+  'deploy/cleanup-job.yaml',
 ])
 
+k8s_resource(workload = 'cleanup', labels = 'jobs')
 k8s_resource(workload = 'cli', labels = 'workers')
 k8s_resource(workload = 'mailer', labels = 'app')
 k8s_resource(workload = 'runner', labels = 'app')
