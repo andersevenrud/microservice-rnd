@@ -16,7 +16,7 @@ Includes a process runner service over PM2 to demonstrate launching of sub-proce
 
 ### Docker Compose
 
-> Runs on http://localhost:8080
+> Runs on http://localhost:8080 (and `/<admin-service>/`)
 
 First run migrations:
 
@@ -33,7 +33,7 @@ docker-compose up
 
 ### Kubernetes
 
-> Runs on http://rnd.lvh.me
+> Runs on http://rnd.lvh.me (and `/<admin-service>.rnd.lvh.me`)
 
 Requires the following minikube setup:
 
@@ -51,16 +51,6 @@ tilt up
 
 Open the interface and click the migration buttons in the top navigation bar
 in order to make apps being able to connect to certain services.
-
-## Usage
-
-> Note the trailing slash must be used to avoid redirects.
-
-* `/` - App
-* `/api/` - API
-* `/kowl/` - Kafka browser
-* `/adminer/` - Database admin
-* `/mailhog/` - Mail preview
 
 ## License
 

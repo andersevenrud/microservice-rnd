@@ -27,32 +27,6 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-adminer
-  namespace: rnd
-  labels:
-    www: ingress
-  annotations:
-    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
-spec:
-  tls:
-  - hosts:
-    - rnd.lvh.me
-    secretName: selfsigned-root-secret
-  rules:
-  - host: rnd.lvh.me
-    http:
-      paths:
-      - path: /adminer(/|$)(.*)
-        pathType: Prefix
-        backend:
-          service:
-            name: adminer
-            port:
-              number: 8080
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
   name: ingress-api
   namespace: rnd
   labels:
@@ -80,24 +54,48 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
+  name: ingress-adminer
+  namespace: rnd
+  labels:
+    www: ingress
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+spec:
+  tls:
+  - hosts:
+    - adminer.rnd.lvh.me
+    secretName: selfsigned-root-secret
+  rules:
+  - host: adminer.rnd.lvh.me
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: adminer
+            port:
+              number: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
   name: ingress-mailhog
   namespace: rnd
   labels:
     www: ingress
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    nginx.ingress.kubernetes.io/app-root: /mailhog
 spec:
   tls:
   - hosts:
-    - rnd.lvh.me
+    - mailhog.rnd.lvh.me
     secretName: selfsigned-root-secret
   rules:
-  - host: rnd.lvh.me
+  - host: mailhog.rnd.lvh.me
     http:
       paths:
-      - path: /mailhog(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
@@ -114,18 +112,16 @@ metadata:
     www: ingress
   annotations:
     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      proxy_set_header    X-Forwarded-Prefix /kowl/;
 spec:
   tls:
   - hosts:
-    - rnd.lvh.me
+    - kowl.rnd.lvh.me
     secretName: selfsigned-root-secret
   rules:
-  - host: rnd.lvh.me
+  - host: kowl.rnd.lvh.me
     http:
       paths:
-      - path: /kowl(/|$)(.*)
+      - path: /
         pathType: Prefix
         backend:
           service:
