@@ -18,7 +18,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: kowl
-          image: quay.io/cloudhut/kowl:master
+          image: quay.io/cloudhut/kowl:master-ab6caaa
           ports:
             - containerPort: 8080
           env:

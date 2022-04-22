@@ -41,7 +41,7 @@ services:
     depends_on:
       - db
   kowl:
-    image: quay.io/cloudhut/kowl:master
+    image: quay.io/cloudhut/kowl:master-ab6caaa
     environment:
       - KAFKA_BROKERS=kafka:9092
     depends_on:
