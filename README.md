@@ -1,14 +1,17 @@
 # microservice-rnd
 
-Microservices R&D project.
-
-**Only for research purposes and not safe for production usage.**
+Microservice architecture demonstration with nodejs (typescript) and Kafka
 
 ## About
 
-A basic microservice architecture nodejs project using Kafka to stream events.
+This is a personal research used for learning more about microservice architectures
+and structuring.
 
-Includes a process runner service over PM2 to demonstrate launching of sub-processes that hooks into the event stream.
+**This is probably not safe for production usage.**
+
+Provides a basic frontend administration interface and API that interacts with a runner service that
+spawns processes to demonstrate usage of event streams, etc, along with some administration applications
+to inspect the underlying services.
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
