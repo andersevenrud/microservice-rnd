@@ -3,7 +3,7 @@ FROM node:16-alpine
 WORKDIR /usr/src/runner
 COPY . .
 
-RUN npm ci --silent --no-audit --no-fund
+RUN npm ci --silent --no-audit --no-fund --production
 RUN npm install -g clean-modules && \
       clean-modules -y && \
       npm remove -g clean-modules
