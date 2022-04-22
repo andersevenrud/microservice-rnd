@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: cli
-          image: microservice-rnd-cli
+          image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
           env:
             - name: DB_HOSTNAME
               value: db

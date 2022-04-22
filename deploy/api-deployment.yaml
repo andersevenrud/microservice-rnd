@@ -18,7 +18,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: api
-          image: microservice-rnd-api
+          image: ghcr.io/andersevenrud/microservice-rnd-api:latest
           ports:
             - containerPort: 8080
           env:

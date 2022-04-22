@@ -18,7 +18,7 @@ spec:
       restartPolicy: Always
       containers:
         - name: mailer
-          image: microservice-rnd-mailer
+          image: ghcr.io/andersevenrud/microservice-rnd-mailer:latest
           ports:
             - containerPort: 8080
           env:

@@ -17,4 +17,4 @@ spec:
       restartPolicy: Always
       containers:
         - name: app
-          image: microservice-rnd-app
+          image: ghcr.io/andersevenrud/microservice-rnd-app:latest

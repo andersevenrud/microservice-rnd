@@ -9,11 +9,11 @@ if not namespace:
     kubectl config set-context --current --namespace=<name of your stack>
   """)
 
-docker_build('microservice-rnd-cli', 'packages/cli')
-docker_build('microservice-rnd-app', 'packages/app')
-docker_build('microservice-rnd-api', 'packages/api')
-docker_build('microservice-rnd-mailer', 'packages/mailer')
-docker_build('microservice-rnd-runner', 'packages/runner')
+docker_build('ghcr.io/andersevenrud/microservice-rnd-cli:latest', 'packages/cli')
+docker_build('ghcr.io/andersevenrud/microservice-rnd-app:latest', 'packages/app')
+docker_build('ghcr.io/andersevenrud/microservice-rnd-api:latest', 'packages/api')
+docker_build('ghcr.io/andersevenrud/microservice-rnd-mailer:latest', 'packages/mailer')
+docker_build('ghcr.io/andersevenrud/microservice-rnd-runner:latest', 'packages/runner')
 
 deploy_cert_manager()
 
