@@ -10,7 +10,7 @@ and structuring.
 **This is probably not safe for production usage.**
 
 Provides a basic frontend administration interface and API that interacts with a runner service that
-spawns processes to demonstrate usage of event streams, etc, along with some administration applications
+spawns processes to demonstrate usage of event streams, etc, along with some administration interfaces
 to inspect the underlying services.
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
@@ -62,6 +62,14 @@ tilt up
 
 Open the interface and click the migration buttons in the top navigation bar
 in order to make apps being able to connect to certain services.
+
+## Admin Services
+
+You can access the following administration interfaces with the URL patterns noted above:
+
+* `kowl` - Kafka events
+* `mailhog` - Mail messages
+* `adminer` - Database administration
 
 ## License
 
