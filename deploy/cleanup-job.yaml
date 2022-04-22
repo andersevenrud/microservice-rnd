@@ -13,7 +13,7 @@ spec:
         spec:
           containers:
           - name: cli
-            image: microservice-rnd-cli
+            image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
             imagePullPolicy: IfNotPresent
             command:
             - /bin/sh
