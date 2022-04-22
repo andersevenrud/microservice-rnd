@@ -4,6 +4,9 @@ WORKDIR /usr/src/app
 COPY . .
 
 RUN npm ci --silent --no-audit --no-fund
+RUN npm install -g clean-modules && \
+      clean-modules -y && \
+      npm remove -g clean-modules
 RUN npm run build
 
 FROM nginx:1-alpine
