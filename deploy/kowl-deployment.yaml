@@ -19,6 +19,7 @@ spec:
       containers:
         - name: kowl
           image: quay.io/cloudhut/kowl:master-ab6caaa
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
           env:

@@ -22,6 +22,7 @@ spec:
       containers:
         - name: kafka
           image: bitnami/kafka:3.0.1
+          imagePullPolicy: IfNotPresent
           ports:
             - name: internal
               containerPort: 9092
