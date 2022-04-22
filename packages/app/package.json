@@ -9,7 +9,7 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "devDependencies": {
     "@types/lodash-es": "^4.17.6",
     "@types/react": "^18.0.1",

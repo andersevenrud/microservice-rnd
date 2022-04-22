@@ -10,7 +10,7 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "dependencies": {
     "@mikro-orm/core": "^5.1.1",
     "@mikro-orm/mariadb": "^5.1.1",

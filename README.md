@@ -62,4 +62,4 @@ in order to make apps being able to connect to certain services.
 
 ## License
 
-MIT
+[Unlicense](./UNLICENSE)
