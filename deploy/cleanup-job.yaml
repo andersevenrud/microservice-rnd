@@ -11,11 +11,22 @@ spec:
     spec:
       template:
         spec:
+          restartPolicy: OnFailure
           containers:
           - name: cli
             image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
             command:
-            - /bin/sh
-            - -c
-            - npm run cleanup
-          restartPolicy: OnFailure
+              - /bin/sh
+              - -c
+              - npm run cleanup
+            env:
+              - name: DB_HOSTNAME
+                value: db
+              - name: DB_NAME
+                value: db
+              - name: DB_PASSWORD
+                value: db
+              - name: DB_USERNAME
+                value: db
+              - name: KAFKA_BROKERS
+                value: kafka:9092

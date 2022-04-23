@@ -9,9 +9,9 @@ and structuring.
 
 **This is probably not safe for production usage.**
 
-Provides a basic frontend administration interface and API that interacts with a runner service that
-spawns processes to demonstrate usage of event streams, etc, along with some administration interfaces
-to inspect the underlying services.
+Provides a basic frontend interface and API that interacts with a runner service that
+spawns processes to demonstrate usage of event streams, etc, along with some administration
+interfaces to inspect the underlying services.
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
@@ -23,6 +23,8 @@ One of the following configurations:
     * `docker-compose`
 2. Local [Kubernetes Cluster](#kubernetes)
     * `minikube`
+        * [`ingress`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/)
+        * [`ingress-dns`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/)
     * [`tilt`](https://tilt.dev/)
 
 ## Installation
@@ -50,18 +52,10 @@ docker-compose up
 
 > HTTPs is available via a self-signed certificate.
 
-Requires the following minikube addons to be set up:
-
-* [`ingress`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/)
-* [`ingress-dns`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/)
-
 ```bash
 kubectl config set-context --current --namespace=rnd
 tilt up
 ```
-
-Open the interface and click the migration buttons in the top navigation bar
-in order to make apps being able to connect to certain services.
 
 ## Admin Services
 

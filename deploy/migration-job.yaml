@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    job: migrations
+  name: migrations
+  namespace: rnd
+spec:
+  ttlSecondsAfterFinished: 0
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: cli-db-migrations
+        image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
+        command: ["npm", "run", "migrate"]
+        env:
+          - name: DB_HOSTNAME
+            value: db
+          - name: DB_NAME
+            value: db
+          - name: DB_PASSWORD
+            value: db
+          - name: DB_USERNAME
+            value: db
+          - name: KAFKA_BROKERS
+            value: kafka:9092
+      - name: cli-topic-migrations
+        image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
+        command:
+          - /bin/sh
+          - -c
+          - npm run topics
+        env:
+          - name: DB_HOSTNAME
+            value: db
+          - name: DB_NAME
+            value: db
+          - name: DB_PASSWORD
+            value: db
+          - name: DB_USERNAME
+            value: db
+          - name: KAFKA_BROKERS
+            value: kafka:9092

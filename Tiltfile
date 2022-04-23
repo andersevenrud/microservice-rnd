@@ -1,4 +1,3 @@
-load('ext://uibutton', 'cmd_button', 'bool_input', 'location')
 load('ext://current_namespace', 'current_namespace')
 load('ext://cert_manager', 'deploy_cert_manager')
 
@@ -20,7 +19,6 @@ deploy_cert_manager()
 k8s_yaml([
   'deploy/namespace.yaml',
 
-  'deploy/cli-deployment.yaml',
   'deploy/mailer-deployment.yaml',
   'deploy/runner-deployment.yaml',
 
@@ -54,10 +52,11 @@ k8s_yaml([
   'deploy/ingress.yaml',
 
   'deploy/cleanup-job.yaml',
+  'deploy/migration-job.yaml',
 ])
 
+k8s_resource(workload = 'migrations', labels = 'jobs')
 k8s_resource(workload = 'cleanup', labels = 'jobs')
-k8s_resource(workload = 'cli', labels = 'workers')
 k8s_resource(workload = 'mailer', labels = 'app')
 k8s_resource(workload = 'runner', labels = 'app')
 k8s_resource(workload = 'app', labels = 'app')
@@ -86,27 +85,3 @@ k8s_resource(new_name = 'pv', objects = [
 k8s_resource(new_name = 'scale', objects = [
   'app:horizontalpodautoscaler',
 ], labels = 'www')
-
-pod_exec_script = '''
-set -eu
-POD_NAME="$(tilt get kubernetesdiscovery "cli" -ojsonpath='{.status.pods[0].name}')"
-kubectl exec "$POD_NAME" -- npm run migrate
-'''
-cmd_button('migrate-database',
-  argv=['sh', '-c', pod_exec_script],
-  location=location.NAV,
-  icon_name='build_circle',
-  text='Migrate database'
-)
-
-pod_exec_script = '''
-set -eu
-POD_NAME="$(tilt get kubernetesdiscovery "cli" -ojsonpath='{.status.pods[0].name}')"
-kubectl exec "$POD_NAME" -- npm run topics
-'''
-cmd_button('migrate-topics',
-  argv=['sh', '-c', pod_exec_script],
-  location=location.NAV,
-  icon_name='build_circle',
-  text='Migrate topics'
-)
