@@ -40,12 +40,9 @@ docker-compose up
 
 ### Kubernetes
 
-> Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`)
-
-> HTTPs is available via a self-signed certificate.
+> Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`. https available via self-signed certificate)
 
 ```bash
-kubectl config set-context --current --namespace=rnd
 tilt up
 ```
 
