@@ -5,6 +5,7 @@ export default {
   waitOn: {
     resources: [...brokers.map((s) => `tcp:${s}`), `tcp:${dbHost}:3306`],
     log: true,
+    timeout: 60 * 1000,
   },
 
   kafka: {

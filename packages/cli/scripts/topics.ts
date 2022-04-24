@@ -50,6 +50,7 @@ async function main() {
     await waitOn({
       resources: config.kafka.brokers.map((str) => `tcp:${str}`),
       log: true,
+      timeout: 60 * 1000,
     })
 
     const kafka = new Kafka(config.kafka)

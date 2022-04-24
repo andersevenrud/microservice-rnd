@@ -12,6 +12,7 @@ async function main() {
     await waitOn({
       resources: [`tcp:${config.db.host}:3306`],
       log: true,
+      timeout: 60 * 1000,
     })
 
     const orm = await createMikro()
