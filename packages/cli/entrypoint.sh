@@ -1,4 +1,4 @@
-#/!bin/sh
+#!/bin/sh
 
 if [ -z "$1" ]; then
   npm ci --silent --no-audit --no-fund
