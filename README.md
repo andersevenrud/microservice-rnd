@@ -33,16 +33,8 @@ One of the following configurations:
 
 > Runs on http://localhost:8080 (and `/<admin-service>/`)
 
-First run migrations:
-
 ```bash
-docker-compose run --rm cli npm run migrate
-docker-compose run --rm cli npm run topics
-```
-
-Then start up solution:
-
-```bash
+docker-compose run --rm cli sh scripts/migrations.sh
 docker-compose up
 ```
 
