@@ -19,6 +19,8 @@ interfaces to inspect the underlying services.
 
 One of the following configurations:
 
+> Note that the docker compose environment does **not** scale, while the kubernetes cluster is configured for scaling.
+
 1. Local [Docker Compose](#docker-compose)
     * `docker-compose`
 2. Local [Kubernetes Cluster](#kubernetes)
