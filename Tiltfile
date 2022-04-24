@@ -1,12 +1,4 @@
-load('ext://current_namespace', 'current_namespace')
 load('ext://cert_manager', 'deploy_cert_manager')
-
-namespace = current_namespace()
-if not namespace:
-  fail("""
-    ⚠️ No default namespace found in kubeconfig. Please run
-    kubectl config set-context --current --namespace=<name of your stack>
-  """)
 
 docker_build('ghcr.io/andersevenrud/microservice-rnd-cli:latest', 'packages/cli')
 docker_build('ghcr.io/andersevenrud/microservice-rnd-app:latest', 'packages/app')
