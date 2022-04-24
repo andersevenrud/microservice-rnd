@@ -15,10 +15,7 @@ spec:
           containers:
           - name: cli
             image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
-            command:
-              - /bin/sh
-              - -c
-              - npm run cleanup
+            command: ["npm", "run", "cleanup"]
             env:
               - name: DB_HOSTNAME
                 value: db

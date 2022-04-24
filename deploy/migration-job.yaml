@@ -27,10 +27,7 @@ spec:
             value: kafka:9092
       - name: cli-topic-migrations
         image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
-        command:
-          - /bin/sh
-          - -c
-          - npm run topics
+        command: ["npm", "run", "topics"]
         env:
           - name: DB_HOSTNAME
             value: db
