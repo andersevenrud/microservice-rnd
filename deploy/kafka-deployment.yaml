@@ -20,6 +20,9 @@ spec:
         backend: kafka-pod
     spec:
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
       containers:
         - name: kafka
           image: bitnami/kafka:3.0.1
@@ -57,4 +60,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 10Gi
+            storage: 1Gi

@@ -20,6 +20,9 @@ spec:
         backend: zookeeper-pod
     spec:
       restartPolicy: Always
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
       containers:
         - name: zookeeper
           image: bitnami/zookeeper:3.8.0
@@ -45,4 +48,4 @@ spec:
           - ReadWriteOnce
         resources:
           requests:
-            storage: 100Mi
+            storage: 1Gi
