@@ -40,7 +40,7 @@ k8s_yaml([
   'deploy/kafka-deployment.yaml',
   'deploy/kafka-service.yaml',
 
-  'deploy/cert-selfsigned.yaml',
+  'deploy/selfsigned-cert.yaml',
   'deploy/ingress.yaml',
 
   'deploy/cleanup-job.yaml',
