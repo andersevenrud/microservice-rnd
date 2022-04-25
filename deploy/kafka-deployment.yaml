@@ -11,8 +11,9 @@ spec:
   selector:
     matchLabels:
       backend: kafka-pod
-  strategy:
-    type: Recreate
+  updateStrategy:
+    type: RollingUpdate
+  podManagementPolicy: Parallel
   template:
     metadata:
       labels:
