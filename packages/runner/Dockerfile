@@ -14,4 +14,5 @@ RUN rm -rf src \
       entrypoint.sh \
       mikro-orm.config.ts \
       tsconfig.json
+ENV NODE_ENV=production
 CMD ["npm", "run", "start"]

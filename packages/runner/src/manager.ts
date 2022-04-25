@@ -38,17 +38,29 @@ export class PM2Manager {
 
   async start(uuid: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      pm2.start(
-        {
-          script: 'src/instance.ts',
-          name: `client:${uuid}`,
-          args: `--uuid ${uuid}`,
-          interpreter: 'node',
-          interpreter_args: '--require ts-node/register',
-          watch: ['src/*.ts'],
-        },
-        (err) => (err ? reject(wrapCatch(err)) : resolve())
-      )
+      if (process.env.NODE_ENV === 'production') {
+        pm2.start(
+          {
+            script: 'dist/src/instance.js',
+            name: `client:${uuid}`,
+            args: `--uuid ${uuid}`,
+            interpreter: 'node',
+          },
+          (err) => (err ? reject(wrapCatch(err)) : resolve())
+        )
+      } else {
+        pm2.start(
+          {
+            script: 'src/instance.ts',
+            name: `client:${uuid}`,
+            args: `--uuid ${uuid}`,
+            interpreter: 'node',
+            interpreter_args: '--require ts-node/register',
+            watch: ['src/*.ts'],
+          },
+          (err) => (err ? reject(wrapCatch(err)) : resolve())
+        )
+      }
     })
   }
 
