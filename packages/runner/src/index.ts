@@ -1,5 +1,5 @@
 import waitOn from 'wait-on'
-import { Kafka } from 'kafkajs'
+import { Kafka, KafkaJSNonRetriableError } from 'kafkajs'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { MikroORM } from '@mikro-orm/core'
 import { createWinston } from './winston'
@@ -47,6 +47,12 @@ async function main() {
       await producer.disconnect()
       await orm.close()
     }
+
+    consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
+      if (error instanceof KafkaJSNonRetriableError) {
+        shutdown()
+      }
+    })
 
     process.once('SIGUSR2', shutdown)
     process.once('SIGINT', shutdown)

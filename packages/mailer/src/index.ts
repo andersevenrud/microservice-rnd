@@ -1,6 +1,6 @@
 import waitOn from 'wait-on'
 import nodemailer, { Transporter } from 'nodemailer'
-import { Kafka } from 'kafkajs'
+import { Kafka, KafkaJSNonRetriableError } from 'kafkajs'
 import { createWinston } from './winston'
 import { MessageContext } from './messages'
 import * as mail from './messages'
@@ -81,6 +81,12 @@ async function main() {
       await producer.disconnect()
       transporter.close()
     }
+
+    consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
+      if (error instanceof KafkaJSNonRetriableError) {
+        shutdown()
+      }
+    })
 
     process.once('SIGUSR2', shutdown)
     process.once('SIGINT', shutdown)

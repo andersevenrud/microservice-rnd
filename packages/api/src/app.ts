@@ -1,6 +1,11 @@
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
-import { Kafka, Producer, CompressionTypes } from 'kafkajs'
+import {
+  Kafka,
+  Producer,
+  CompressionTypes,
+  KafkaJSNonRetriableError,
+} from 'kafkajs'
 import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
 import { RequestContext } from '@mikro-orm/core'
@@ -177,7 +182,7 @@ export async function createApplication(ctx: ApplicationContext) {
     allowAutoTopicCreation: false,
   })
 
-  const subscribe = async () => {
+  const subscribe = async (shutdown: () => void) => {
     await consumer.connect()
     await consumer.subscribe({ topic: 'logs' })
     await consumer.subscribe({ topic: 'clientState' })
@@ -195,6 +200,12 @@ export async function createApplication(ctx: ApplicationContext) {
           )
         }
       },
+    })
+
+    consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
+      if (error instanceof KafkaJSNonRetriableError) {
+        shutdown()
+      }
     })
   }
 

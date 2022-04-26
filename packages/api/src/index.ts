@@ -48,7 +48,7 @@ async function main() {
     process.once('SIGTERM', shutdown)
 
     // NOTE: Start late because this blocks the bootstrapping
-    await subscribe()
+    await subscribe(() => shutdown())
   } catch (e) {
     console.error(e)
     process.exit(1)
