@@ -11,3 +11,17 @@ spec:
     - port: 8080
   selector:
     app: api-pod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: api
+  name: api-health
+  namespace: rnd
+spec:
+  sessionAffinity: None
+  ports:
+    - port: 8081
+  selector:
+    app: api-pod
