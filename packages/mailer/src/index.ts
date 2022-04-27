@@ -1,6 +1,6 @@
 import waitOn from 'wait-on'
 import nodemailer, { Transporter } from 'nodemailer'
-import { Kafka, KafkaJSNonRetriableError } from 'kafkajs'
+import { Kafka } from 'kafkajs'
 import { createWinston } from './winston'
 import { MessageContext } from './messages'
 import * as mail from './messages'
@@ -100,8 +100,8 @@ async function main() {
       }
     }
 
-    consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
-      if (error instanceof KafkaJSNonRetriableError) {
+    consumer.on(consumer.events.CRASH, ({ payload: { restart } }) => {
+      if (!restart) {
         shutdown(true)
       }
     })

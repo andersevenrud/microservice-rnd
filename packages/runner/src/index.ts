@@ -1,5 +1,5 @@
 import waitOn from 'wait-on'
-import { Kafka, KafkaJSNonRetriableError } from 'kafkajs'
+import { Kafka } from 'kafkajs'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { MikroORM } from '@mikro-orm/core'
 import { createWinston } from './winston'
@@ -64,8 +64,8 @@ async function main() {
       }
     }
 
-    consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
-      if (error instanceof KafkaJSNonRetriableError) {
+    consumer.on(consumer.events.CRASH, ({ payload: { restart } }) => {
+      if (!restart) {
         shutdown(true)
       }
     })
