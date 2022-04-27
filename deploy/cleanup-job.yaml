@@ -6,6 +6,8 @@ metadata:
   name: cleanup
   namespace: rnd
 spec:
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 0
   schedule: "0 * * * *"
   jobTemplate:
     spec:
