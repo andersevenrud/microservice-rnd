@@ -35,6 +35,16 @@ async function sendMail(
   }
 }
 
+async function shutdownAll(list: (() => any)[]) {
+  for (const fn of list) {
+    try {
+      await fn()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+}
+
 async function main() {
   try {
     await waitOn(config.waitOn)
@@ -78,9 +88,11 @@ async function main() {
       logger.info('Mailer is shutting down...')
 
       try {
-        await consumer.disconnect()
-        await producer.disconnect()
-        transporter.close()
+        await shutdownAll([
+          () => consumer.disconnect(),
+          () => producer.disconnect(),
+          () => transporter.close(),
+        ])
       } catch (e) {
         console.error('Exception on shutdown', e)
       } finally {

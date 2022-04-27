@@ -9,6 +9,16 @@ import { createApplication, createHealthCheck } from './app'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
 
+async function shutdownAll(list: (() => any)[]) {
+  for (const fn of list) {
+    try {
+      await fn()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+}
+
 async function main() {
   try {
     const health = await createHealthCheck()
@@ -56,10 +66,12 @@ async function main() {
           setTimeout(resolve, config.shutdown.delay)
         })
 
-        await terminator.terminate()
-        await producer.disconnect()
-        await consumer.disconnect()
-        await orm.close()
+        await shutdownAll([
+          () => terminator.terminate(),
+          () => producer.disconnect(),
+          () => consumer.disconnect(),
+          () => orm.close(),
+        ])
       } catch (e) {
         console.error('Exception on shutdown', e)
       } finally {

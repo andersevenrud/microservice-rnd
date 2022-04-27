@@ -8,6 +8,16 @@ import { PM2Manager } from './manager'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
 
+async function shutdownAll(list: (() => any)[]) {
+  for (const fn of list) {
+    try {
+      await fn()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+}
+
 async function main() {
   try {
     await waitOn(config.waitOn)
@@ -41,12 +51,14 @@ async function main() {
       logger.info('Runner is shutting down...')
 
       try {
-        await destroy()
-        await manager.kill()
-        await manager.disconnect()
-        await consumer.disconnect()
-        await producer.disconnect()
-        await orm.close()
+        await shutdownAll([
+          () => destroy(),
+          () => manager.kill(),
+          () => manager.disconnect(),
+          () => consumer.disconnect(),
+          () => producer.disconnect(),
+          () => orm.close(),
+        ])
       } finally {
         process.exit(failure ? 1 : 0)
       }
