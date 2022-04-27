@@ -1,5 +1,7 @@
 FROM node:16-alpine
 
+RUN apk add --no-cache dumb-init
+
 WORKDIR /usr/src/mailer
 COPY . .
 
@@ -14,4 +16,4 @@ RUN rm -rf src \
       entrypoint.sh \
       tsconfig.json
 USER node
-CMD ["node", "dist/index.js"]
+CMD ["dumb-init", "node", "dist/index.js"]

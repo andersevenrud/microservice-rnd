@@ -1,5 +1,7 @@
 FROM node:16-alpine
 
+RUN apk add --no-cache dumb-init
+
 WORKDIR /usr/src/api
 COPY . .
 
@@ -15,4 +17,4 @@ RUN rm -rf src \
       mikro-orm.config.ts \
       tsconfig.json
 USER node
-CMD ["node", "dist/src/index.js"]
+CMD ["dumb-init", "node", "dist/src/index.js"]

@@ -1,5 +1,7 @@
 FROM node:16-alpine
 
+RUN apk add --no-cache dumb-init
+
 WORKDIR /usr/src/runner
 COPY . .
 
@@ -16,4 +18,4 @@ RUN rm -rf src \
       tsconfig.json
 ENV NODE_ENV=production
 USER node
-CMD ["node", "dist/src/index.js"]
+CMD ["dumb-init", "node", "dist/src/index.js"]
