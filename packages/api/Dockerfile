@@ -14,4 +14,4 @@ RUN rm -rf src \
       entrypoint.sh \
       mikro-orm.config.ts \
       tsconfig.json
-CMD ["npm", "run", "start"]
+CMD ["node", "dist/src/index.js"]
