@@ -42,10 +42,16 @@ async function main() {
     const shutdown = async () => {
       logger.info('Instance is shutting down...', { uuid })
 
-      clearInterval(interval)
-      await sendMessage('offline')
-      await consumer.disconnect()
-      await producer.disconnect()
+      try {
+        clearInterval(interval)
+        await sendMessage('offline')
+        await consumer.disconnect()
+        await producer.disconnect()
+      } catch (e) {
+        console.error('Exception on shutdown', e)
+      } finally {
+        process.exit(0)
+      }
     }
 
     process.once('SIGUSR2', shutdown)

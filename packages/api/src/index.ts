@@ -34,21 +34,27 @@ async function main() {
 
     logger.info('API is running...')
 
-    const shutdown = async () => {
+    const shutdown = async (failure = false) => {
       logger.info('API is shutting down...')
 
-      await terminator.terminate()
-      await producer.disconnect()
-      await consumer.disconnect()
-      await orm.close()
+      try {
+        await terminator.terminate()
+        await producer.disconnect()
+        await consumer.disconnect()
+        await orm.close()
+      } catch (e) {
+        console.error('Exception on shutdown', e)
+      } finally {
+        process.exit(failure ? 1 : 0)
+      }
     }
 
-    process.once('SIGUSR2', shutdown)
-    process.once('SIGINT', shutdown)
-    process.once('SIGTERM', shutdown)
+    process.once('SIGUSR2', () => shutdown())
+    process.once('SIGINT', () => shutdown())
+    process.once('SIGTERM', () => shutdown())
 
     // NOTE: Start late because this blocks the bootstrapping
-    await subscribe(() => shutdown())
+    await subscribe(() => shutdown(true))
   } catch (e) {
     console.error(e)
     process.exit(1)

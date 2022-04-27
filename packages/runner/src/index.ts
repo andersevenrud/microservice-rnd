@@ -37,26 +37,30 @@ async function main() {
 
     logger.info('Runner is running...')
 
-    const shutdown = async () => {
+    const shutdown = async (failure = false) => {
       logger.info('Runner is shutting down...')
 
-      await destroy()
-      await manager.kill()
-      await manager.disconnect()
-      await consumer.disconnect()
-      await producer.disconnect()
-      await orm.close()
+      try {
+        await destroy()
+        await manager.kill()
+        await manager.disconnect()
+        await consumer.disconnect()
+        await producer.disconnect()
+        await orm.close()
+      } finally {
+        process.exit(failure ? 1 : 0)
+      }
     }
 
     consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
       if (error instanceof KafkaJSNonRetriableError) {
-        shutdown()
+        shutdown(true)
       }
     })
 
-    process.once('SIGUSR2', shutdown)
-    process.once('SIGINT', shutdown)
-    process.once('SIGTERM', shutdown)
+    process.once('SIGUSR2', () => shutdown())
+    process.once('SIGINT', () => shutdown())
+    process.once('SIGTERM', () => shutdown())
   } catch (e) {
     console.error(e)
     process.exit(1)

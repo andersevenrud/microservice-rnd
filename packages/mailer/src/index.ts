@@ -74,23 +74,29 @@ async function main() {
 
     logger.info('Mailer is running...')
 
-    const shutdown = async () => {
+    const shutdown = async (failure = false) => {
       logger.info('Mailer is shutting down...')
 
-      await consumer.disconnect()
-      await producer.disconnect()
-      transporter.close()
+      try {
+        await consumer.disconnect()
+        await producer.disconnect()
+        transporter.close()
+      } catch (e) {
+        console.error('Exception on shutdown', e)
+      } finally {
+        process.exit(failure ? 1 : 0)
+      }
     }
 
     consumer.on(consumer.events.CRASH, ({ payload: { error } }) => {
       if (error instanceof KafkaJSNonRetriableError) {
-        shutdown()
+        shutdown(true)
       }
     })
 
-    process.once('SIGUSR2', shutdown)
-    process.once('SIGINT', shutdown)
-    process.once('SIGTERM', shutdown)
+    process.once('SIGUSR2', () => shutdown())
+    process.once('SIGINT', () => shutdown())
+    process.once('SIGTERM', () => shutdown())
   } catch (e) {
     console.error(e)
     process.exit(1)
