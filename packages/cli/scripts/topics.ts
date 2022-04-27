@@ -76,18 +76,22 @@ async function main() {
     console.info('Creating', creations.length, 'topics')
     console.info('Updating', creations.length, 'topics')
 
-    await admin.createTopics({
-      topics: creations,
-    })
+    if (creations.length > 0) {
+      await admin.createTopics({
+        topics: creations,
+      })
+    }
 
-    await admin.alterConfigs({
-      validateOnly: false,
-      resources: updates.map(({ topic, configEntries }) => ({
-        type: ConfigResourceTypes.TOPIC,
-        name: topic,
-        configEntries,
-      })),
-    })
+    if (updates.length > 0) {
+      await admin.alterConfigs({
+        validateOnly: false,
+        resources: updates.map(({ topic, configEntries }) => ({
+          type: ConfigResourceTypes.TOPIC,
+          name: topic,
+          configEntries,
+        })),
+      })
+    }
 
     await admin.disconnect()
   } catch (e) {
