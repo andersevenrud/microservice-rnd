@@ -13,4 +13,5 @@ RUN npm cache clean --force
 RUN rm -rf src \
       entrypoint.sh \
       tsconfig.json
+USER node
 CMD ["node", "dist/index.js"]

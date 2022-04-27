@@ -15,4 +15,5 @@ RUN rm -rf src \
       mikro-orm.config.ts \
       tsconfig.json
 ENV NODE_ENV=production
+USER node
 CMD ["node", "dist/src/index.js"]
