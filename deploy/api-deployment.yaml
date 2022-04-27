@@ -20,7 +20,10 @@ spec:
         - name: api
           image: ghcr.io/andersevenrud/microservice-rnd-api:latest
           ports:
-            - containerPort: 8080
+            - name: public
+              containerPort: 8080
+            - name: health
+              containerPort: 8081
           env:
             - name: DB_HOSTNAME
               value: db
@@ -32,3 +35,19 @@ spec:
               value: db
             - name: KAFKA_BROKERS
               value: kafka:9092
+            - name: HEALTH_READINESS_PROBE_DELAY
+              value: "30000"
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /livez
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 20

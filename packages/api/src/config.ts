@@ -8,6 +8,10 @@ export default {
     timeout: 60 * 1000,
   },
 
+  shutdown: {
+    delay: parseInt(process.env.HEALTH_READINESS_PROBE_DELAY || '0'),
+  },
+
   kafka: {
     clientId: 'api',
     brokers,

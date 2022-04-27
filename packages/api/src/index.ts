@@ -1,15 +1,18 @@
+import http from 'http'
 import waitOn from 'wait-on'
 import { Kafka } from 'kafkajs'
 import { MikroORM } from '@mikro-orm/core'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { createHttpTerminator } from 'http-terminator'
 import { createWinston } from './winston'
-import { createApplication } from './app'
+import { createApplication, createHealthCheck } from './app'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
 
 async function main() {
   try {
+    const health = await createHealthCheck()
+
     await waitOn(config.waitOn)
 
     const kafka = new Kafka(config.kafka)
@@ -29,8 +32,16 @@ async function main() {
       kafka,
     })
 
-    const server = app.listen(8080)
+    const server = await new Promise<http.Server>((resolve, reject) => {
+      const server = app.listen(8080, () => {
+        resolve(server)
+      })
+      server.once('error', reject)
+    })
+
     const terminator = createHttpTerminator({ server })
+
+    health.ready()
 
     logger.info('API is running...')
 
@@ -38,6 +49,13 @@ async function main() {
       logger.info('API is shutting down...')
 
       try {
+        await health.destroy()
+
+        // NOTE: This only applies to kubernetes as we want to the readiness probe to fail before actually stopping
+        await new Promise((resolve) => {
+          setTimeout(resolve, config.shutdown.delay)
+        })
+
         await terminator.terminate()
         await producer.disconnect()
         await consumer.disconnect()
