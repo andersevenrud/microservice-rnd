@@ -66,6 +66,7 @@ services:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/cli
+    user: node
     environment:
       - DB_HOSTNAME=db
       - DB_NAME=db
@@ -81,6 +82,7 @@ services:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/mailer
+    user: node
     environment:
       - KAFKA_BROKERS=kafka:9092
       - APP_URL=http://localhost:8080/
@@ -95,6 +97,7 @@ services:
     image: node:16-alpine
     command: ./entrypoint.sh
     working_dir: /usr/src/api
+    user: node
     environment:
       - DB_HOSTNAME=db
       - DB_NAME=db

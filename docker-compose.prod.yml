@@ -49,7 +49,6 @@ services:
   runner:
     build:
       context: ./packages/runner
-    user: node
     environment:
       - DB_HOSTNAME=db
       - DB_NAME=db
