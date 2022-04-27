@@ -8,4 +8,5 @@ RUN npm install -g clean-modules@2.0.4 && \
       clean-modules -y && \
       npm remove -g clean-modules
 RUN npm cache clean --force
+USER node
 CMD tail -f /dev/null
