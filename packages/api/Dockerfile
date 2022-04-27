@@ -17,4 +17,5 @@ RUN rm -rf src \
       mikro-orm.config.ts \
       tsconfig.json
 USER node
+ENV NODE_ENV production
 CMD ["dumb-init", "node", "dist/src/index.js"]

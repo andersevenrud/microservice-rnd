@@ -9,4 +9,5 @@ RUN npm install -g clean-modules@2.0.4 && \
       npm remove -g clean-modules
 RUN npm cache clean --force
 USER node
+ENV NODE_ENV production
 CMD tail -f /dev/null

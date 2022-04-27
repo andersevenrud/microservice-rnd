@@ -16,4 +16,5 @@ RUN rm -rf src \
       entrypoint.sh \
       tsconfig.json
 USER node
+ENV NODE_ENV production
 CMD ["dumb-init", "node", "dist/index.js"]
