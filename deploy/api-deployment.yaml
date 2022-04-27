@@ -19,6 +19,7 @@ spec:
       containers:
         - name: api
           image: ghcr.io/andersevenrud/microservice-rnd-api:latest
+          imagePullPolicy: Always
           ports:
             - name: public
               containerPort: 8080

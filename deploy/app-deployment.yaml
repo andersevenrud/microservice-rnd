@@ -18,3 +18,4 @@ spec:
       containers:
         - name: app
           image: ghcr.io/andersevenrud/microservice-rnd-app:latest
+          imagePullPolicy: Always

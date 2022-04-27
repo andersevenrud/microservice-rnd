@@ -19,6 +19,7 @@ spec:
       containers:
         - name: mailer
           image: ghcr.io/andersevenrud/microservice-rnd-mailer:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
