@@ -2,6 +2,7 @@ version: "2"
 
 services:
   db:
+    restart: on-failure
     image: mariadb:10.8
     environment:
       - MARIADB_ROOT_PASSWORD=db
@@ -11,12 +12,14 @@ services:
     volumes:
       - db-data:/var/lib/mysql
   zookeeper:
+    restart: on-failure
     image: bitnami/zookeeper:3.8.0
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
     volumes:
       - zookeeper-data:/bitnami/zookeeper
   kafka:
+    restart: on-failure
     image: bitnami/kafka:3.0.1
     environment:
       - KAFKA_BROKER_ID=1
@@ -31,22 +34,26 @@ services:
     depends_on:
       - zookeeper
   mailhog:
+    restart: on-failure
     image: mailhog/mailhog:v1.0.1
     logging:
       driver: none
   adminer:
+    restart: on-failure
     image: adminer:4.8.1
     environment:
       - ADMINER_DEFAULT_SERVER=db
     depends_on:
       - db
   kowl:
+    restart: on-failure
     image: quay.io/cloudhut/kowl:master-ab6caaa
     environment:
       - KAFKA_BROKERS=kafka:9092
     depends_on:
       - kafka
   runner:
+    restart: on-failure
     build:
       context: ./packages/runner
     environment:
@@ -59,6 +66,7 @@ services:
       - db
       - kafka
   cli:
+    restart: on-failure
     build:
       context: ./packages/cli
     command:
@@ -74,6 +82,7 @@ services:
       - db
       - kafka
   mailer:
+    restart: on-failure
     build:
       context: ./packages/mailer
     environment:
@@ -85,6 +94,7 @@ services:
       - kafka
       - mailhog
   api:
+    restart: on-failure
     build:
       context: ./packages/api
     environment:
@@ -97,6 +107,7 @@ services:
       - db
       - kafka
   app:
+    restart: on-failure
     build:
       context: ./packages/app
     depends_on:
@@ -104,6 +115,7 @@ services:
       - kafka
       - runner
   nginx:
+    restart: on-failure
     build:
       context: ./packages/nginx
     ports:
