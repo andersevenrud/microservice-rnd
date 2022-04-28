@@ -4,15 +4,16 @@ Microservice architecture demonstration with nodejs (typescript) and Kafka
 
 ## About
 
-This is a personal research used for learning more about microservice architectures,
+This is a personal research project used for learning more about microservice architectures,
 structuring and deployment/development on a Kubernetes Cluster as well as Docker Compose.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
 interfaces to inspect the underlying services.
 
-**Even though this project includes optimizations to run in a production environment, I
-do not consider the backend configurations to be safe in the current state (as of this README).**
+**Even though this project includes optimizations to run in a production environment
+(and has been tested in the cloud), I do not consider the backend configurations to
+be safe out of the box in this configuration.**
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
