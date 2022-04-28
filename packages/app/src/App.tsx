@@ -286,7 +286,7 @@ function Actions() {
 }
 
 function Page() {
-  const { load, addLog } = useGlobalProvider()
+  const { load, addLog, addToast } = useGlobalProvider()
 
   const onMessage = (event: MessageEvent<any>) => {
     const data = JSON.parse(event.data)
@@ -303,11 +303,25 @@ function Page() {
       window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
     )
 
+    const onOpen = () => addToast({ type: 'info', message: 'Connected' })
+
+    const onClose = () =>
+      addToast({ type: 'warning', message: 'Closed connection' })
+
+    const onError = () =>
+      addToast({ type: 'error', message: 'Connection error' })
+
+    ws.addEventListener('open', onOpen)
+    ws.addEventListener('close', onClose)
+    ws.addEventListener('error', onError)
     ws.addEventListener('message', onMessage)
 
     load()
 
     return () => {
+      ws.removeEventListener('open', onOpen)
+      ws.removeEventListener('close', onClose)
+      ws.removeEventListener('error', onError)
       ws.removeEventListener('message', onMessage)
       ws.close()
     }
