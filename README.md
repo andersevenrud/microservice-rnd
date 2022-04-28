@@ -5,7 +5,8 @@ Microservice architecture demonstration with nodejs (typescript) and Kafka
 ## About
 
 This is a personal research project used for learning more about microservice architectures,
-structuring and deployment/development on a Kubernetes Cluster as well as Docker Compose.
+structuring and good practices related to deployment/development on a Kubernetes Cluster
+as well as Docker Compose.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
@@ -46,7 +47,7 @@ docker-compose up
 
 > Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`. https available via self-signed certificate)
 
-See `docs/k8s.md` for more information about setting up a local Kubernetes cluster.
+See [`docs/k8s.md`](docs/k8s.yaml) for more information about setting up a local Kubernetes cluster.
 
 ```bash
 tilt up
