@@ -23,11 +23,11 @@ One of the following configurations:
 > Note that the docker compose environment does **not** scale, while the kubernetes cluster is configured for scaling.
 
 1. Local [Docker Compose](#docker-compose)
+    * `docker`
     * `docker-compose`
 2. Local [Kubernetes Cluster](#kubernetes)
+    * `docker`
     * `minikube`
-        * [`ingress`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress/)
-        * [`ingress-dns`](https://minikube.sigs.k8s.io/docs/handbook/addons/ingress-dns/)
     * [`tilt`](https://tilt.dev/)
 
 ## Installation
@@ -44,6 +44,8 @@ docker-compose up
 ### Kubernetes
 
 > Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`. https available via self-signed certificate)
+
+See `docs/k8s.md` for more information about setting up a local Kubernetes cluster.
 
 ```bash
 tilt up
