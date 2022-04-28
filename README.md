@@ -22,7 +22,8 @@ be safe out of the box in this state.**
 
 One of the following configurations:
 
-> Note that the docker compose environment does **not** scale, while the kubernetes cluster is configured for scaling.
+> Note that the docker compose environment does **not** scale and is mainly for development
+> purposes, while the kubernetes cluster is configured for scaling.
 
 1. Local [Docker Compose](#docker-compose)
     * `docker`
