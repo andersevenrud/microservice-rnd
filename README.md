@@ -13,7 +13,7 @@ interfaces to inspect the underlying services.
 
 **Even though this project includes optimizations to run in a production environment
 (and has been tested in the cloud), I do not consider the backend configurations to
-be safe out of the box in this configuration.**
+be safe out of the box in this state.**
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
