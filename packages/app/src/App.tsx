@@ -7,7 +7,12 @@ import React, {
   PropsWithChildren,
   ButtonHTMLAttributes,
 } from 'react'
-import { GlobalProvider, useGlobalProvider, ClientInstance } from './store'
+import {
+  GlobalProvider,
+  useGlobalProvider,
+  ClientInstance,
+  ToastMessage,
+} from './store'
 import { createClient, deleteClient, performClientAction } from './api'
 
 type ClassName = string | string[] | undefined
@@ -20,6 +25,14 @@ const statusClassNames: Record<string, string> = {
   warn: 'bg-orange-500',
   error: 'bg-red-500',
   debug: 'bg-gray-500',
+}
+
+const statusForegroundClassNames: Record<string, string> = {
+  success: 'text-white',
+  info: 'text-white',
+  warn: 'text-black',
+  error: 'text-white',
+  debug: 'text-black',
 }
 
 const classNames = (...args: any[]) => args.filter(Boolean).flat().join(' ')
@@ -77,6 +90,27 @@ const Button = ({
   </button>
 )
 
+function Toasts() {
+  const { toasts } = useGlobalProvider()
+
+  const createClassNames = (toast: ToastMessage) =>
+    classNames(
+      'p-3 rounded',
+      statusClassNames[toast.type],
+      statusForegroundClassNames[toast.type]
+    )
+
+  return (
+    <div className="fixed bottom-0 right-0 z-50 m-2 space-y-4">
+      {toasts.map((toast, i) => (
+        <div key={i} className={createClassNames(toast)}>
+          {toast.message}
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function Logs() {
   const { logs } = useGlobalProvider()
 
@@ -104,15 +138,27 @@ function Logs() {
 
 function ListBox({ item }: { item: ClientInstance }) {
   const [expanded, setExpanded] = useState(false)
-  const { load } = useGlobalProvider()
+  const { load, addToast } = useGlobalProvider()
 
   const onToggle = () => setExpanded(!expanded)
 
   const onDeleteClient = (client: ClientInstance) =>
-    deleteClient(client.uuid).then(() => load())
+    deleteClient(client.uuid)
+      .then(() => load())
+      .then(() => addToast({ type: 'info', message: 'Deleting client' }))
+      .catch(() =>
+        addToast({ type: 'error', message: 'Failed to delete client' })
+      )
 
   const onClientAction = (client: ClientInstance, action: string) =>
-    performClientAction(client.uuid, action).then(() => load())
+    performClientAction(client.uuid, action)
+      .then(() => load())
+      .then(() =>
+        addToast({ type: 'info', message: `Performing "${action}" on client` })
+      )
+      .catch(() =>
+        addToast({ type: 'error', message: 'Failed to perform client action' })
+      )
 
   return (
     <Box>
@@ -210,9 +256,13 @@ function List() {
 }
 
 function Actions() {
-  const { load } = useGlobalProvider()
+  const { load, addToast } = useGlobalProvider()
 
-  const onCreateClient = () => createClient().then(() => load())
+  const onCreateClient = () =>
+    createClient()
+      .then(() => load())
+      .then(() => addToast({ type: 'info', message: 'Creating client' }))
+      .catch(() => addToast({ type: 'error', message: 'Failed to add client' }))
 
   const onReload = () => load()
 
@@ -295,6 +345,8 @@ export default function App() {
             A research project by Anders Evenrud
           </a>
         </div>
+
+        <Toasts />
       </div>
     </GlobalProvider>
   )
