@@ -6,6 +6,9 @@ COPY . .
 RUN npm ci --silent --no-audit --no-fund
 RUN npm run build
 
+# Start a fresh layer to explicitly add the required files. This avoids any caches etc.
+# Also, we want to have a web server in production in front, and not any
+# node runtime
 FROM nginx:1-alpine
 RUN rm -rf /var/www/html
 RUN sed -i 's/\/usr\/share\/nginx\/html/\/var\/www\/html/g' /etc/nginx/conf.d/default.conf
