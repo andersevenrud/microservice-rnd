@@ -63,11 +63,5 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
-  },
-  "mikro-orm": {
-    "useTsNode": true,
-    "configPaths": [
-      "./mikro-orm.config.ts"
-    ]
   }
 }
