@@ -5,7 +5,8 @@ Microservice architecture demonstration with nodejs (typescript) and Kafka
 ## About
 
 This is a personal research project used for learning more about microservice architectures,
-structuring and good practices related to deployment/development on a Kubernetes Cluster.
+structuring and good practices related to development on Docker and deployment onto a
+Kubernetes Cluster.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
