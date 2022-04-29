@@ -13,17 +13,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - uses: ./.github/actions/publisher
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
-        with:
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/andersevenrud/microservice-rnd-app:latest
-          context: ./packages/app
+          package_name: app
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
   docker_api:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
@@ -31,17 +24,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - uses: ./.github/actions/publisher
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
-        with:
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/andersevenrud/microservice-rnd-api:latest
-          context: ./packages/api
+          package_name: api
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
   docker_cli:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
@@ -49,17 +35,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - uses: ./.github/actions/publisher
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
-        with:
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/andersevenrud/microservice-rnd-cli:latest
-          context: ./packages/cli
+          package_name: cli
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
   docker_mailer:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
@@ -67,17 +46,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - uses: ./.github/actions/publisher
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
-        with:
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/andersevenrud/microservice-rnd-mailer:latest
-          context: ./packages/mailer
+          package_name: mailer
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
   docker_runner:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
@@ -85,14 +57,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: docker/setup-buildx-action@v1
-      - uses: docker/login-action@v1
+      - uses: ./.github/actions/publisher
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2
-        with:
-          push: ${{ github.ref == 'refs/heads/main' }}
-          tags: ghcr.io/andersevenrud/microservice-rnd-runner:latest
-          context: ./packages/runner
+          package_name: runner
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
