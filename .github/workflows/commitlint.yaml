@@ -1,11 +1,11 @@
-name: LGTM
+name: Lint Commit
 on:
   push:
     branches:
       - main
   pull_request:
 jobs:
-  commitlint:
+  lint:
     name: Conventional Commits check
     runs-on: ubuntu-latest
     steps:

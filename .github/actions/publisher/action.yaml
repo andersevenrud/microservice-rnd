@@ -15,7 +15,7 @@ runs:
     - uses: lewagon/wait-on-check-action@v1.0.0
       with:
         ref: ${{ github.ref }}
-        check-name: LGTM
+        check-name: Lint Commit
         repo-token: ${{ inputs.token }}
         wait-interval: 10
     - uses: lewagon/wait-on-check-action@v1.0.0
