@@ -1,0 +1,20 @@
+name: Lint API
+on:
+  push:
+    paths:
+      - ./packages/api/**
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ./packages/api/**
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/linter
+        with:
+          package_name: api

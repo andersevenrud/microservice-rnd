@@ -1,0 +1,20 @@
+name: Lint App
+on:
+  push:
+    paths:
+      - ./packages/app/**
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ./packages/app/**
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/linter
+        with:
+          package_name: app

@@ -5,28 +5,7 @@ on:
       - main
   pull_request:
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/linter
-        with:
-          package_name: api
-      - uses: ./.github/actions/linter
-        with:
-          package_name: app
-      - uses: ./.github/actions/linter
-        with:
-          package_name: cli
-      - uses: ./.github/actions/linter
-        with:
-          package_name: mailer
-      - uses: ./.github/actions/linter
-        with:
-          package_name: runner
-  commit:
+  commitlint:
     name: Conventional Commits check
     runs-on: ubuntu-latest
     steps:

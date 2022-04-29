@@ -1,0 +1,20 @@
+name: Lint Runner
+on:
+  push:
+    paths:
+      - ./packages/runner/**
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ./packages/runner/**
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/linter
+        with:
+          package_name: runner

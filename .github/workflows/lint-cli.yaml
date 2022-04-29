@@ -1,0 +1,20 @@
+name: Lint CLI
+on:
+  push:
+    paths:
+      - ./packages/cli/**
+    branches:
+      - main
+  pull_request:
+    paths:
+      - ./packages/cli/**
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/linter
+        with:
+          package_name: cli
