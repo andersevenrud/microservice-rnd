@@ -2,7 +2,7 @@ name: Publish CLI
 on:
   push:
     paths:
-      - ./packages/cli/**
+      - packages/cli/**
     branches:
       - main
 jobs:

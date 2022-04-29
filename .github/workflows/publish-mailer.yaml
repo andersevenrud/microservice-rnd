@@ -2,7 +2,7 @@ name: Publish Mailer
 on:
   push:
     paths:
-      - ./packages/mailer/**
+      - packages/mailer/**
     branches:
       - main
 jobs:

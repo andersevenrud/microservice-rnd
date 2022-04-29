@@ -2,12 +2,11 @@ name: Lint App
 on:
   push:
     paths:
-      - ./packages/app/**
+      - packages/app/**
     branches:
-      - main
   pull_request:
     paths:
-      - ./packages/app/**
+      - packages/app/**
 jobs:
   lint:
     runs-on: ubuntu-latest

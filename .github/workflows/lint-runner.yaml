@@ -2,12 +2,11 @@ name: Lint Runner
 on:
   push:
     paths:
-      - ./packages/runner/**
+      - packages/runner/**
     branches:
-      - main
   pull_request:
     paths:
-      - ./packages/runner/**
+      - packages/runner/**
 jobs:
   lint:
     runs-on: ubuntu-latest

@@ -2,12 +2,11 @@ name: Lint API
 on:
   push:
     paths:
-      - ./packages/api/**
+      - packages/api/**
     branches:
-      - main
   pull_request:
     paths:
-      - ./packages/api/**
+      - packages/api/**
 jobs:
   lint:
     runs-on: ubuntu-latest

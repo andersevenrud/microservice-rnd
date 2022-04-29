@@ -2,12 +2,11 @@ name: Lint Mailer
 on:
   push:
     paths:
-      - ./packages/mailer/**
+      - packages/mailer/**
     branches:
-      - main
   pull_request:
     paths:
-      - ./packages/mailer/**
+      - packages/mailer/**
 jobs:
   lint:
     runs-on: ubuntu-latest

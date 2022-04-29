@@ -2,7 +2,7 @@ name: Publish App
 on:
   push:
     paths:
-      - ./packages/app/**
+      - packages/app/**
     branches:
       - main
 jobs:

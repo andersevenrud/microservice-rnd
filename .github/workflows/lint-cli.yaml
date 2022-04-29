@@ -2,12 +2,11 @@ name: Lint CLI
 on:
   push:
     paths:
-      - ./packages/cli/**
+      - packages/cli/**
     branches:
-      - main
   pull_request:
     paths:
-      - ./packages/cli/**
+      - packages/cli/**
 jobs:
   lint:
     runs-on: ubuntu-latest
