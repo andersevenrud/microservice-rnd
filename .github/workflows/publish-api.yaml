@@ -1,0 +1,19 @@
+name: Publish API
+on:
+  push:
+    paths:
+      - ./packages/api/**
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/publisher
+        with:
+          package_name: api
+          token: ${{ secrets.GITHUB_TOKEN }}
+          wait_on: Lint API
