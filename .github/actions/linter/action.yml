@@ -1,0 +1,18 @@
+name: Lint Package
+inputs:
+  package_name:
+    required: true
+    type: string
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache-dependency-path: packages/${{inputs.package_name}}/package-lock.json
+    - run: npm ci
+      shell: bash
+      working-directory: ./packages/${{inputs.package_name}}
+    - run: npm run lint
+      shell: bash
+      working-directory: ./packages/${{inputs.package_name}}

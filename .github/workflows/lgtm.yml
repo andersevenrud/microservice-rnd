@@ -6,17 +6,26 @@ on:
   pull_request:
 jobs:
   lint:
-    name: Lint all packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2
+      - uses: ./.github/actions/linter
         with:
-          node-version: '16'
-      - run: yarn install
-      - run: yarn workspaces run lint
+          package_name: api
+      - uses: ./.github/actions/linter
+        with:
+          package_name: app
+      - uses: ./.github/actions/linter
+        with:
+          package_name: cli
+      - uses: ./.github/actions/linter
+        with:
+          package_name: mailer
+      - uses: ./.github/actions/linter
+        with:
+          package_name: runner
   commit:
     name: Conventional Commits check
     runs-on: ubuntu-latest
