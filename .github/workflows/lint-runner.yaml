@@ -1,9 +1,8 @@
 name: Lint Runner
 on:
   push:
-    paths:
-      - packages/runner/**
-    branches:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - packages/runner/**

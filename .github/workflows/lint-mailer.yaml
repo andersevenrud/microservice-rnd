@@ -1,9 +1,8 @@
 name: Lint Mailer
 on:
   push:
-    paths:
-      - packages/mailer/**
-    branches:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - packages/mailer/**

@@ -6,7 +6,17 @@ on:
     branches:
       - main
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/linter
+        with:
+          package_name: api
   publish:
+    needs: [lint]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,4 +26,3 @@ jobs:
         with:
           package_name: api
           token: ${{ secrets.GITHUB_TOKEN }}
-          wait_on: Lint API

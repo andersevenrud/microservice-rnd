@@ -1,9 +1,8 @@
 name: Lint API
 on:
   push:
-    paths:
-      - packages/api/**
-    branches:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - packages/api/**

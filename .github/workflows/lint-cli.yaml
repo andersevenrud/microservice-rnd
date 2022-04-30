@@ -1,9 +1,8 @@
 name: Lint CLI
 on:
   push:
-    paths:
-      - packages/cli/**
-    branches:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - packages/cli/**

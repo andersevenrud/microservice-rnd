@@ -1,9 +1,8 @@
 name: Lint App
 on:
   push:
-    paths:
-      - packages/app/**
-    branches:
+    branches-ignore:
+      - main
   pull_request:
     paths:
       - packages/app/**

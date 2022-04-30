@@ -6,22 +6,13 @@ inputs:
   token:
     required: true
     type: string
-  wait_on:
-    required: true
-    type: string
 runs:
   using: "composite"
   steps:
     - uses: lewagon/wait-on-check-action@v1.0.0
       with:
         ref: ${{ github.ref }}
-        check-name: Lint Commit
-        repo-token: ${{ inputs.token }}
-        wait-interval: 10
-    - uses: lewagon/wait-on-check-action@v1.0.0
-      with:
-        ref: ${{ github.ref }}
-        check-name: ${{ inputs.wait_on }}
+        check-name: Conventional Commits check
         repo-token: ${{ inputs.token }}
         wait-interval: 10
     - uses: docker/setup-buildx-action@v1
