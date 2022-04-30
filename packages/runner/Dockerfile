@@ -24,6 +24,7 @@ WORKDIR /usr/src/runner
 COPY --chown=node:node --from=build /usr/src/runner/node_modules /usr/src/runner/node_modules
 COPY --chown=node:node --from=build /usr/src/runner/dist /usr/src/runner/dist
 COPY --chown=node:node --from=build /usr/src/runner/package.json /usr/src/runner/package.json
+COPY --chown=node:node --from=build /usr/src/api/UNLICENSE /usr/src/api/UNLICENSE
 
 # Make sure we don't run node on PID 1
 CMD ["dumb-init", "node", "dist/src/index.js"]

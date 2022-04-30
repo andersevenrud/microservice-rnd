@@ -24,6 +24,7 @@ WORKDIR /usr/src/api
 COPY --chown=node:node --from=build /usr/src/api/node_modules /usr/src/api/node_modules
 COPY --chown=node:node --from=build /usr/src/api/dist /usr/src/api/dist
 COPY --chown=node:node --from=build /usr/src/api/package.json /usr/src/api/package.json
+COPY --chown=node:node --from=build /usr/src/api/UNLICENSE /usr/src/api/UNLICENSE
 
 # Make sure we don't run node on PID 1
 CMD ["dumb-init", "node", "dist/src/index.js"]
