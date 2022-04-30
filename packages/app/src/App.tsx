@@ -303,7 +303,10 @@ function Page() {
       window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
     )
 
-    const onOpen = () => addToast({ type: 'info', message: 'Connected' })
+    const onOpen = () => {
+      addToast({ type: 'info', message: 'Connected' })
+      load()
+    }
 
     const onClose = () =>
       addToast({ type: 'warning', message: 'Closed connection' })
