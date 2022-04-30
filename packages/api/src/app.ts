@@ -21,17 +21,15 @@ class ExpressNotFoundError extends ExpressError {
   status = 404
 }
 
-const withErrorWrapper = (
-  fn: (req: Request, res: Response, next: NextFunction) => Promise<void>
-) => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+const withErrorWrapper =
+  (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) =>
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       await fn(req, res, next)
     } catch (e) {
       next(e)
     }
   }
-}
 
 function createRouter({ producer }: ApplicationContext) {
   const router = express.Router()
