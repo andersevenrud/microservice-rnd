@@ -24,7 +24,7 @@ WORKDIR /usr/src/mailer
 COPY --chown=node:node --from=build /usr/src/mailer/node_modules /usr/src/mailer/node_modules
 COPY --chown=node:node --from=build /usr/src/mailer/dist /usr/src/mailer/dist
 COPY --chown=node:node --from=build /usr/src/mailer/package.json /usr/src/mailer/package.json
-COPY --chown=node:node --from=build /usr/src/api/UNLICENSE /usr/src/api/UNLICENSE
+COPY --chown=node:node --from=build /usr/src/mailer/UNLICENSE /usr/src/mailer/UNLICENSE
 
 # Make sure we don't run node on PID 1
 CMD ["dumb-init", "node", "dist/index.js"]
