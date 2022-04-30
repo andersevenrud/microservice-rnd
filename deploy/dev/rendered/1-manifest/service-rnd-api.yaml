@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"labels":{"app":"api-service","app.kubernetes.io/managed-by":"pulumi"},"name":"api","namespace":"rnd"},"spec":{"ports":[{"port":8080}],"selector":{"app":"api-pod"},"type":"LoadBalancer"}}
+  labels:
+    app: api-service
+    app.kubernetes.io/managed-by: pulumi
+  name: api
+  namespace: rnd
+spec:
+  ports:
+  - port: 8080
+  selector:
+    app: api-pod
+  type: LoadBalancer

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"admin":"mailhog","app.kubernetes.io/managed-by":"pulumi"},"name":"mailhog","namespace":"rnd"},"spec":{"replicas":1,"selector":{"matchLabels":{"admin":"mailhog-pod"}},"template":{"metadata":{"labels":{"admin":"mailhog-pod"}},"spec":{"containers":[{"image":"mailhog/mailhog:v1.0.1","imagePullPolicy":"IfNotPresent","name":"mailhog","ports":[{"containerPort":1025,"name":"smtp"},{"containerPort":8025,"name":"http"}]}],"restartPolicy":"Always"}}}}
+  labels:
+    admin: mailhog
+    app.kubernetes.io/managed-by: pulumi
+  name: mailhog
+  namespace: rnd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      admin: mailhog-pod
+  template:
+    metadata:
+      labels:
+        admin: mailhog-pod
+    spec:
+      containers:
+      - image: mailhog/mailhog:v1.0.1
+        imagePullPolicy: IfNotPresent
+        name: mailhog
+        ports:
+        - containerPort: 1025
+          name: smtp
+        - containerPort: 8025
+          name: http
+      restartPolicy: Always

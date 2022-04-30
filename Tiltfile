@@ -8,44 +8,8 @@ docker_build('ghcr.io/andersevenrud/microservice-rnd-runner:latest', 'packages/r
 
 deploy_cert_manager()
 
-k8s_yaml([
-  'deploy/namespace.yaml',
-
-  'deploy/mailer-deployment.yaml',
-  'deploy/runner-deployment.yaml',
-
-  'deploy/app-hpa.yaml',
-  'deploy/app-deployment.yaml',
-  'deploy/app-service.yaml',
-
-  'deploy/api-deployment.yaml',
-  'deploy/api-service.yaml',
-
-  'deploy/kowl-deployment.yaml',
-  'deploy/kowl-service.yaml',
-
-  'deploy/adminer-deployment.yaml',
-  'deploy/adminer-service.yaml',
-
-  'deploy/mailhog-deployment.yaml',
-  'deploy/mailhog-service.yaml',
-
-  'deploy/zookeeper-deployment.yaml',
-  'deploy/zookeeper-service.yaml',
-
-  'deploy/db-pvc.yaml',
-  'deploy/db-deployment.yaml',
-  'deploy/db-service.yaml',
-
-  'deploy/kafka-deployment.yaml',
-  'deploy/kafka-service.yaml',
-
-  'deploy/selfsigned-cert.yaml',
-  'deploy/ingress.yaml',
-
-  'deploy/cleanup-job.yaml',
-  'deploy/migration-job.yaml',
-])
+k8s_yaml(listdir('deploy/dev/static'))
+k8s_yaml(listdir('deploy/dev/rendered/1-manifest'))
 
 k8s_resource(workload = 'migrations', labels = 'jobs', trigger_mode = TRIGGER_MODE_MANUAL)
 k8s_resource(workload = 'cleanup', labels = 'jobs')
@@ -77,3 +41,4 @@ k8s_resource(new_name = 'pv', objects = [
 k8s_resource(new_name = 'scale', objects = [
   'app:horizontalpodautoscaler',
 ], labels = 'www')
+

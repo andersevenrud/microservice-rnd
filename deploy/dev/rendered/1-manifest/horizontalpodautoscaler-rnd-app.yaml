@@ -1,0 +1,19 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"autoscaling/v1","kind":"HorizontalPodAutoscaler","metadata":{"labels":{"app":"app","app.kubernetes.io/managed-by":"pulumi"},"name":"app","namespace":"rnd"},"spec":{"maxReplicas":3,"minReplicas":1,"scaleTargetRef":{"apiVersion":"apps/v1","kind":"Deployment","name":"app"},"targetCPUUtilizationPercentage":85}}
+  labels:
+    app: app
+    app.kubernetes.io/managed-by: pulumi
+  name: app
+  namespace: rnd
+spec:
+  maxReplicas: 3
+  minReplicas: 1
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: app
+  targetCPUUtilizationPercentage: 85
