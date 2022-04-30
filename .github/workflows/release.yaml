@@ -1,0 +1,19 @@
+name: Release Tag
+on:
+  push:
+    tags:
+      - "v*"
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: |
+          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" | sed -e 's/^v//' >> $GITHUB_ENV
+      - uses: ./.github/actions/publisher
+        with:
+          package_name: api
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ env.RELEASE_VERSION }}
