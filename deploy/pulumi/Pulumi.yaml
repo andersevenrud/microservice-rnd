@@ -1,0 +1,4 @@
+name: rnd
+runtime: nodejs
+description: microservice-rnd deployment
+config: configs
