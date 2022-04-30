@@ -54,18 +54,18 @@ const Timestamp = ({ date }: { date: string }) => (
 )
 
 const Heading = ({ children }: PropsWithChildren<any>) => (
-  <h2 className="text-3xl py-4">{children}</h2>
+  <h2 className="py-4 text-3xl">{children}</h2>
 )
 
 const StatusIndicator = ({ status }: { status: string }) => (
   <div
     title={capitalize(status)}
-    className={classNames('w-4 h-4 rounded-full', statusClassNames[status])}
+    className={classNames('h-4 w-4 rounded-full', statusClassNames[status])}
   ></div>
 )
 
 const Box = ({ children }: PropsWithChildren<any>) => (
-  <div className="bg-white shadow rounded p-4">{children}</div>
+  <div className="rounded bg-white p-4 shadow">{children}</div>
 )
 
 const Button = ({
@@ -80,7 +80,7 @@ const Button = ({
     title={title}
     className={classNames(
       'inline-flex items-center space-x-2',
-      'px-4 py-2 rounded-md',
+      'rounded-md px-4 py-2',
       className || 'border border-gray-200 text-gray-600',
       args.disabled && 'cursor-not-allowed opacity-30'
     )}
@@ -101,7 +101,7 @@ function Toasts() {
     )
 
   return (
-    <div className="fixed bottom-0 right-0 z-50 m-2 space-y-4">
+    <div className="fixed right-0 bottom-0 z-50 m-2 space-y-4">
       {toasts.map((toast, i) => (
         <div key={i} className={createClassNames(toast)}>
           {toast.message}
@@ -119,13 +119,13 @@ function Logs() {
       {logs.map(({ timestamp, data }, i) => (
         <Box key={i}>
           <div>
-            <div className="flex items-center border-b border-gray-200 pb-4 space-x-4">
-              <span className="flex-grow">{formattedTimestamp(timestamp)}</span>
+            <div className="flex items-center space-x-4 border-b border-gray-200 pb-4">
+              <span className="grow">{formattedTimestamp(timestamp)}</span>
               <StatusIndicator status={data.level} />
             </div>
-            <div className="pt-4 space-y-2">
+            <div className="space-y-2 pt-4">
               <div className="mb-4">{data.message}</div>
-              <div className="p-4 text-sm bg-gray-100 text-gray-500 overflow-auto">
+              <div className="overflow-auto bg-gray-100 p-4 text-sm text-gray-500">
                 <pre>{JSON.stringify(data.meta, null, 4)}</pre>
               </div>
             </div>
@@ -164,10 +164,10 @@ function ListBox({ item }: { item: ClientInstance }) {
     <Box>
       <div className="border-b border-gray-200 pb-4">
         <div
-          className="flex items-center space-x-2 text-lg text-gray-800 cursor-pointer"
+          className="flex cursor-pointer items-center space-x-2 text-lg text-gray-800"
           onClick={onToggle}
         >
-          <div className="flex items-center text-gray-500 text-xs">
+          <div className="flex items-center text-xs text-gray-500">
             <i
               className={classNames(
                 'fa',
@@ -175,7 +175,7 @@ function ListBox({ item }: { item: ClientInstance }) {
               )}
             />
           </div>
-          <div className="flex-grow">
+          <div className="grow">
             <span>{item.uuid}</span>
           </div>
           <div>
@@ -184,7 +184,7 @@ function ListBox({ item }: { item: ClientInstance }) {
         </div>
 
         {expanded && (
-          <div className="text-sm text-gray-500 space-y-2 mt-4">
+          <div className="mt-4 space-y-2 text-sm text-gray-500">
             <div>
               Active <Timestamp date={item.lastActiveAt} />
             </div>
@@ -197,7 +197,7 @@ function ListBox({ item }: { item: ClientInstance }) {
 
       <div className="flex items-center space-x-4 pt-4">
         <div>{capitalize(item.state)}</div>
-        <div className="flex flex-grow space-x-2 justify-end">
+        <div className="flex grow justify-end space-x-2">
           <Button
             title="Start"
             disabled={[
@@ -247,7 +247,7 @@ function List() {
   const { list } = useGlobalProvider()
 
   return (
-    <div className="grid md:grid-cols-2 gap-4 items-baseline">
+    <div className="grid items-baseline gap-4 md:grid-cols-2">
       {list.map((item) => (
         <ListBox key={item.uuid} item={item} />
       ))}
@@ -274,7 +274,7 @@ function Actions() {
           <span>Reload</span>
         </Button>
         <Button
-          className="text-white bg-blue-500 font-bold"
+          className="bg-blue-500 font-bold text-white"
           onClick={onCreateClient}
         >
           <i className="fa fa-plus" />
@@ -344,16 +344,16 @@ function Page() {
 export default function App() {
   return (
     <GlobalProvider>
-      <div className="bg-gray-100 max-w-screen min-h-screen">
-        <div className="sticky top-0 left-0 right-0 bg-white p-4 border-b border-gray-200 shadow-sm">
+      <div className="max-w-screen min-h-screen bg-gray-100">
+        <div className="sticky inset-x-0 top-0 border-b border-gray-200 bg-white p-4 shadow-sm">
           <h1 className="text-xl">Kafkaesque</h1>
         </div>
 
-        <div className="py-8 max-w-7xl mx-auto px-2 7xl:px-0">
+        <div className="7xl:px-0 mx-auto max-w-7xl py-8 px-2">
           <Page />
         </div>
 
-        <div className="text-gray-400 text-xs text-center p-8">
+        <div className="p-8 text-center text-xs text-gray-400">
           <a
             href="https://github.com/andersevenrud/rnd-microservice-arch"
             target="_blank"
