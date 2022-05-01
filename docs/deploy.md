@@ -23,6 +23,7 @@ First set up Pulumi:
 ```bash
 cd deploy/pulumi
 npm install
+pulumi login --local
 ```
 
 Now set up a stack. Example:
@@ -78,3 +79,13 @@ Go back into the root directory and apply the generated configurations:
 ```bash
 KUBECONFIG="config.yaml" kubectl apply -f deploy/my-stack/ -R
 ```
+
+## CD via Github Actions
+
+This project includes a workflow template (`.github/workflows/release.yaml`) that can be used for CD.
+
+The following secrets are required:
+
+* `PULUMI_ACCESS_TOKEN` - Access token for the Pulumi stack
+* `PULUMI_CONFIG_PASSPHRASE` - The passphrase used for the stack (can be empty)
+* `PULUMI_CONFIG` - A `Pulumi.yaml` file that includes the configuration entry `rnd:kubeconfig` that contains `config.yaml` from your k8s provider.
