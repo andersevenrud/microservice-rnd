@@ -13,16 +13,8 @@ import * as runner from './components/runner'
 import * as zookeeper from './components/zookeeper'
 import * as jobs from './components/jobs'
 
-export default function (config: pulumi.Config, provider: k8s.Provider) {
+export function devConfiguration(config: pulumi.Config, provider: k8s.Provider) {
   ns.rnd(config, provider)
-
-  new k8s.yaml.ConfigFile(
-    'ingresses',
-    {
-      file: 'src/dev/ingress.yaml',
-    },
-    { provider }
-  )
 
   new k8s.yaml.ConfigFile(
     'selfsigned-cert',
@@ -45,10 +37,12 @@ export default function (config: pulumi.Config, provider: k8s.Provider) {
   api.deployment(config, provider)
   api.service(config, provider)
   api.health(config, provider)
+  api.ingress(config, provider)
 
   app.deployment(config, provider)
   app.service(config, provider)
   app.scale(config, provider)
+  app.ingress(config, provider)
 
   mailer.deployment(config, provider)
 
@@ -59,10 +53,13 @@ export default function (config: pulumi.Config, provider: k8s.Provider) {
 
   adminer.deployment(config, provider)
   adminer.service(config, provider)
+  adminer.ingress(config, provider)
 
   kowl.deployment(config, provider)
   kowl.service(config, provider)
+  kowl.ingress(config, provider)
 
   mailhog.deployment(config, provider)
   mailhog.service(config, provider)
+  mailhog.ingress(config, provider)
 }

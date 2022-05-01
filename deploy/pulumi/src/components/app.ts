@@ -91,3 +91,51 @@ export const service = (config: Config, provider: k8s.Provider) =>
     },
     { provider }
   )
+
+export const ingress = (config: Config, provider: k8s.Provider) =>
+  new k8s.networking.v1.Ingress(
+    'app-ingress',
+    {
+      metadata: {
+        name: 'ingress-root',
+        namespace: 'rnd',
+        labels: {
+          www: 'ingress',
+        },
+        annotations: {
+          'cert-manager.io/cluster-issuer': 'selfsigned-cluster-issuer',
+        },
+      },
+      spec: {
+        tls: [
+          {
+            hosts: ['rnd.lvh.me'],
+            secretName: 'selfsigned-root-secret',
+          },
+        ],
+        rules: [
+          {
+            host: 'rnd.lvh.me',
+            http: {
+              paths: [
+                {
+                  path: '/',
+                  pathType: 'Prefix',
+                  backend: {
+                    service: {
+                      name: 'app',
+                      port: {
+                        number: 8080,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+
+    { provider }
+  )

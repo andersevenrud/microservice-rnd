@@ -130,3 +130,52 @@ export const health = (config: Config, provider: k8s.Provider) =>
     },
     { provider }
   )
+
+export const ingress = (config: Config, provider: k8s.Provider) =>
+  new k8s.networking.v1.Ingress(
+    'api-ingress',
+    {
+      metadata: {
+        name: 'ingress-api',
+        namespace: 'rnd',
+        labels: {
+          www: 'ingress',
+        },
+        annotations: {
+          'nginx.ingress.kubernetes.io/rewrite-target': '/$2',
+          'cert-manager.io/cluster-issuer': 'selfsigned-cluster-issuer',
+        },
+      },
+      spec: {
+        tls: [
+          {
+            hosts: ['rnd.lvh.me'],
+            secretName: 'selfsigned-root-secret',
+          },
+        ],
+        rules: [
+          {
+            host: 'rnd.lvh.me',
+            http: {
+              paths: [
+                {
+                  path: '/api(/|$)(.*)',
+                  pathType: 'Prefix',
+                  backend: {
+                    service: {
+                      name: 'api',
+                      port: {
+                        number: 8080,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+
+    { provider }
+  )
