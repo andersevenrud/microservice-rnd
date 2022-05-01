@@ -28,6 +28,14 @@ export default function createConfiguration(
       },
       { provider }
     )
+  } else {
+    new k8s.yaml.ConfigFile(
+      'prod-cert',
+      {
+        file: 'src/prod/cert.yaml',
+      },
+      { provider }
+    )
   }
 
   zookeeper.statefulSet(config, provider)

@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: prod-cluster-issuer
+  namespace: rnd
+  labels:
+    ops: cert
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: andersevenrud@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
