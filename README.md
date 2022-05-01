@@ -7,15 +7,13 @@ Microservice architecture demonstration with nodejs (typescript) and [Kafka](htt
 This is a personal research project used for learning more about microservice architectures,
 structuring and good practices related to development on Docker and deployment onto a
 Kubernetes Cluster. Uses Github Actions for CI and CD and [Pulumi](https://www.pulumi.com/)
-to generate configurations.
+deploy onto the cloud.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
 interfaces to inspect the underlying services.
 
-**Even though this project includes optimizations to run in a production environment
-(and has been tested in the cloud), I do not consider the backend configurations to
-be safe out of the box in this state.**
+**Please note that the out-of-the-box configurations are not safe for a production environment.**
 
 ![Vite-App](https://user-images.githubusercontent.com/161548/163657043-a2f3b766-77a6-44fc-8b62-078c6fa8390c.png)
 
