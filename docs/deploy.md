@@ -27,6 +27,8 @@ Now set up a stack. Example:
 
 ```bash
 pulumi stack init my-stack
+
+# Set up base configuration
 pulumi config set name my-stack
 pulumi config set mode production
 pulumi config set version latest
