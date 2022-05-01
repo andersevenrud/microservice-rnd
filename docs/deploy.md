@@ -66,10 +66,8 @@ pulumi update
 Generate:
 
 ```bash
-pulumi update
+GENERATE_YAML=true pulumi update
 ```
-
-## Deploy
 
 Go back into the root directory and apply the generated configurations:
 

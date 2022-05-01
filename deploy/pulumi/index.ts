@@ -13,7 +13,7 @@ let provider = new k8s.Provider('render-yaml', {
   renderYamlToDirectory: `../${mode}`,
 })
 
-if (kubeConfig) {
+if (kubeConfig && !process.env.GENERATE_YAML) {
   provider = new k8s.Provider('k8s', {
     kubeconfig: kubeConfig,
   })
