@@ -61,6 +61,10 @@ You can access the following administration interfaces with the URL patterns not
 * `mailhog` - Mail messages
 * `adminer` - Database administration
 
+## Deployment
+
+If you want to deploy this into the cloud, see [`docs/deploy.md`](docs/deploy.md).
+
 ## License
 
 [Unlicense](./UNLICENSE)
