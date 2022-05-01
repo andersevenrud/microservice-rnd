@@ -11,6 +11,7 @@ import * as mailhog from './components/mailhog'
 import * as runner from './components/runner'
 import * as zookeeper from './components/zookeeper'
 import * as jobs from './components/jobs'
+import * as certs from './components/cert'
 import { Configuration } from './config'
 
 export default function createKubernetes(
@@ -19,23 +20,7 @@ export default function createKubernetes(
 ) {
   ns.rnd(config, provider)
 
-  if (config.dev) {
-    new k8s.yaml.ConfigFile(
-      'selfsigned-cert',
-      {
-        file: 'src/dev/cert.yaml',
-      },
-      { provider }
-    )
-  } else {
-    new k8s.yaml.ConfigFile(
-      'prod-cert',
-      {
-        file: 'src/prod/cert.yaml',
-      },
-      { provider }
-    )
-  }
+  certs.cert(config, provider)
 
   zookeeper.statefulSet(config, provider)
   zookeeper.service(config, provider)
