@@ -41,7 +41,15 @@ pulumi config set env.MAILER_HOST mailhog
 pulumi config set env.MAILER_PORT 1025
 ```
 
+Generate:
+
+```bash
+pulumi update
+```
+
 ## Deploy
+
+Go back into the root directory and apply the generated configurations:
 
 ```bash
 KUBECONFIG="config.yaml" kubectl apply -f deploy/my-stack/ -R
