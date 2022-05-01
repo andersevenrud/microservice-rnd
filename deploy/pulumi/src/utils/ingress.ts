@@ -12,6 +12,7 @@ export const createIngress = (config: Config, paths: any[]) => {
     })
   } else {
     Object.assign(annotations, {
+      'cert-manager.io/cluster-issuer': 'prod-cluster-issuer',
       'kubernetes.io/ingress.class': 'nginx',
     })
   }
