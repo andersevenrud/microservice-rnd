@@ -31,7 +31,7 @@ export default function createConfig(config: Config): Configuration {
   const kubeConfigRaw = config.get('kubeconfig')
   const kubeConfig = kubeConfigRaw ? parse(kubeConfigRaw) : undefined
   const mode = config.get('mode') || 'dev'
-  const dev = config.get('mode') === 'dev'
+  const dev = mode === 'dev'
   const version = config.get('version') || 'latest'
   const sha = config.get('sha') || 'HEAD'
   const host = config.get('host') || 'rnd.lvh.me'
