@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"selfsigned-cluster-issuer","nginx.ingress.kubernetes.io/rewrite-target":"/$2"},"labels":{"app.kubernetes.io/managed-by":"pulumi","www":"ingress"},"name":"ingress-api","namespace":"rnd"},"spec":{"rules":[{"host":"rnd.lvh.me","http":{"paths":[{"backend":{"service":{"name":"api","port":{"number":8080}}},"path":"/api(/|$)(.*)","pathType":"Prefix"}]}}],"tls":[{"hosts":["rnd.lvh.me"],"secretName":"selfsigned-root-secret"}]}}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  labels:
+    app.kubernetes.io/managed-by: pulumi
+    www: ingress
+  name: ingress-api
+  namespace: rnd
+spec:
+  rules:
+  - host: rnd.lvh.me
+    http:
+      paths:
+      - backend:
+          service:
+            name: api
+            port:
+              number: 8080
+        path: /api(/|$)(.*)
+        pathType: Prefix
+  tls:
+  - hosts:
+    - rnd.lvh.me
+    secretName: selfsigned-root-secret

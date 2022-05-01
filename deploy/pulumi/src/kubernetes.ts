@@ -16,6 +16,22 @@ import * as jobs from './components/jobs'
 export default function (config: pulumi.Config, provider: k8s.Provider) {
   ns.rnd(config, provider)
 
+  new k8s.yaml.ConfigFile(
+    'ingresses',
+    {
+      file: 'src/dev/ingress.yaml',
+    },
+    { provider }
+  )
+
+  new k8s.yaml.ConfigFile(
+    'selfsigned-cert',
+    {
+      file: 'src/dev/cert.yaml',
+    },
+    { provider }
+  )
+
   zookeeper.statefulSet(config, provider)
   zookeeper.service(config, provider)
 

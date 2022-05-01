@@ -5,7 +5,7 @@ import createDefaults from './src/kubernetes'
 const config = new pulumi.Config()
 
 const provider = new k8s.Provider('render-yaml', {
-  renderYamlToDirectory: '../dev/rendered',
+  renderYamlToDirectory: '../dev',
 })
 
 createDefaults(config, provider)

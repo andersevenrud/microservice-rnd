@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"selfsigned-cluster-issuer"},"labels":{"app.kubernetes.io/managed-by":"pulumi","www":"ingress"},"name":"ingress-kowl","namespace":"rnd"},"spec":{"rules":[{"host":"kowl.rnd.lvh.me","http":{"paths":[{"backend":{"service":{"name":"kowl","port":{"number":8080}}},"path":"/","pathType":"Prefix"}]}}],"tls":[{"hosts":["kowl.rnd.lvh.me"],"secretName":"selfsigned-root-secret"}]}}
+  labels:
+    app.kubernetes.io/managed-by: pulumi
+    www: ingress
+  name: ingress-kowl
+  namespace: rnd
+spec:
+  rules:
+  - host: kowl.rnd.lvh.me
+    http:
+      paths:
+      - backend:
+          service:
+            name: kowl
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - kowl.rnd.lvh.me
+    secretName: selfsigned-root-secret
