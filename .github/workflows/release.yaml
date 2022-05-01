@@ -1,6 +1,4 @@
 name: Release Deployment
-env:
-  PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
 on:
   workflow_dispatch:
     inputs:
@@ -94,6 +92,7 @@ jobs:
           pulumi config set sha ${GITHUB_SHA::6}
         working-directory: ./deploy/pulumi
         env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
       - uses: pulumi/actions@v3
         with:
@@ -101,4 +100,5 @@ jobs:
           stack-name: vultr
           work-dir: ./deploy/pulumi
         env:
+          PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
