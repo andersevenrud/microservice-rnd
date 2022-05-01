@@ -26,24 +26,15 @@ One of the following configurations:
 > Note that the docker compose environment does **not** scale and is mainly for development
 > purposes, while the kubernetes cluster is configured for scaling.
 
-1. Local [Docker Compose](#docker-compose)
-    * `docker`
-    * `docker-compose`
-2. Local [Kubernetes Cluster](#kubernetes)
+1. Local [Kubernetes Cluster](#kubernetes)
     * `docker`
     * [`minikube`](https://minikube.sigs.k8s.io/docs/)
     * [`tilt`](https://tilt.dev/)
+2. Local [Docker Compose](#docker-compose)
+    * `docker`
+    * `docker-compose`
 
 ## Installation
-
-### Docker Compose
-
-> Runs on http://localhost:8080 (and `/<admin-service>/`)
-
-```bash
-docker-compose run --rm cli sh scripts/migrations.sh
-docker-compose up
-```
 
 ### Kubernetes
 
@@ -53,6 +44,15 @@ See [`docs/k8s.md`](docs/k8s.md) for more information about setting up a local K
 
 ```bash
 tilt up
+```
+
+### Docker Compose
+
+> Runs on http://localhost:8080 (and `/<admin-service>/`)
+
+```bash
+docker-compose run --rm cli sh scripts/migrations.sh
+docker-compose up
 ```
 
 ## Admin Services
