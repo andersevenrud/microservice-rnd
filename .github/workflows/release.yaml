@@ -84,17 +84,17 @@ jobs:
           cache-dependency-path: deploy/pulumi/package-lock.json
       - run: npm ci
         working-directory: ./deploy/pulumi
-      - run: |
+      - name: pulumi stack
+        run: |
           mkdir -p configs
           echo "${{ secrets.PULUMI_CONFIG }}" > configs/Pulumi.vultr.yaml
           curl -fsSL https://get.pulumi.com | sh
           pulumi stack select vultr
-          pulumi config set version ${RELEASE_VERSION}
+          pulumi config set version ${{ github.event.inputs.version }}
           pulumi config set sha ${GITHUB_SHA::6}
         working-directory: ./deploy/pulumi
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          RELEASE_VERSION: ${{ github.event.inputs.version }}
       - uses: pulumi/actions@v3
         with:
           command: up

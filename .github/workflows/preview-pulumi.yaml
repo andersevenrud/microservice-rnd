@@ -1,0 +1,36 @@
+name: Preview Pulumi
+on:
+  pull_request:
+    paths:
+      - deploy/pulumi/**
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache-dependency-path: deploy/pulumi/package-lock.json
+      - run: npm ci
+        working-directory: ./deploy/pulumi
+      - name: pulumi stack
+        run: |
+          mkdir -p configs
+          echo "${{ secrets.PULUMI_CONFIG }}" > configs/Pulumi.vultr.yaml
+          curl -fsSL https://get.pulumi.com | sh
+          pulumi stack select vultr
+          pulumi config set version ${{ github.event.inputs.version }}
+          pulumi config set sha ${GITHUB_SHA::6}
+        working-directory: ./deploy/pulumi
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+      - uses: pulumi/actions@v3
+        with:
+          command: preview
+          stack-name: vultr
+          work-dir: ./deploy/pulumi
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
