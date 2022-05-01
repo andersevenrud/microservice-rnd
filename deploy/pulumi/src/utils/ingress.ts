@@ -1,9 +1,9 @@
 import { Configuration } from '../config'
 
-export const createIngress = (config: Configuration, paths: any[]) => {
+export const createIngress = (config: Configuration, paths: any[], subdomain?: string) => {
   const annotations = {}
   const secretName = config.dev ? 'selfsigned-root-secret' : 'letsencrypt-prod'
-  const host = config.host
+  const host = subdomain ? `${subdomain}.${config.host}` : config.host
 
   if (config.dev) {
     Object.assign(annotations, {

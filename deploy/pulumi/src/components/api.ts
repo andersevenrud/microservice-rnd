@@ -166,6 +166,5 @@ export const ingress = (config: Configuration, provider: k8s.Provider) =>
         },
       }
     ),
-
     { provider }
   )
