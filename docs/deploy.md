@@ -48,7 +48,7 @@ pulumi config set env.MAILER_HOST mailhog
 pulumi config set env.MAILER_PORT 1025
 ```
 
-## Automatically deploying via kubeconfig
+## Manual Deployment
 
 Add your account configuration:
 
@@ -56,15 +56,15 @@ Add your account configuration:
 cat config.yaml | pulumi config set kubeconfig
 ```
 
-Deploy:
+### Using pulumi stack
 
 ```bash
 pulumi update
 ```
 
-## Manually deploying via configurations
+### Using kubectl apply
 
-Generate:
+Generate configurations instead of remote stack:
 
 ```bash
 GENERATE_YAML=true pulumi update
