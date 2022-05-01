@@ -1,12 +1,13 @@
 # microservice-rnd
 
-Microservice architecture demonstration with nodejs (typescript) and Kafka
+Microservice architecture demonstration with nodejs (typescript) and [Kafka](https://kafka.apache.org/).
 
 ## About
 
 This is a personal research project used for learning more about microservice architectures,
 structuring and good practices related to development on Docker and deployment onto a
-Kubernetes Cluster. Uses Github Actions for CI and CD and Pulumi to generate configurations.
+Kubernetes Cluster. Uses Github Actions for CI and CD and [Pulumi](https://www.pulumi.com/)
+to generate configurations.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
@@ -30,7 +31,7 @@ One of the following configurations:
     * `docker-compose`
 2. Local [Kubernetes Cluster](#kubernetes)
     * `docker`
-    * `minikube`
+    * [`minikube`](https://minikube.sigs.k8s.io/docs/)
     * [`tilt`](https://tilt.dev/)
 
 ## Installation
