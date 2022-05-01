@@ -1,12 +1,11 @@
-import { Config } from '@pulumi/pulumi'
+import { Configuration } from '../config'
 
-export const createIngress = (config: Config, paths: any[]) => {
-  const isDev = config.get('mode') === 'dev'
+export const createIngress = (config: Configuration, paths: any[]) => {
   const annotations = {}
-  const secretName = isDev ? 'selfsigned-root-secret' : 'letsencrypt-prod'
-  const host = config.get('host') || 'rnd.lvh.me'
+  const secretName = config.dev ? 'selfsigned-root-secret' : 'letsencrypt-prod'
+  const host = config.host
 
-  if (isDev) {
+  if (config.dev) {
     Object.assign(annotations, {
       'cert-manager.io/cluster-issuer': 'selfsigned-cluster-issuer',
     })

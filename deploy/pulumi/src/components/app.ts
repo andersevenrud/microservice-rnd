@@ -1,18 +1,18 @@
 import * as deepmerge from 'deepmerge'
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
 import { githubImage } from '../utils/image'
 import { createIngress } from '../utils/ingress'
+import { Configuration } from '../config'
 
-export const deployment = (config: Config, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'app-deployment',
     {
       metadata: {
         labels: {
           app: 'app',
-          version: config.get('version') || 'latest',
-          sha: config.get('sha') || 'HEAD',
+          version: config.version,
+          sha: config.sha,
         },
         name: 'app',
         namespace: 'rnd',
@@ -45,7 +45,7 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const scale = (config: Config, provider: k8s.Provider) =>
+export const scale = (config: Configuration, provider: k8s.Provider) =>
   new k8s.autoscaling.v1.HorizontalPodAutoscaler(
     'app-scale',
     {
@@ -70,7 +70,7 @@ export const scale = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Config, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider: k8s.Provider) =>
   new k8s.core.v1.Service(
     'app-service',
     {
@@ -96,7 +96,7 @@ export const service = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const ingress = (config: Config, provider: k8s.Provider) =>
+export const ingress = (config: Configuration, provider: k8s.Provider) =>
   new k8s.networking.v1.Ingress(
     'app-ingress',
     deepmerge(

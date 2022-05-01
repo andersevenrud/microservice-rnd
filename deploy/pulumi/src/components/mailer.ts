@@ -1,17 +1,17 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
 import { kafkaEnv, mailerEnv } from '../utils/env'
 import { githubImage } from '../utils/image'
+import { Configuration } from '../config'
 
-export const deployment = (config: Config, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'mailer-deployment',
     {
       metadata: {
         labels: {
           app: 'mailer',
-          version: config.get('version') || 'latest',
-          sha: config.get('sha') || 'HEAD',
+          version: config.version,
+          sha: config.sha,
         },
         name: 'mailer',
         namespace: 'rnd',
@@ -44,7 +44,7 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
                 env: [
                   {
                     name: 'APP_URL',
-                    value: config.get('env.APP_URL') || 'http://rnd.lvh.me/',
+                    value: config.appUrl,
                   },
                   ...kafkaEnv(config),
                   ...mailerEnv(config),

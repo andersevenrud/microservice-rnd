@@ -1,7 +1,7 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
+import { Configuration } from '../config'
 
-export const deployment = (config: Config, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'db-deployment',
     {
@@ -43,19 +43,19 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
                 env: [
                   {
                     name: 'MARIADB_DATABASE',
-                    value: config.get('env.DB_NAME') || 'db',
+                    value: config.db.name,
                   },
                   {
                     name: 'MARIADB_PASSWORD',
-                    value: config.get('env.DB_PASSWORD') || 'db',
+                    value: config.db.password,
                   },
                   {
                     name: 'MARIADB_ROOT_PASSWORD',
-                    value: config.get('env.DB_PASSWORD') || 'db',
+                    value: config.db.password,
                   },
                   {
                     name: 'MARIADB_USER',
-                    value: config.get('env.DB_USERNAME') || 'db',
+                    value: config.db.username,
                   },
                 ],
                 volumeMounts: [
@@ -81,7 +81,7 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Config, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider: k8s.Provider) =>
   new k8s.core.v1.Service(
     'db-service',
     {
@@ -107,7 +107,7 @@ export const service = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const pvc = (config: Config, provider: k8s.Provider) =>
+export const pvc = (config: Configuration, provider: k8s.Provider) =>
   new k8s.core.v1.PersistentVolumeClaim(
     'db-pvc',
     {
@@ -122,7 +122,7 @@ export const pvc = (config: Config, provider: k8s.Provider) =>
         accessModes: ['ReadWriteOnce'],
         resources: {
           requests: {
-            storage: config.get('db_storage_size') || '1Gi',
+            storage: config.db_storage_size,
           },
         },
       },

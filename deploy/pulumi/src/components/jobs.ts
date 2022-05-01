@@ -1,9 +1,9 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
 import { dbEnv, kafkaEnv } from '../utils/env'
 import { githubImage } from '../utils/image'
+import { Configuration } from '../config'
 
-export const cleanup = (config: Config, provider: k8s.Provider) =>
+export const cleanup = (config: Configuration, provider: k8s.Provider) =>
   new k8s.batch.v1.CronJob(
     'cleanup-job',
     {
@@ -40,7 +40,7 @@ export const cleanup = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const migration = (config: Config, provider: k8s.Provider) =>
+export const migration = (config: Configuration, provider: k8s.Provider) =>
   new k8s.batch.v1.Job(
     'migration-job',
     {

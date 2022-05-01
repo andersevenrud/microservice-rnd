@@ -1,5 +1,4 @@
 import * as k8s from '@pulumi/kubernetes'
-import * as pulumi from '@pulumi/pulumi'
 import * as ns from './components/ns'
 import * as adminer from './components/adminer'
 import * as api from './components/api'
@@ -12,15 +11,15 @@ import * as mailhog from './components/mailhog'
 import * as runner from './components/runner'
 import * as zookeeper from './components/zookeeper'
 import * as jobs from './components/jobs'
+import { Configuration } from './config'
 
-export default function createConfiguration(
-  config: pulumi.Config,
+export default function createKubernetes(
+  config: Configuration,
   provider: k8s.Provider
 ) {
-  const isDev = config.get('mode') === 'dev'
   ns.rnd(config, provider)
 
-  if (isDev) {
+  if (config.dev) {
     new k8s.yaml.ConfigFile(
       'selfsigned-cert',
       {
@@ -68,7 +67,7 @@ export default function createConfiguration(
   mailhog.deployment(config, provider)
   mailhog.service(config, provider)
 
-  if (isDev) {
+  if (config.dev) {
     adminer.deployment(config, provider)
     adminer.service(config, provider)
     adminer.ingress(config, provider)

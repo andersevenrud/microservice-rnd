@@ -1,17 +1,17 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
 import { dbEnv, kafkaEnv } from '../utils/env'
 import { githubImage } from '../utils/image'
+import { Configuration } from '../config'
 
-export const deployment = (config: Config, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'runner-deployment',
     {
       metadata: {
         labels: {
           app: 'runner',
-          version: config.get('version') || 'latest',
-          sha: config.get('sha') || 'HEAD',
+          version: config.version,
+          sha: config.sha,
         },
         name: 'runner',
         namespace: 'rnd',

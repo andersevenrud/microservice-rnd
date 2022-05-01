@@ -1,7 +1,7 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
+import { Configuration } from '../config'
 
-export const rnd = (config: Config, provider: k8s.Provider) =>
+export const rnd = (config: Configuration, provider: k8s.Provider) =>
   new k8s.core.v1.Namespace(
     'namespace',
     {

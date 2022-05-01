@@ -1,7 +1,7 @@
-import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
+import { Configuration } from '../config'
 
-export const statefulSet = (config: Config, provider: k8s.Provider) =>
+export const statefulSet = (config: Configuration, provider: k8s.Provider) =>
   new k8s.apps.v1.StatefulSet(
     'kafka-deployment',
     {
@@ -104,7 +104,7 @@ export const statefulSet = (config: Config, provider: k8s.Provider) =>
               accessModes: ['ReadWriteOnce'],
               resources: {
                 requests: {
-                  storage: config.get('kafka_storage_size') || '1Gi',
+                  storage: config.kafka_storage_size,
                 },
               },
             },
@@ -115,7 +115,7 @@ export const statefulSet = (config: Config, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Config, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider: k8s.Provider) =>
   new k8s.core.v1.Service(
     'kafka-service',
     {

@@ -1,6 +1,4 @@
-import { Config } from '@pulumi/pulumi'
+import { Configuration } from '../config'
 
-export const githubImage = (config: Config, pkg: string) =>
-  `ghcr.io/andersevenrud/microservice-rnd-${pkg}:${
-    config.get('version') || 'latest'
-  }`
+export const githubImage = (config: Configuration, pkg: string) =>
+  `ghcr.io/andersevenrud/microservice-rnd-${pkg}:${config.version}`

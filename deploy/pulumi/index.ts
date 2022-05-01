@@ -1,22 +1,19 @@
-import { parse } from 'yaml'
 import * as k8s from '@pulumi/kubernetes'
 import * as pulumi from '@pulumi/pulumi'
-import createConfiguration from './src/kubernetes'
+import createKubernetes from './src/kubernetes'
+import createConfig from './src/config'
 
-const config = new pulumi.Config()
-const mode = config.get('mode') || 'dev'
-
-const kubeConfigRaw = config.get('kubeconfig')
-const kubeConfig = kubeConfigRaw ? parse(kubeConfigRaw) : undefined
+const cfg = new pulumi.Config()
+const config = createConfig(cfg)
 
 let provider = new k8s.Provider('render-yaml', {
-  renderYamlToDirectory: `../${mode}`,
+  renderYamlToDirectory: `../${config.mode}`,
 })
 
-if (kubeConfig && !process.env.GENERATE_YAML) {
+if (config.kubeConfig && !process.env.GENERATE_YAML) {
   provider = new k8s.Provider('k8s', {
-    kubeconfig: kubeConfig,
+    kubeconfig: config.kubeConfig,
   })
 }
 
-createConfiguration(config, provider)
+createKubernetes(config, provider)
