@@ -1,6 +1,14 @@
 # Remote deployment
 
-You can generate and/or deploy k8s configurations to fit your cloud environment:
+You can generate and/or deploy k8s configurations to fit your cloud environment.
+
+## Requirements
+
+[Pulumi](https://www.pulumi.com/):
+
+```bash
+curl -fsSL https://get.pulumi.com | sh
+```
 
 ## Before you begin
 
