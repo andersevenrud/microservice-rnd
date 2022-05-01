@@ -52,7 +52,6 @@ export const migration = (config: Config, provider: k8s.Provider) =>
         namespace: 'rnd',
       },
       spec: {
-        ttlSecondsAfterFinished: 0,
         template: {
           spec: {
             restartPolicy: 'OnFailure',
