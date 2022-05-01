@@ -11,6 +11,8 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
       metadata: {
         labels: {
           app: 'app',
+          version: config.get('version') || 'latest',
+          sha: config.get('sha') || 'HEAD',
         },
         name: 'app',
         namespace: 'rnd',

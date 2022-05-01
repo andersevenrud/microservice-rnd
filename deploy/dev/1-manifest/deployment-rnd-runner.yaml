@@ -3,10 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"app":"runner","app.kubernetes.io/managed-by":"pulumi"},"name":"runner","namespace":"rnd"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"runner-pod"}},"strategy":{},"template":{"metadata":{"labels":{"app":"runner-pod"}},"spec":{"containers":[{"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-runner:latest","imagePullPolicy":"Always","name":"runner","ports":[{"containerPort":8080}]}],"restartPolicy":"Always"}}}}
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"app":"runner","app.kubernetes.io/managed-by":"pulumi","sha":"HEAD","version":"latest"},"name":"runner","namespace":"rnd"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"runner-pod"}},"strategy":{},"template":{"metadata":{"labels":{"app":"runner-pod"}},"spec":{"containers":[{"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-runner:latest","imagePullPolicy":"Always","name":"runner","ports":[{"containerPort":8080}]}],"restartPolicy":"Always"}}}}
   labels:
     app: runner
     app.kubernetes.io/managed-by: pulumi
+    sha: HEAD
+    version: latest
   name: runner
   namespace: rnd
 spec:

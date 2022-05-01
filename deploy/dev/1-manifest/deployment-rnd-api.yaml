@@ -3,10 +3,12 @@ kind: Deployment
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"app":"api","app.kubernetes.io/managed-by":"pulumi"},"name":"api","namespace":"rnd"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"api-pod"}},"template":{"metadata":{"labels":{"app":"api-pod"}},"spec":{"containers":[{"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"},{"name":"HEALTH_READINESS_PROBE_DELAY","value":"30000"}],"image":"ghcr.io/andersevenrud/microservice-rnd-api:latest","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"path":"/livez","port":8081,"scheme":"HTTP"},"initialDelaySeconds":15,"periodSeconds":20},"name":"api","ports":[{"containerPort":8080,"name":"public"},{"containerPort":8081,"name":"health"}],"readinessProbe":{"httpGet":{"path":"/readyz","port":8081,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10}}],"restartPolicy":"Always"}}}}
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"labels":{"app":"api","app.kubernetes.io/managed-by":"pulumi","sha":"HEAD","version":"latest"},"name":"api","namespace":"rnd"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"api-pod"}},"template":{"metadata":{"labels":{"app":"api-pod"}},"spec":{"containers":[{"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"},{"name":"HEALTH_READINESS_PROBE_DELAY","value":"30000"}],"image":"ghcr.io/andersevenrud/microservice-rnd-api:latest","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"path":"/livez","port":8081,"scheme":"HTTP"},"initialDelaySeconds":15,"periodSeconds":20},"name":"api","ports":[{"containerPort":8080,"name":"public"},{"containerPort":8081,"name":"health"}],"readinessProbe":{"httpGet":{"path":"/readyz","port":8081,"scheme":"HTTP"},"initialDelaySeconds":5,"periodSeconds":10}}],"restartPolicy":"Always"}}}}
   labels:
     app: api
     app.kubernetes.io/managed-by: pulumi
+    sha: HEAD
+    version: latest
   name: api
   namespace: rnd
 spec:
