@@ -43,19 +43,19 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
                 env: [
                   {
                     name: 'MARIADB_DATABASE',
-                    value: config.get('DB_NAME') || 'db',
+                    value: config.get('env.DB_NAME') || 'db',
                   },
                   {
                     name: 'MARIADB_PASSWORD',
-                    value: config.get('DB_PASSWORD') || 'db',
+                    value: config.get('env.DB_PASSWORD') || 'db',
                   },
                   {
                     name: 'MARIADB_ROOT_PASSWORD',
-                    value: config.get('DB_PASSWORD') || 'db',
+                    value: config.get('env.DB_PASSWORD') || 'db',
                   },
                   {
                     name: 'MARIADB_USER',
-                    value: config.get('DB_USERNAME') || 'db',
+                    value: config.get('env.DB_USERNAME') || 'db',
                   },
                 ],
                 volumeMounts: [
@@ -122,7 +122,7 @@ export const pvc = (config: Config, provider: k8s.Provider) =>
         accessModes: ['ReadWriteOnce'],
         resources: {
           requests: {
-            storage: config.get('DB_DATA_STORAGE') || '1Gi',
+            storage: config.get('db_storage_size') || '1Gi',
           },
         },
       },

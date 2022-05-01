@@ -35,13 +35,3 @@ sudo nmcli general reload
 ### Local deployment
 
 Simply run `tilt up`.
-
-## Remote deployment
-
-Download the account configuration from your k8s provider, then just apply
-via `kubectl`.
-
-```bash
-KUBECONFIG="config.yaml" kubectl apply -f deploy/namespace.yaml
-KUBECONFIG="config.yaml" kubectl apply -f deploy/SOMETHING_ELSE.yaml
-```

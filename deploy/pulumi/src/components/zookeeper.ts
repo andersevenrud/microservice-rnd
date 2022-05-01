@@ -80,7 +80,7 @@ export const statefulSet = (config: Config, provider: k8s.Provider) =>
               accessModes: ['ReadWriteOnce'],
               resources: {
                 requests: {
-                  storage: config.get('ZOOKEEPER_DATA_STORAGE') || '1Gi',
+                  storage: config.get('zookeeper_storage_size') || '1Gi',
                 },
               },
             },

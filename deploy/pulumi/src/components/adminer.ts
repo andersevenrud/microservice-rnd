@@ -39,7 +39,7 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
                 env: [
                   {
                     name: 'ADMINER_DEFAULT_SERVER',
-                    value: config.get('DB_HOSTNAME') || 'db',
+                    value: config.get('env.DB_HOSTNAME') || 'db',
                   },
                 ],
               },

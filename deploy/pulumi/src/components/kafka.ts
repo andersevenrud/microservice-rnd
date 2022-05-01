@@ -104,7 +104,7 @@ export const statefulSet = (config: Config, provider: k8s.Provider) =>
               accessModes: ['ReadWriteOnce'],
               resources: {
                 requests: {
-                  storage: config.get('KAFKA_DATA_STORAGE') || '1Gi',
+                  storage: config.get('kafka_storage_size') || '1Gi',
                 },
               },
             },

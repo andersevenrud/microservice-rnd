@@ -1,6 +1,8 @@
+import * as deepmerge from 'deepmerge'
 import { Config } from '@pulumi/pulumi'
 import * as k8s from '@pulumi/kubernetes'
 import { githubImage } from '../utils/image'
+import { createIngress } from '../utils/ingress'
 
 export const deployment = (config: Config, provider: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
@@ -95,47 +97,31 @@ export const service = (config: Config, provider: k8s.Provider) =>
 export const ingress = (config: Config, provider: k8s.Provider) =>
   new k8s.networking.v1.Ingress(
     'app-ingress',
-    {
-      metadata: {
-        name: 'ingress-root',
-        namespace: 'rnd',
-        labels: {
-          www: 'ingress',
-        },
-        annotations: {
-          'cert-manager.io/cluster-issuer': 'selfsigned-cluster-issuer',
-        },
-      },
-      spec: {
-        tls: [
-          {
-            hosts: ['rnd.lvh.me'],
-            secretName: 'selfsigned-root-secret',
-          },
-        ],
-        rules: [
-          {
-            host: 'rnd.lvh.me',
-            http: {
-              paths: [
-                {
-                  path: '/',
-                  pathType: 'Prefix',
-                  backend: {
-                    service: {
-                      name: 'app',
-                      port: {
-                        number: 8080,
-                      },
-                    },
-                  },
-                },
-              ],
+    deepmerge(
+      createIngress(config, [
+        {
+          path: '/',
+          pathType: 'Prefix',
+          backend: {
+            service: {
+              name: 'app',
+              port: {
+                number: 8080,
+              },
             },
           },
-        ],
-      },
-    },
+        },
+      ]),
+      {
+        metadata: {
+          name: 'ingress-root',
+          namespace: 'rnd',
+          labels: {
+            www: 'ingress',
+          },
+        },
+      }
+    ),
 
     { provider }
   )

@@ -13,16 +13,22 @@ import * as runner from './components/runner'
 import * as zookeeper from './components/zookeeper'
 import * as jobs from './components/jobs'
 
-export function devConfiguration(config: pulumi.Config, provider: k8s.Provider) {
+export default function createConfiguration(
+  config: pulumi.Config,
+  provider: k8s.Provider
+) {
+  const isDev = config.get('mode') === 'dev'
   ns.rnd(config, provider)
 
-  new k8s.yaml.ConfigFile(
-    'selfsigned-cert',
-    {
-      file: 'src/dev/cert.yaml',
-    },
-    { provider }
-  )
+  if (isDev) {
+    new k8s.yaml.ConfigFile(
+      'selfsigned-cert',
+      {
+        file: 'src/dev/cert.yaml',
+      },
+      { provider }
+    )
+  }
 
   zookeeper.statefulSet(config, provider)
   zookeeper.service(config, provider)
@@ -51,15 +57,18 @@ export function devConfiguration(config: pulumi.Config, provider: k8s.Provider) 
   jobs.cleanup(config, provider)
   jobs.migration(config, provider)
 
-  adminer.deployment(config, provider)
-  adminer.service(config, provider)
-  adminer.ingress(config, provider)
-
-  kowl.deployment(config, provider)
-  kowl.service(config, provider)
-  kowl.ingress(config, provider)
-
   mailhog.deployment(config, provider)
   mailhog.service(config, provider)
-  mailhog.ingress(config, provider)
+
+  if (isDev) {
+    adminer.deployment(config, provider)
+    adminer.service(config, provider)
+    adminer.ingress(config, provider)
+
+    kowl.deployment(config, provider)
+    kowl.service(config, provider)
+    kowl.ingress(config, provider)
+
+    mailhog.ingress(config, provider)
+  }
 }

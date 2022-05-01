@@ -42,7 +42,7 @@ export const deployment = (config: Config, provider: k8s.Provider) =>
                 env: [
                   {
                     name: 'APP_URL',
-                    value: 'http://rnd.lvh.me/',
+                    value: config.get('env.APP_URL') || 'http://rnd.lvh.me/',
                   },
                   ...kafkaEnv(config),
                   ...mailerEnv(config),
