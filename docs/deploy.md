@@ -27,8 +27,9 @@ Now set up a stack. Example:
 
 ```bash
 pulumi stack init my-stack
+pulumi config set name my-stack
+pulumi config set mode production
 pulumi config set version latest
-pulumi config set mode my-stack
 pulumi config set host my.domain.name
 pulumi config set env.APP_URL https://my.domain.name
 

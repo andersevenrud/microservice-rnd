@@ -7,7 +7,7 @@ const cfg = new pulumi.Config()
 const config = createConfig(cfg)
 
 let provider = new k8s.Provider('render-yaml', {
-  renderYamlToDirectory: `../${config.mode}`,
+  renderYamlToDirectory: `../${config.name}`,
 })
 
 if (config.kubeConfig && !process.env.GENERATE_YAML) {

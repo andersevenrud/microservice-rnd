@@ -6,6 +6,7 @@ export interface Configuration {
   host: string
   appUrl: string
   mode: string
+  name: string
   dev: boolean
   version: string
   sha: string
@@ -30,8 +31,9 @@ export interface Configuration {
 export default function createConfig(config: Config): Configuration {
   const kubeConfigRaw = config.get('kubeconfig')
   const kubeConfig = kubeConfigRaw ? parse(kubeConfigRaw) : undefined
-  const mode = config.get('mode') || 'dev'
-  const dev = mode === 'dev'
+  const mode = config.get('mode') || 'development'
+  const dev = mode === 'development'
+  const name = config.get('name') || 'dev'
   const version = config.get('version') || 'latest'
   const sha = config.get('sha') || 'HEAD'
   const host = config.get('host') || 'rnd.lvh.me'
@@ -43,6 +45,7 @@ export default function createConfig(config: Config): Configuration {
     dev,
     kubeConfig,
     mode,
+    name,
     version,
     sha,
     db_storage_size: config.get('db_storage_size') || '1Gi',
