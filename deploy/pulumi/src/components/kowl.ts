@@ -4,7 +4,7 @@ import { kafkaEnv } from '../utils/env'
 import { createIngress } from '../utils/ingress'
 import { Configuration } from '../config'
 
-export const deployment = (config: Configuration, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'kowl-deployment',
     {
@@ -50,7 +50,7 @@ export const deployment = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Configuration, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.core.v1.Service(
     'kowl-service',
     {
@@ -76,7 +76,7 @@ export const service = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const ingress = (config: Configuration, provider: k8s.Provider) =>
+export const ingress = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.networking.v1.Ingress(
     'kowl-ingress',
     deepmerge(

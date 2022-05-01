@@ -3,7 +3,7 @@ import { dbEnv, kafkaEnv } from '../utils/env'
 import { githubImage } from '../utils/image'
 import { Configuration } from '../config'
 
-export const deployment = (config: Configuration, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'runner-deployment',
     {

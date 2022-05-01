@@ -3,7 +3,7 @@ import * as k8s from '@pulumi/kubernetes'
 import { createIngress } from '../utils/ingress'
 import { Configuration } from '../config'
 
-export const deployment = (config: Configuration, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'adminer-deployment',
     {
@@ -53,7 +53,7 @@ export const deployment = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Configuration, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.core.v1.Service(
     'adminer-service',
     {
@@ -79,7 +79,7 @@ export const service = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const ingress = (config: Configuration, provider: k8s.Provider) =>
+export const ingress = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.networking.v1.Ingress(
     'adminer-ingress',
     deepmerge(

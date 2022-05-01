@@ -16,7 +16,7 @@ import { Configuration } from './config'
 
 export default function createKubernetes(
   config: Configuration,
-  provider: k8s.Provider
+  provider?: k8s.Provider
 ) {
   ns.rnd(config, provider)
 

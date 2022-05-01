@@ -6,11 +6,13 @@ import createConfig from './src/config'
 const cfg = new pulumi.Config()
 const config = createConfig(cfg)
 
-let provider = new k8s.Provider('render-yaml', {
-  renderYamlToDirectory: `../${config.name}`,
-})
+let provider
 
-if (config.kubeConfig && !process.env.GENERATE_YAML) {
+if (process.env.GENERATE_YAML) {
+  provider = new k8s.Provider('render-yaml', {
+    renderYamlToDirectory: `../${config.name}`,
+  })
+} else if (config.kubeConfig) {
   provider = new k8s.Provider('k8s', {
     kubeconfig: config.kubeConfig,
   })

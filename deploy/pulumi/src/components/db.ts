@@ -1,7 +1,7 @@
 import * as k8s from '@pulumi/kubernetes'
 import { Configuration } from '../config'
 
-export const deployment = (config: Configuration, provider: k8s.Provider) =>
+export const deployment = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.apps.v1.Deployment(
     'db-deployment',
     {
@@ -81,7 +81,7 @@ export const deployment = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const service = (config: Configuration, provider: k8s.Provider) =>
+export const service = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.core.v1.Service(
     'db-service',
     {
@@ -107,7 +107,7 @@ export const service = (config: Configuration, provider: k8s.Provider) =>
     { provider }
   )
 
-export const pvc = (config: Configuration, provider: k8s.Provider) =>
+export const pvc = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.core.v1.PersistentVolumeClaim(
     'db-pvc',
     {
