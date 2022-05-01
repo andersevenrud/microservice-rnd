@@ -71,7 +71,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ github.event.inputs.version }}
   deploy:
-    if: ${{ always() && contains(needs.*.result, 'success') || (contains(needs.*.result, 'skipped')) }}
+    if: ${{ always() && (contains(needs.*.result, 'success') || contains(needs.*.result, 'skipped')) }}
     runs-on: ubuntu-latest
     needs: ['api', 'app', 'cli', 'mailer', 'runner']
     steps:
