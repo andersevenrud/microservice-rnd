@@ -28,6 +28,7 @@ One of the following configurations:
     * `docker`
     * [`minikube`](https://minikube.sigs.k8s.io/docs/)
     * [`tilt`](https://tilt.dev/)
+    * [`pulumi`](https://www.pulumi.com/) (optional)
 2. Local [Docker Compose](#docker-compose)
     * `docker`
     * `docker-compose`
