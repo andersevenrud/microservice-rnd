@@ -1,6 +1,6 @@
 # Remote deployment
 
-You can generate k8s configurations to fit your cloud environment:
+You can generate and/or deploy k8s configurations to fit your cloud environment:
 
 ## Before you begin
 
@@ -40,6 +40,22 @@ pulumi config set env.KAFKA_BROKERS kafka:9092
 pulumi config set env.MAILER_HOST mailhog
 pulumi config set env.MAILER_PORT 1025
 ```
+
+## Automatically deploying via kubeconfig
+
+Add your account configuration:
+
+```bash
+cat config.yaml | pulumi config set kubeconfig
+```
+
+Deploy:
+
+```bash
+pulumi update
+```
+
+## Manually deploying via configurations
 
 Generate:
 

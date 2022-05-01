@@ -12,7 +12,8 @@
   "dependencies": {
     "@pulumi/kubernetes": "^3.18.3",
     "@pulumi/pulumi": "^3.31.0",
-    "deepmerge": "^4.2.2"
+    "deepmerge": "^4.2.2",
+    "yaml": "^2.0.1"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
