@@ -4,11 +4,8 @@ You can generate and/or deploy k8s configurations to fit your cloud environment.
 
 ## Requirements
 
-[Pulumi](https://www.pulumi.com/):
-
-```bash
-curl -fsSL https://get.pulumi.com | sh
-```
+* [Pulumi](https://www.pulumi.com/docs/get-started/install/)
+* [cert-manager](https://cert-manager.io/docs/installation/kubectl/)
 
 ## Before you begin
 
