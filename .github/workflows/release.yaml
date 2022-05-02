@@ -88,6 +88,7 @@ jobs:
           token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           config: ${{ secrets.PULUMI_CONFIG }}
           passphrase: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
+          stack: vultr
       - uses: pulumi/actions@v3
         with:
           command: up

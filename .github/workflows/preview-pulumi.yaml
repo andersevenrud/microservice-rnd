@@ -22,6 +22,7 @@ jobs:
           version: ${{ github.event.inputs.version }}
           token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           config: ${{ secrets.PULUMI_CONFIG }}
+          stack: vultr
       - uses: pulumi/actions@v3
         with:
           command: preview

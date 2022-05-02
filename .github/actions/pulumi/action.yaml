@@ -3,6 +3,9 @@ inputs:
   version:
     required: true
     type: string
+  stack:
+    required: true
+    type: string
   token:
     required: true
     type: string
@@ -19,8 +22,8 @@ runs:
     - name: pulumi stack
       run: |
         mkdir -p configs
-        echo "${{ inputs.config }}" > configs/Pulumi.vultr.yaml
-        pulumi stack select vultr
+        echo "${{ inputs.config }}" > configs/Pulumi.${{ inputs.stack }}.yaml
+        pulumi stack select ${{ inputs.stack }}
         pulumi config set version ${{ inputs.version }}
         pulumi config set sha ${GITHUB_SHA::6}
       working-directory: ./deploy/pulumi
