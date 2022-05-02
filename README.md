@@ -61,6 +61,7 @@ You can access the following administration interfaces with the URL patterns not
 * `kowl` - Kafka events
 * `mailhog` - Mail messages
 * `adminer` - Database administration
+* `keycloak` - Authentication administration
 
 ## Deployment
 

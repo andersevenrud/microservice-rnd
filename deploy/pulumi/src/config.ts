@@ -13,6 +13,20 @@ export interface Configuration {
   db_storage_size: string
   kafka_storage_size: string
   zookeeper_storage_size: string
+  keycloak_storage_size: string
+  keycloak_db_storage_size: string
+  keycloak_db: {
+    name: string
+    password: string
+    username: string
+  }
+  keycloak: {
+    hostname: string
+    username: string
+    password: string
+    db_type: string
+    db_url: string
+  }
   db: {
     hostname: string
     name: string
@@ -51,6 +65,21 @@ export default function createConfig(config: Config): Configuration {
     db_storage_size: config.get('db_storage_size') || '1Gi',
     kafka_storage_size: config.get('kafka_storage_size') || '1Gi',
     zookeeper_storage_size: config.get('zookeeper_storage_size') || '1Gi',
+    keycloak_storage_size: config.get('keycloak_storage_size') || '1Gi',
+    keycloak_db_storage_size: config.get('keycloak_db_storage_size') || '1Gi',
+    keycloak_db: {
+      username: config.get('keycloak_db.username') || 'db',
+      password: config.get('keycloak_db.password') || 'db',
+      name: config.get('keycloak_db.name') || 'db',
+    },
+    keycloak: {
+      hostname: config.get('keycloak.hostname') || `auth.${host}`,
+      username: config.get('keycloak.username') || 'admin',
+      password: config.get('keycloak.password') || 'admin',
+      db_type: config.get('keycloak.db_type') || 'postgres',
+      db_url:
+        config.get('keycloak.db_url') || 'jdbc:postgresql://keycloak-db/db',
+    },
     db: {
       hostname: config.get('env.DB_HOSTNAME') || 'db',
       name: config.get('env.DB_NAME') || 'db',
