@@ -15,11 +15,11 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: pulumi/setup-pulumi@v2
     - name: pulumi stack
       run: |
         mkdir -p configs
         echo "${{ inputs.config }}" > configs/Pulumi.vultr.yaml
-        curl -fsSL https://get.pulumi.com | sh
         pulumi stack select vultr
         pulumi config set version ${{ inputs.version }}
         pulumi config set sha ${GITHUB_SHA::6}
