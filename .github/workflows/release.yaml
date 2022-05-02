@@ -7,6 +7,11 @@ on:
         required: false
         default: latest
         description: Version number
+      stack:
+        type: string
+        required: false
+        default: vultr
+        description: Pulumi stack name
 jobs:
   api:
     if: github.event.inputs.version != 'latest'
@@ -88,11 +93,11 @@ jobs:
           token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
           config: ${{ secrets.PULUMI_CONFIG }}
           passphrase: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
-          stack: vultr
+          stack: ${{ github.event.inputs.stack }}
       - uses: pulumi/actions@v3
         with:
           command: up
-          stack-name: vultr
+          stack-name: ${{ github.event.inputs.stack }}
           work-dir: ./deploy/pulumi
         env:
           PULUMI_CONFIG_PASSPHRASE: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
