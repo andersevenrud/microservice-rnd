@@ -17,7 +17,7 @@ jobs:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ./.github/actions/publisher
@@ -29,7 +29,7 @@ jobs:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ./.github/actions/publisher
@@ -41,7 +41,7 @@ jobs:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ./.github/actions/publisher
@@ -53,7 +53,7 @@ jobs:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ./.github/actions/publisher
@@ -65,7 +65,7 @@ jobs:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: ./.github/actions/publisher
@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: ['api', 'app', 'cli', 'mailer', 'runner']
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v2
