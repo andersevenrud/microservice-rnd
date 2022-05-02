@@ -1,6 +1,33 @@
 version: "2"
 
 services:
+  keycloak:
+    restart: on-failure
+    image: quay.io/keycloak/keycloak:18.0.0
+    command: start-dev
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=postgres
+      - KC_DB_URL=jdbc:postgresql://keycloak-db/db
+      - KC_DB_USERNAME=db
+      - KC_DB_PASSWORD=db
+      - KC_HOSTNAME=localhost
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+    depends_on:
+      - keycloak-db
+    ports:
+      - 8081:8080
+  keycloak-db:
+    restart: on-failure
+    image: postgres:14.2
+    environment:
+      - POSTGRES_PASSWORD=db
+      - POSTGRES_USER=db
+      - POSTGRES_DB=db
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
   db:
     restart: on-failure
     image: mariadb:10.8
@@ -103,6 +130,7 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
+      - KEYCLOAK_HOST=localhost:8080
     depends_on:
       - db
       - kafka
@@ -110,6 +138,8 @@ services:
     restart: on-failure
     build:
       context: ./packages/app
+    environment:
+      - KEYCLOAK_HOST=localhost:8081
     depends_on:
       - db
       - kafka
@@ -131,3 +161,5 @@ volumes:
   kafka-data:
   db-data:
   zookeeper-data:
+  keycloak-data:
+  keycloak-db-data:

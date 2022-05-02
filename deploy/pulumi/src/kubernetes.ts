@@ -10,6 +10,7 @@ import * as mailer from './components/mailer'
 import * as mailhog from './components/mailhog'
 import * as runner from './components/runner'
 import * as zookeeper from './components/zookeeper'
+import * as keycloak from './components/keycloak'
 import * as jobs from './components/jobs'
 import * as certs from './components/cert'
 import { Configuration } from './config'
@@ -21,6 +22,12 @@ export default function createKubernetes(
   ns.rnd(config, provider)
 
   certs.cert(config, provider)
+
+  keycloak.dbDeployment(config, provider)
+  keycloak.dbService(config, provider)
+  keycloak.dbPvc(config, provider)
+  keycloak.statefulSet(config, provider)
+  keycloak.service(config, provider)
 
   zookeeper.statefulSet(config, provider)
   zookeeper.service(config, provider)
