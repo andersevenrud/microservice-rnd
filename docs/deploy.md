@@ -4,6 +4,7 @@ You can generate and/or deploy k8s configurations to fit your cloud environment.
 
 ## Requirements
 
+* A domain name if you want to deploy on the cloud
 * [Pulumi](https://www.pulumi.com/docs/get-started/install/)
 * [cert-manager](https://cert-manager.io/docs/installation/kubectl/)
 
@@ -12,6 +13,17 @@ You can generate and/or deploy k8s configurations to fit your cloud environment.
 Download the account configuration from your k8s provider.
 
 > In this case named `config.yaml`.
+
+Also make sure that the application (`app`) has been built with the following env variables:
+
+```
+# Required
+env.VITE_KEYCLOAK_URL https://auth.my.domain.name/
+
+# Optional
+env.VITE_KEYCLOAK_REALM rnd
+env.VITE_KEYCLOAK_CLIENT_ID rnd-client
+```
 
 ## Create configurations
 

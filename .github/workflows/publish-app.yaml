@@ -26,3 +26,7 @@ jobs:
         with:
           package_name: app
           token: ${{ secrets.GITHUB_TOKEN }}
+          args: |
+            VITE_KEYCLOAK_URL=https://auth.rnd.lvh.me/
+            VITE_KEYCLOAK_REALM=rnd
+            VITE_KEYCLOAK_CLIENT_ID=rnd-client
