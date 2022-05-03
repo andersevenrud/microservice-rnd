@@ -37,6 +37,10 @@ jobs:
           package_name: app
           token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ github.event.inputs.version }}
+          args: |
+            VITE_KEYCLOAK_URL=https://auth.rnd.lvh.me/
+            VITE_KEYCLOAK_REALM=rnd
+            VITE_KEYCLOAK_CLIENT_ID=rnd-client
   cli:
     if: github.event.inputs.version != 'latest'
     runs-on: ubuntu-latest

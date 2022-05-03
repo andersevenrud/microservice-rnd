@@ -141,7 +141,6 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
-      - KEYCLOAK_HOST=localhost:8080
     volumes:
       - ./packages/api:/usr/src/api
     depends_on:
@@ -153,7 +152,9 @@ services:
     command: ./entrypoint.sh
     working_dir: /usr/src/app
     environment:
-      - KEYCLOAK_HOST=localhost:8081
+      - VITE_KEYCLOAK_URL=http://localhost:8081/
+      - VITE_KEYCLOAK_REALM=rnd
+      - VITE_KEYCLOAK_CLIENT_ID=rnd-client
     volumes:
       - ./packages/app:/usr/src/app
     depends_on:

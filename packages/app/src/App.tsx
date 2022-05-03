@@ -1,6 +1,15 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
+import { useKeycloak, ReactKeycloakProvider } from '@react-keycloak/web'
 import { capitalize } from 'lodash-es'
 import { parse, formatDistance } from 'date-fns'
+import {
+  useNavigate,
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+} from 'react-router-dom'
 import React, {
   useEffect,
   useState,
@@ -14,6 +23,7 @@ import {
   ToastMessage,
 } from './store'
 import { createClient, deleteClient, performClientAction } from './api'
+import keycloak from './keycloak'
 
 type ClassName = string | string[] | undefined
 
@@ -341,30 +351,97 @@ function Page() {
   )
 }
 
+function LoginPage() {
+  const navigate = useNavigate()
+  const { keycloak, initialized } = useKeycloak()
+
+  useEffect(() => {
+    if (initialized) {
+      if (!keycloak.authenticated) {
+        keycloak.login()
+      } else {
+        navigate('/')
+      }
+    }
+  }, [initialized])
+
+  return <div>Redirecting...</div>
+}
+
+function LogoutPage() {
+  const navigate = useNavigate()
+  const { keycloak, initialized } = useKeycloak()
+
+  useEffect(() => {
+    if (initialized) {
+      if (keycloak.authenticated) {
+        keycloak.logout()
+      } else {
+        navigate('/')
+      }
+    }
+  }, [initialized])
+
+  return <div>Redirecting...</div>
+}
+
+function Layout() {
+  return (
+    <div className="max-w-screen min-h-screen bg-gray-100">
+      <div className="sticky inset-x-0 top-0 border-b border-gray-200 bg-white p-4 shadow-sm">
+        <h1 className="text-xl">Kafkaesque</h1>
+      </div>
+
+      <div className="7xl:px-0 mx-auto max-w-7xl py-8 px-2">
+        <Outlet />
+      </div>
+
+      <div className="p-8 text-center text-xs text-gray-400">
+        <a
+          href="https://github.com/andersevenrud/rnd-microservice-arch"
+          target="_blank"
+          rel="noreferrer"
+        >
+          A research project by Anders Evenrud
+        </a>
+      </div>
+
+      <Toasts />
+    </div>
+  )
+}
+
+function ProtectedRoute({ children }: PropsWithChildren<any>) {
+  const { keycloak } = useKeycloak()
+
+  if (keycloak.authenticated) {
+    return children
+  }
+
+  return <Navigate to="/login" />
+}
+
 export default function App() {
   return (
     <GlobalProvider>
-      <div className="max-w-screen min-h-screen bg-gray-100">
-        <div className="sticky inset-x-0 top-0 border-b border-gray-200 bg-white p-4 shadow-sm">
-          <h1 className="text-xl">Kafkaesque</h1>
-        </div>
-
-        <div className="7xl:px-0 mx-auto max-w-7xl py-8 px-2">
-          <Page />
-        </div>
-
-        <div className="p-8 text-center text-xs text-gray-400">
-          <a
-            href="https://github.com/andersevenrud/rnd-microservice-arch"
-            target="_blank"
-            rel="noreferrer"
-          >
-            A research project by Anders Evenrud
-          </a>
-        </div>
-
-        <Toasts />
-      </div>
+      <ReactKeycloakProvider authClient={keycloak}>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/logout" element={<LogoutPage />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Page />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </ReactKeycloakProvider>
     </GlobalProvider>
   )
 }

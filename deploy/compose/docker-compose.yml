@@ -130,7 +130,6 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
-      - KEYCLOAK_HOST=localhost:8080
     depends_on:
       - db
       - kafka
@@ -139,7 +138,9 @@ services:
     build:
       context: ./packages/app
     environment:
-      - KEYCLOAK_HOST=localhost:8081
+      - VITE_KEYCLOAK_URL=http://localhost:8081/
+      - VITE_KEYCLOAK_REALM=rnd
+      - VITE_KEYCLOAK_CLIENT_ID=rnd-client
     depends_on:
       - db
       - kafka

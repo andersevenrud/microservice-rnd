@@ -37,7 +37,9 @@ One of the following configurations:
 
 ### Kubernetes
 
-> Runs on http://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`. https available via self-signed certificate)
+> Runs on https://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`)
+
+> Keycloak runs on https://auth.rnd.lvh.me
 
 See [`docs/k8s.md`](docs/k8s.md) for more information about setting up a local Kubernetes cluster.
 
@@ -47,7 +49,7 @@ tilt up
 
 ### Docker Compose
 
-> Runs on http://localhost:8080 (and `/<admin-service>/`)
+> Runs on http://localhost:8080 (and `/<admin-service>/`, with exception of keycloak that runs on port 8081)
 
 ```bash
 docker-compose run --rm cli sh scripts/migrations.sh
@@ -61,7 +63,7 @@ You can access the following administration interfaces with the URL patterns not
 * `kowl` - Kafka events
 * `mailhog` - Mail messages
 * `adminer` - Database administration
-* `keycloak` - Authentication administration
+* `auth` - Authentication administration
 
 ## Deployment
 
