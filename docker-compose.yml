@@ -109,6 +109,11 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
+      - KEYCLOAK_URL=http://keycloak:8080
+      - KEYCLOAK_USERNAME=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_REALM=rnd
+      - APP_URL=http://localhost:8080/
     volumes:
       - ./packages/cli:/usr/src/cli
     depends_on:

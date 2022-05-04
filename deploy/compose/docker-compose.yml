@@ -106,6 +106,9 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
+      - KEYCLOAK_USERNAME=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_REALM=rnd
     depends_on:
       - db
       - kafka
