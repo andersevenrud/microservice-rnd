@@ -4,7 +4,7 @@ services:
   keycloak:
     restart: on-failure
     image: quay.io/keycloak/keycloak:18.0.0
-    command: start-dev
+    command: start-dev --http-relative-path /auth
     environment:
       - KEYCLOAK_ADMIN=admin
       - KEYCLOAK_ADMIN_PASSWORD=admin
@@ -12,16 +12,14 @@ services:
       - KC_DB_URL=jdbc:postgresql://keycloak-db/db
       - KC_DB_USERNAME=db
       - KC_DB_PASSWORD=db
+      - KC_PROXY=edge
       - KC_HOSTNAME=localhost
       - KC_HOSTNAME_PATH=auth
       - KC_HOSTNAME_PORT=8080
-      - KC_PROXY=edge
     volumes:
       - keycloak-data:/opt/keycloak/data
     depends_on:
       - keycloak-db
-    ports:
-      - 8081:8080
   keycloak-db:
     restart: on-failure
     image: postgres:14.2
@@ -137,7 +135,7 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
-      - OAUTH_ISSUER_URL=http://keycloak:8080/realms/rnd
+      - OAUTH_ISSUER_URL=http://keycloak:8080/auth/realms/rnd
       - OAUTH_AUDIENCE=account
     depends_on:
       - db
