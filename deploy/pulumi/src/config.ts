@@ -26,6 +26,7 @@ export interface Configuration {
     password: string
     db_type: string
     db_url: string
+    proxy: string
   }
   db: {
     hostname: string
@@ -79,6 +80,7 @@ export default function createConfig(config: Config): Configuration {
       db_type: config.get('keycloak.db_type') || 'postgres',
       db_url:
         config.get('keycloak.db_url') || 'jdbc:postgresql://keycloak-db/db',
+      proxy: config.get('keycloak.proxy') || 'edge',
     },
     db: {
       hostname: config.get('env.DB_HOSTNAME') || 'db',

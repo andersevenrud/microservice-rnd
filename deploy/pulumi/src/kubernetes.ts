@@ -28,6 +28,7 @@ export default function createKubernetes(
   keycloak.dbPvc(config, provider)
   keycloak.statefulSet(config, provider)
   keycloak.service(config, provider)
+  keycloak.ingress(config, provider)
 
   zookeeper.statefulSet(config, provider)
   zookeeper.service(config, provider)
