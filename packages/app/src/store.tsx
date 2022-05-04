@@ -1,4 +1,5 @@
 import { throttle } from 'lodash-es'
+import { useKeycloak } from '@react-keycloak/web'
 import React, {
   useState,
   createContext,
@@ -53,6 +54,7 @@ export const GlobalContext = createContext({
 } as StoreContext)
 
 export const GlobalProvider = ({ children }: PropsWithChildren<any>) => {
+  const { keycloak } = useKeycloak()
   const [toasts, setToasts] = useState<ToastMessage[]>([])
   const [logs, setLogs] = useState<LogMessage[]>([])
   const [list, setList] = useState([])
@@ -68,7 +70,7 @@ export const GlobalProvider = ({ children }: PropsWithChildren<any>) => {
 
   const load = throttle(
     () =>
-      fetchClients()
+      fetchClients(keycloak.token)
         .then((result) => setList(result))
         .catch((e) => addToast({ type: 'error', message: e.message })),
     500,

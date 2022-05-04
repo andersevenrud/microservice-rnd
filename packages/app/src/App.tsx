@@ -149,11 +149,12 @@ function Logs() {
 function ListBox({ item }: { item: ClientInstance }) {
   const [expanded, setExpanded] = useState(false)
   const { load, addToast } = useGlobalProvider()
+  const { keycloak } = useKeycloak()
 
   const onToggle = () => setExpanded(!expanded)
 
   const onDeleteClient = (client: ClientInstance) =>
-    deleteClient(client.uuid)
+    deleteClient(client.uuid, keycloak.token)
       .then(() => load())
       .then(() => addToast({ type: 'info', message: 'Deleting client' }))
       .catch(() =>
@@ -161,7 +162,7 @@ function ListBox({ item }: { item: ClientInstance }) {
       )
 
   const onClientAction = (client: ClientInstance, action: string) =>
-    performClientAction(client.uuid, action)
+    performClientAction(client.uuid, action, keycloak.token)
       .then(() => load())
       .then(() =>
         addToast({ type: 'info', message: `Performing "${action}" on client` })
@@ -267,9 +268,10 @@ function List() {
 
 function Actions() {
   const { load, addToast } = useGlobalProvider()
+  const { keycloak } = useKeycloak()
 
   const onCreateClient = () =>
-    createClient()
+    createClient(keycloak.token)
       .then(() => load())
       .then(() => addToast({ type: 'info', message: 'Creating client' }))
       .catch(() => addToast({ type: 'error', message: 'Failed to add client' }))
@@ -297,6 +299,7 @@ function Actions() {
 
 function Page() {
   const { load, addLog, addToast } = useGlobalProvider()
+  const { keycloak } = useKeycloak()
 
   const onMessage = (event: MessageEvent<any>) => {
     const data = JSON.parse(event.data)
@@ -390,6 +393,7 @@ function Layout() {
     <div className="max-w-screen min-h-screen bg-gray-100">
       <div className="sticky inset-x-0 top-0 border-b border-gray-200 bg-white p-4 shadow-sm">
         <h1 className="text-xl">Kafkaesque</h1>
+        <button onClick={() => console.log(keycloak)}>Dump</button>
       </div>
 
       <div className="7xl:px-0 mx-auto max-w-7xl py-8 px-2">
@@ -423,8 +427,8 @@ function ProtectedRoute({ children }: PropsWithChildren<any>) {
 
 export default function App() {
   return (
-    <GlobalProvider>
-      <ReactKeycloakProvider authClient={keycloak}>
+    <ReactKeycloakProvider authClient={keycloak}>
+      <GlobalProvider>
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
@@ -441,7 +445,7 @@ export default function App() {
             </Route>
           </Routes>
         </BrowserRouter>
-      </ReactKeycloakProvider>
-    </GlobalProvider>
+      </GlobalProvider>
+    </ReactKeycloakProvider>
   )
 }
