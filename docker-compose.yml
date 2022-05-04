@@ -12,7 +12,9 @@ services:
       - KC_DB_URL=jdbc:postgresql://keycloak-db/db
       - KC_DB_USERNAME=db
       - KC_DB_PASSWORD=db
-      - KC_HOSTNAME=localhost:8081
+      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME_PATH=auth
+      - KC_HOSTNAME_PORT=8080
       - KC_PROXY=edge
     volumes:
       - keycloak-data:/opt/keycloak/data
@@ -160,7 +162,7 @@ services:
     command: ./entrypoint.sh
     working_dir: /usr/src/app
     environment:
-      - VITE_KEYCLOAK_URL=http://localhost:8081/
+      - VITE_KEYCLOAK_URL=http://localhost:8080/auth/
       - VITE_KEYCLOAK_REALM=rnd
       - VITE_KEYCLOAK_CLIENT_ID=rnd-client
     volumes:
@@ -180,8 +182,9 @@ services:
       - api
       - app
       - mailhog
-      - pgadmin
+      - adminer
       - kowl
+      - keycloak
 
 volumes:
   kafka-data:
