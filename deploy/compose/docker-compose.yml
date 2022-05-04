@@ -114,6 +114,7 @@ services:
     depends_on:
       - db
       - kafka
+      - keycloak
   mailer:
     restart: on-failure
     build:

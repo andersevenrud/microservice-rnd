@@ -121,6 +121,7 @@ services:
     depends_on:
       - db
       - kafka
+      - keycloak
   mailer:
     restart: on-failure
     image: node:16-alpine
