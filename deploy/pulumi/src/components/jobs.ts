@@ -68,6 +68,29 @@ export const migration = (config: Configuration, provider?: k8s.Provider) =>
                 command: ['npm', 'run', 'topics'],
                 env: [...dbEnv(config), ...kafkaEnv(config)],
               },
+              {
+                name: 'cli-keycloak-migrations',
+                image: githubImage(config, 'cli'),
+                command: ['npm', 'run', 'keycloak'],
+                env: [
+                  {
+                    name: 'KEYCLOAK_URL',
+                    value: 'http://auth.rnd.lvh.me',
+                  },
+                  {
+                    name: 'KEYCLOAK_USERNAME',
+                    value: 'admin',
+                  },
+                  {
+                    name: 'KEYCLOAK_PASSWORD',
+                    value: 'admin',
+                  },
+                  {
+                    name: 'KEYCLOAK_REALM',
+                    value: 'rnd',
+                  },
+                ],
+              },
             ],
           },
         },

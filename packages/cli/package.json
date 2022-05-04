@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "dev": "ts-node-dev src/cron.ts",
+    "keycloak": "ts-node --transpile-only scripts/keycloak.ts",
     "migrate": "ts-node --transpile-only scripts/migrate.ts",
     "topics": "ts-node --transpile-only scripts/topics.ts",
     "cleanup": "ts-node --transpile-only scripts/cleanup.ts",
@@ -14,6 +15,7 @@
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "UNLICENSED",
   "dependencies": {
+    "@keycloak/keycloak-admin-client": "^18.0.0",
     "@mikro-orm/cli": "^5.1.1",
     "@mikro-orm/core": "^5.1.1",
     "@mikro-orm/mariadb": "^5.1.1",
