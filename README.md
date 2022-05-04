@@ -11,7 +11,8 @@ deploy onto the cloud.
 
 Provides a basic frontend interface and API that interacts with a runner service that
 spawns processes to demonstrate usage of event streams, etc, along with some administration
-interfaces to inspect the underlying services.
+interfaces to inspect the underlying services. [Keycloak](https://www.keycloak.org/) is used
+for authentication and authorization.
 
 **Please note that the out-of-the-box configurations are not safe for a production environment.**
 
