@@ -56,6 +56,12 @@ docker-compose run --rm cli sh scripts/migrations.sh
 docker-compose up
 ```
 
+## Dashboard
+
+When you open the app you will be redirected to the authentication client.
+
+The default username is `admin` and password `admin`.
+
 ## Admin Services
 
 You can access the following administration interfaces with the URL patterns noted above:
