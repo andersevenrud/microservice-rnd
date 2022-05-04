@@ -1,10 +1,13 @@
+import bodyParser from 'body-parser'
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
+import { auth } from 'express-oauth2-jwt-bearer'
 import { Kafka, Producer, CompressionTypes } from 'kafkajs'
 import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
 import { RequestContext } from '@mikro-orm/core'
 import { ClientInstance } from './entities'
+import config from './config'
 
 export interface ApplicationContext {
   logger: Logger
@@ -134,7 +137,15 @@ function createExpress(ctx: ApplicationContext) {
   const wss = ews.getWss()
   const router = createRouter(ctx)
 
+  app.use(bodyParser.urlencoded({ extended: false }))
   app.use(express.json())
+
+  // FIXME: Make WS auth
+  router.use(
+    auth({
+      ...config.auth,
+    })
+  )
 
   app.use((_, __, next) => {
     RequestContext.create(ctx.orm.em, next)
