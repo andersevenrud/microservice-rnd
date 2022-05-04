@@ -12,7 +12,8 @@ services:
       - KC_DB_URL=jdbc:postgresql://keycloak-db/db
       - KC_DB_USERNAME=db
       - KC_DB_PASSWORD=db
-      - KC_HOSTNAME=localhost
+      - KC_HOSTNAME=localhost:8081
+      - KC_PROXY=edge
     volumes:
       - keycloak-data:/opt/keycloak/data
     depends_on:
@@ -130,6 +131,8 @@ services:
       - DB_USERNAME=db
       - DB_PASSWORD=db
       - KAFKA_BROKERS=kafka:9092
+      - OAUTH_ISSUER_URL=http://keycloak:8080/realms/rnd
+      - OAUTH_AUDIENCE=account
     depends_on:
       - db
       - kafka

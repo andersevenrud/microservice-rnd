@@ -1,5 +1,7 @@
+import * as deepmerge from 'deepmerge'
 import * as k8s from '@pulumi/kubernetes'
 import { Configuration } from '../config'
+import { createIngress } from '../utils/ingress'
 
 export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.apps.v1.StatefulSet(
@@ -71,6 +73,10 @@ export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
                     name: 'env.KC_HOSTNAME',
                     value: config.keycloak.hostname,
                   },
+                  {
+                    name: 'env.KC_PROXY',
+                    value: config.keycloak.proxy,
+                  },
                 ],
                 volumeMounts: [
                   {
@@ -126,6 +132,42 @@ export const service = (config: Configuration, provider?: k8s.Provider) =>
         },
       },
     },
+    { provider }
+  )
+
+export const ingress = (config: Configuration, provider?: k8s.Provider) =>
+  new k8s.networking.v1.Ingress(
+    'keycloak-ingress',
+    deepmerge(
+      createIngress(
+        config,
+        [
+          {
+            path: '/',
+            pathType: 'Prefix',
+            backend: {
+              service: {
+                name: 'app',
+                port: {
+                  number: 8080,
+                },
+              },
+            },
+          },
+        ],
+        'admin'
+      ),
+      {
+        metadata: {
+          name: 'keycloak-root',
+          namespace: 'rnd',
+          labels: {
+            backend: 'keycloak',
+          },
+        },
+      }
+    ),
+
     { provider }
   )
 
