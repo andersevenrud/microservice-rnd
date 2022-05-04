@@ -2,6 +2,12 @@ const dbHost = process.env.DB_HOST || 'db'
 const brokers = (process.env.KAFKA_BROKERS || '').split(',')
 
 export default {
+  auth: {
+    issuerBaseURL:
+      process.env.OAUTH_ISSUER_URL || 'https://auth.rnd.lvh.me/realms/rnd',
+    audience: process.env.OAUTH_AUDIENCE || 'account',
+  },
+
   waitOn: {
     resources: [...brokers.map((s) => `tcp:${s}`), `tcp:${dbHost}:3306`],
     log: true,

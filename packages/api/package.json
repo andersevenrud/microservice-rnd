@@ -14,7 +14,9 @@
   "dependencies": {
     "@mikro-orm/core": "^5.1.1",
     "@mikro-orm/mariadb": "^5.1.1",
+    "body-parser": "^1.20.0",
     "express": "^4.17.3",
+    "express-oauth2-jwt-bearer": "^1.1.0",
     "express-ws": "^5.0.2",
     "http-terminator": "^3.2.0",
     "kafkajs": "^1.16.0",
