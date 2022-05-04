@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
 import { auth } from 'express-oauth2-jwt-bearer'
@@ -136,22 +137,38 @@ function createExpress(ctx: ApplicationContext) {
   const ews = expressWs(app)
   const wss = ews.getWss()
   const router = createRouter(ctx)
+  const auther = auth({
+    ...config.auth,
+  })
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(express.json())
+  app.use(cookieParser())
 
-  // FIXME: Make WS auth
-  router.use(
-    auth({
-      ...config.auth,
-    })
-  )
+  router.use(auther)
 
   app.use((_, __, next) => {
     RequestContext.create(ctx.orm.em, next)
   })
 
-  app.ws('/logs', (ws, req) => {})
+  app.ws('/logs', (ws, upgradeReq) => {
+    // FIXME: This is just a hack to get authentication on the websocket via JWT.
+    auther(
+      {
+        ...upgradeReq,
+        headers: {
+          authorization: `Bearer ${upgradeReq.cookies.rnd_token}`,
+        },
+        is: () => false,
+      } as any,
+      {} as any,
+      (error?: any) => {
+        if (error) {
+          ws.close(1011, 'Unauthorized')
+        }
+      }
+    )
+  })
 
   app.use(router)
 

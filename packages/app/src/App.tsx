@@ -299,7 +299,7 @@ function Actions() {
 
 function Page() {
   const { load, addLog, addToast } = useGlobalProvider()
-  const { keycloak } = useKeycloak()
+  const { initialized } = useKeycloak()
 
   const onMessage = (event: MessageEvent<any>) => {
     const data = JSON.parse(event.data)
@@ -312,17 +312,39 @@ function Page() {
   }
 
   useEffect(() => {
+    document.cookie = `rnd_token=${keycloak.token}`
+  }, [initialized])
+
+  useEffect(() => {
+    let settleTimeout = -1
+
     const ws = new ReconnectingWebSocket(
       window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
     )
 
     const onOpen = () => {
-      addToast({ type: 'info', message: 'Connected' })
-      load()
+      clearTimeout(settleTimeout)
+
+      settleTimeout = setTimeout(() => {
+        addToast({ type: 'info', message: 'Connected' })
+        load()
+      }, 500)
     }
 
-    const onClose = () =>
-      addToast({ type: 'warning', message: 'Closed connection' })
+    const onClose = (ev: any) => {
+      clearTimeout(settleTimeout)
+
+      if (ev.code === 1000) {
+        addToast({ type: 'warning', message: 'Closed connection' })
+      } else {
+        addToast({
+          type: 'error',
+          message: `Closed failure ${ev.code} (${
+            ev.reason || 'unknown reason'
+          })`,
+        })
+      }
+    }
 
     const onError = () =>
       addToast({ type: 'error', message: 'Connection error' })
