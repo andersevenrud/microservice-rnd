@@ -49,7 +49,7 @@ tilt up
 
 ### Docker Compose
 
-> Runs on http://localhost:8080 (and `/<admin-service>/`, with exception of keycloak that runs on port 8081)
+> Runs on http://localhost:8080 (and `/<admin-service>/`)
 
 ```bash
 docker-compose run --rm cli sh scripts/migrations.sh
