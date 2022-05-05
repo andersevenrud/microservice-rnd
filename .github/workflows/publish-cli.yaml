@@ -1,5 +1,6 @@
 name: Publish CLI
 on:
+  workflow_dispatch:
   push:
     paths:
       - packages/cli/**

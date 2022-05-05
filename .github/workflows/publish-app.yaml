@@ -1,5 +1,6 @@
 name: Publish App
 on:
+  workflow_dispatch:
   push:
     paths:
       - packages/app/**

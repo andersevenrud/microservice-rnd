@@ -1,5 +1,6 @@
 name: Publish Mailer
 on:
+  workflow_dispatch:
   push:
     paths:
       - packages/mailer/**
