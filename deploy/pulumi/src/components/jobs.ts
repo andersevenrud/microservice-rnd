@@ -75,7 +75,7 @@ export const migration = (config: Configuration, provider?: k8s.Provider) =>
                 env: [
                   {
                     name: 'KEYCLOAK_URL',
-                    value: 'http://auth.rnd.lvh.me',
+                    value: 'http://keycloak:8080',
                   },
                   {
                     name: 'KEYCLOAK_USERNAME',

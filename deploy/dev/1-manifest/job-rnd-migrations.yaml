@@ -3,7 +3,7 @@ kind: Job
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"batch/v1","kind":"Job","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","job":"migrations"},"name":"migrations","namespace":"rnd"},"spec":{"template":{"spec":{"containers":[{"command":["npm","run","migrate"],"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-db-migrations"},{"command":["npm","run","topics"],"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-topic-migrations"}],"restartPolicy":"OnFailure"}}}}
+      {"apiVersion":"batch/v1","kind":"Job","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","job":"migrations"},"name":"migrations","namespace":"rnd"},"spec":{"template":{"spec":{"containers":[{"command":["npm","run","migrate"],"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-db-migrations"},{"command":["npm","run","topics"],"env":[{"name":"DB_HOSTNAME","value":"db"},{"name":"DB_NAME","value":"db"},{"name":"DB_PASSWORD","value":"db"},{"name":"DB_USERNAME","value":"db"},{"name":"KAFKA_BROKERS","value":"kafka:9092"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-topic-migrations"},{"command":["npm","run","keycloak"],"env":[{"name":"KEYCLOAK_URL","value":"http://keycloak:8080"},{"name":"KEYCLOAK_USERNAME","value":"admin"},{"name":"KEYCLOAK_PASSWORD","value":"admin"},{"name":"KEYCLOAK_REALM","value":"rnd"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-keycloak-migrations"}],"restartPolicy":"OnFailure"}}}}
   labels:
     app.kubernetes.io/managed-by: pulumi
     job: migrations
@@ -47,4 +47,19 @@ spec:
           value: kafka:9092
         image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
         name: cli-topic-migrations
+      - command:
+        - npm
+        - run
+        - keycloak
+        env:
+        - name: KEYCLOAK_URL
+          value: http://keycloak:8080
+        - name: KEYCLOAK_USERNAME
+          value: admin
+        - name: KEYCLOAK_PASSWORD
+          value: admin
+        - name: KEYCLOAK_REALM
+          value: rnd
+        image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
+        name: cli-keycloak-migrations
       restartPolicy: OnFailure

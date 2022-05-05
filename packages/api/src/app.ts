@@ -25,6 +25,10 @@ class ExpressNotFoundError extends ExpressError {
   status = 404
 }
 
+const auther = auth({
+  ...config.auth,
+})
+
 const withErrorWrapper =
   (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) =>
   async (req: Request, res: Response, next: NextFunction) => {
@@ -68,6 +72,7 @@ function createRouter({ producer }: ApplicationContext) {
 
   router.get(
     '/client',
+    auther,
     withErrorWrapper(async (req: Request, res: Response) => {
       const em = RequestContext.getEntityManager()!
       const list = await em.find(ClientInstance, {
@@ -80,6 +85,7 @@ function createRouter({ producer }: ApplicationContext) {
 
   router.post(
     '/client',
+    auther,
     withErrorWrapper(async (req: Request, res: Response) => {
       const em = RequestContext.getEntityManager()!
       const client = new ClientInstance()
@@ -94,6 +100,7 @@ function createRouter({ producer }: ApplicationContext) {
 
   router.delete(
     '/client/:uuid',
+    auther,
     withErrorWrapper(async (req: Request, res: Response) => {
       const em = RequestContext.getEntityManager()!
       const client = await em.findOneOrFail(ClientInstance, {
@@ -112,6 +119,7 @@ function createRouter({ producer }: ApplicationContext) {
 
   router.post(
     '/client/:uuid/:action',
+    auther,
     withErrorWrapper(async (req: Request, res: Response) => {
       const { uuid, action } = req.params
       if (!['start', 'stop', 'restart'].includes(action)) {
@@ -137,15 +145,10 @@ function createExpress(ctx: ApplicationContext) {
   const ews = expressWs(app)
   const wss = ews.getWss()
   const router = createRouter(ctx)
-  const auther = auth({
-    ...config.auth,
-  })
 
   app.use(bodyParser.urlencoded({ extended: false }))
   app.use(express.json())
   app.use(cookieParser())
-
-  router.use(auther)
 
   app.use((_, __, next) => {
     RequestContext.create(ctx.orm.em, next)

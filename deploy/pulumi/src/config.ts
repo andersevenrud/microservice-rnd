@@ -41,6 +41,10 @@ export interface Configuration {
   kafka: {
     brokers: string
   }
+  oauth: {
+    issuerUrl: string
+    audience: string
+  }
 }
 
 export default function createConfig(config: Config): Configuration {
@@ -52,7 +56,7 @@ export default function createConfig(config: Config): Configuration {
   const version = config.get('version') || 'latest'
   const sha = config.get('sha') || 'HEAD'
   const host = config.get('host') || 'rnd.lvh.me'
-  const appUrl = config.get('env.APP_URL') || 'http://rnd.lvh.me/'
+  const appUrl = config.get('env.APP_URL') || `http://${host}/`
 
   return {
     host,
@@ -94,6 +98,10 @@ export default function createConfig(config: Config): Configuration {
     },
     kafka: {
       brokers: config.get('env.KAFKA_BROKERS') || 'kafka:9092',
+    },
+    oauth: {
+      issuerUrl: `https://auth.${host}/realms/rnd`,
+      audience: 'account',
     },
   }
 }

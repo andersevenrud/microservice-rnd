@@ -38,6 +38,7 @@ export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
               {
                 name: 'keycloak',
                 image: 'quay.io/keycloak/keycloak:18.0.0',
+                args: ['start-dev'],
                 imagePullPolicy: 'IfNotPresent',
                 ports: [
                   {
@@ -46,35 +47,35 @@ export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
                 ],
                 env: [
                   {
-                    name: 'env.KEYCLOAK_ADMIN',
+                    name: 'KEYCLOAK_ADMIN',
                     value: config.keycloak.username,
                   },
                   {
-                    name: 'env.KEYCLOAK_ADMIN_PASSWORD',
+                    name: 'KEYCLOAK_ADMIN_PASSWORD',
                     value: config.keycloak.password,
                   },
                   {
-                    name: 'env.KC_DB',
+                    name: 'KC_DB',
                     value: config.keycloak.db_type,
                   },
                   {
-                    name: 'env.KC_DB_URL',
+                    name: 'KC_DB_URL',
                     value: config.keycloak.db_url,
                   },
                   {
-                    name: 'env.KC_DB_USERNAME',
+                    name: 'KC_DB_USERNAME',
                     value: config.keycloak_db.username,
                   },
                   {
-                    name: 'env.KC_DB_PASSWORD',
+                    name: 'KC_DB_PASSWORD',
                     value: config.keycloak_db.password,
                   },
                   {
-                    name: 'env.KC_HOSTNAME',
+                    name: 'KC_HOSTNAME',
                     value: config.keycloak.hostname,
                   },
                   {
-                    name: 'env.KC_PROXY',
+                    name: 'KC_PROXY',
                     value: config.keycloak.proxy,
                   },
                 ],
@@ -147,7 +148,7 @@ export const ingress = (config: Configuration, provider?: k8s.Provider) =>
             pathType: 'Prefix',
             backend: {
               service: {
-                name: 'app',
+                name: 'keycloak',
                 port: {
                   number: 8080,
                 },
@@ -155,14 +156,14 @@ export const ingress = (config: Configuration, provider?: k8s.Provider) =>
             },
           },
         ],
-        'admin'
+        'auth'
       ),
       {
         metadata: {
-          name: 'keycloak-root',
+          name: 'ingress-keycloak',
           namespace: 'rnd',
           labels: {
-            backend: 'keycloak',
+            www: 'ingress',
           },
         },
       }
@@ -262,7 +263,6 @@ export const dbService = (config: Configuration, provider?: k8s.Provider) =>
         ports: [
           {
             port: 5432,
-            targetPort: 5432,
           },
         ],
         selector: {
