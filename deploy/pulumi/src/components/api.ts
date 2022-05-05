@@ -53,15 +53,19 @@ export const deployment = (config: Configuration, provider?: k8s.Provider) =>
                   ...kafkaEnv(config),
                   {
                     name: 'OAUTH_ISSUER_URL',
-                    value: 'http://auth.rnd.lvh.me/realms/rnd',
+                    value: config.oauth.issuerUrl,
                   },
                   {
                     name: 'OAUTH_AUDIENCE',
-                    value: 'account',
+                    value: config.oauth.audience,
                   },
                   {
                     name: 'HEALTH_READINESS_PROBE_DELAY',
                     value: '30000',
+                  },
+                  {
+                    name: 'NODE_TLS_REJECT_UNAUTHORIZED',
+                    value: config.dev ? '0' : '1',
                   },
                 ],
                 readinessProbe: {
