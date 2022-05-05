@@ -16,3 +16,5 @@ jobs:
       - uses: ./.github/actions/linter
         with:
           package_name: runner
+          token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          config: ${{ secrets.PULUMI_CONFIG }}
