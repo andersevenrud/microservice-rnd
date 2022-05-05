@@ -12,6 +12,7 @@ inputs:
   passphrase:
     required: false
     type: string
+    default: ""
   config:
     required: true
     type: string
