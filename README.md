@@ -40,8 +40,6 @@ One of the following configurations:
 
 > Runs on https://rnd.lvh.me (and `<admin-service>.rnd.lvh.me`)
 
-> Keycloak runs on https://auth.rnd.lvh.me
-
 See [`docs/k8s.md`](docs/k8s.md) for more information about setting up a local Kubernetes cluster.
 
 ```bash
