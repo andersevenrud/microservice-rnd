@@ -415,7 +415,6 @@ function Layout() {
     <div className="max-w-screen min-h-screen bg-gray-100">
       <div className="sticky inset-x-0 top-0 border-b border-gray-200 bg-white p-4 shadow-sm">
         <h1 className="text-xl">Kafkaesque</h1>
-        <button onClick={() => console.log(keycloak)}>Dump</button>
       </div>
 
       <div className="7xl:px-0 mx-auto max-w-7xl py-8 px-2">
