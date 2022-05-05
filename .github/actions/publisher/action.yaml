@@ -10,7 +10,6 @@ inputs:
   args:
     required: false
     type: string
-secrets:
   token:
     required: true
     type: string
@@ -21,14 +20,14 @@ runs:
       with:
         ref: ${{ github.ref }}
         check-name: Conventional Commits check
-        repo-token: ${{ secrets.token }}
+        repo-token: ${{ inputs.token }}
         wait-interval: 10
     - uses: docker/setup-buildx-action@v1
     - uses: docker/login-action@v1
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.token }}
+        password: ${{ inputs.token }}
     - uses: docker/build-push-action@v2
       with:
         tags: ghcr.io/andersevenrud/microservice-rnd-${{inputs.package_name}}:${{inputs.version}}
