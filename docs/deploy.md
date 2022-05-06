@@ -51,6 +51,8 @@ pulumi config set env.APP_URL https://my.domain.name
 pulumi config set zookeeper_storage_size 10Gi
 pulumi config set kafka_storage_size 10Gi
 pulumi config set db_storage_size 10Gi
+pulumi config set keycloak_storage_size 10Gi
+pulumi config set keycloak_db_storage_size 10Gi
 
 # Override default env variables (optional)
 pulumi config set env.DB_HOSTNAME db
