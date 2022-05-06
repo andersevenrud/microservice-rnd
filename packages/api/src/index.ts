@@ -6,18 +6,9 @@ import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { createHttpTerminator } from 'http-terminator'
 import { createWinston } from './winston'
 import { createApplication, createHealthCheck } from './app'
+import { useShutdown } from './utils/shutdown'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
-
-async function shutdownAll(list: (() => any)[]) {
-  for (const fn of list) {
-    try {
-      await fn()
-    } catch (e) {
-      console.error(e)
-    }
-  }
-}
 
 async function main() {
   try {
@@ -26,10 +17,8 @@ async function main() {
     await waitOn(config.waitOn)
 
     const kafka = new Kafka(config.kafka)
-
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()
-
     const logger = createWinston(producer)
 
     await producer.connect()
@@ -51,37 +40,23 @@ async function main() {
 
     const terminator = createHttpTerminator({ server })
 
+    const shutdown = useShutdown(
+      () => [
+        async () => {
+          logger.info('API is shutting down...')
+          await health.destroy()
+        },
+        () => terminator.terminate(),
+        () => producer.disconnect(),
+        () => consumer.disconnect(),
+        () => orm.close(),
+      ],
+      config.shutdown.delay
+    )
+
     health.ready()
 
     logger.info('API is running...')
-
-    const shutdown = async (failure = false) => {
-      logger.info('API is shutting down...')
-
-      try {
-        await health.destroy()
-
-        // NOTE: This only applies to kubernetes as we want to the readiness probe to fail before actually stopping
-        await new Promise((resolve) => {
-          setTimeout(resolve, config.shutdown.delay)
-        })
-
-        await shutdownAll([
-          () => terminator.terminate(),
-          () => producer.disconnect(),
-          () => consumer.disconnect(),
-          () => orm.close(),
-        ])
-      } catch (e) {
-        console.error('Exception on shutdown', e)
-      } finally {
-        process.exit(failure ? 1 : 0)
-      }
-    }
-
-    process.once('SIGUSR2', () => shutdown())
-    process.once('SIGINT', () => shutdown())
-    process.once('SIGTERM', () => shutdown())
 
     // NOTE: Start late because this blocks the bootstrapping
     await subscribe(() => shutdown(true))

@@ -1,6 +1,7 @@
 import minimist from 'minimist'
 import { Kafka, CompressionTypes } from 'kafkajs'
 import { createWinston } from './winston'
+import { useShutdown } from './utils/shutdown'
 import config from './config'
 
 async function main() {
@@ -30,35 +31,29 @@ async function main() {
         ],
       })
 
-    await consumer.connect()
-    await producer.connect()
+    let interval: NodeJS.Timer
 
     logger.info('Instance is running...', { uuid })
 
+    useShutdown(
+      () => [
+        () => {
+          logger.info('Instance is shutting down...', { uuid })
+          clearInterval(interval)
+        },
+        () => sendMessage('offline'),
+        () => consumer.disconnect(),
+        () => producer.disconnect(),
+      ],
+      0,
+      ['SIGUSR2', 'SIGINT']
+    )
+
+    await consumer.connect()
+    await producer.connect()
     await sendMessage('online')
 
-    const interval = setInterval(() => sendMessage('ping'), 30 * 1000)
-
-    const shutdown = async () => {
-      logger.info('Instance is shutting down...', { uuid })
-
-      try {
-        clearInterval(interval)
-        await sendMessage('offline')
-        await consumer.disconnect()
-        await producer.disconnect()
-      } catch (e) {
-        console.error('Exception on shutdown', e)
-      } finally {
-        process.exit(0)
-      }
-    }
-
-    process.once('SIGUSR2', shutdown)
-    process.once('SIGINT', shutdown)
-
-    // NOTE: These interfer with PM2
-    //process.once('SIGTERM', shutdown)
+    interval = setInterval(() => sendMessage('ping'), 30 * 1000)
   } catch (e) {
     console.error(e)
     process.exit(1)

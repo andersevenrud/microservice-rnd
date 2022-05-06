@@ -5,18 +5,9 @@ import { MikroORM } from '@mikro-orm/core'
 import { createWinston } from './winston'
 import { createApplication } from './app'
 import { PM2Manager } from './manager'
+import { useShutdown } from './utils/shutdown'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
-
-async function shutdownAll(list: (() => any)[]) {
-  for (const fn of list) {
-    try {
-      await fn()
-    } catch (e) {
-      console.error(e)
-    }
-  }
-}
 
 async function main() {
   try {
@@ -47,32 +38,24 @@ async function main() {
 
     logger.info('Runner is running...')
 
-    const shutdown = async (failure = false) => {
-      logger.info('Runner is shutting down...')
-
-      try {
-        await shutdownAll([
-          () => destroy(),
-          () => manager.kill(),
-          () => manager.disconnect(),
-          () => consumer.disconnect(),
-          () => producer.disconnect(),
-          () => orm.close(),
-        ])
-      } finally {
-        process.exit(failure ? 1 : 0)
-      }
-    }
+    const shutdown = useShutdown(
+      () => [
+        () => logger.info('Runner is shutting down...'),
+        () => destroy(),
+        () => manager.kill(),
+        () => manager.disconnect(),
+        () => consumer.disconnect(),
+        () => producer.disconnect(),
+        () => orm.close(),
+      ],
+      0 // FIXME
+    )
 
     consumer.on(consumer.events.CRASH, ({ payload: { restart } }) => {
       if (!restart) {
         shutdown(true)
       }
     })
-
-    process.once('SIGUSR2', () => shutdown())
-    process.once('SIGINT', () => shutdown())
-    process.once('SIGTERM', () => shutdown())
   } catch (e) {
     console.error(e)
     process.exit(1)

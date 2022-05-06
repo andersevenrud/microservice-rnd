@@ -3,6 +3,7 @@ import nodemailer, { Transporter } from 'nodemailer'
 import { Kafka } from 'kafkajs'
 import { createWinston } from './winston'
 import { MessageContext } from './messages'
+import { useShutdown } from './utils/shutdown'
 import * as mail from './messages'
 import config from './config'
 
@@ -35,16 +36,6 @@ async function sendMail(
   }
 }
 
-async function shutdownAll(list: (() => any)[]) {
-  for (const fn of list) {
-    try {
-      await fn()
-    } catch (e) {
-      console.error(e)
-    }
-  }
-}
-
 async function main() {
   try {
     await waitOn(config.waitOn)
@@ -58,6 +49,16 @@ async function main() {
     })
 
     const logger = createWinston('mailer', producer)
+
+    const shutdown = useShutdown(
+      () => [
+        () => logger.info('Mailer is shutting down...'),
+        () => consumer.disconnect(),
+        () => producer.disconnect(),
+        () => transporter.close(),
+      ],
+      0 // FIXME
+    )
 
     await producer.connect()
     await consumer.connect()
@@ -84,31 +85,11 @@ async function main() {
 
     logger.info('Mailer is running...')
 
-    const shutdown = async (failure = false) => {
-      logger.info('Mailer is shutting down...')
-
-      try {
-        await shutdownAll([
-          () => consumer.disconnect(),
-          () => producer.disconnect(),
-          () => transporter.close(),
-        ])
-      } catch (e) {
-        console.error('Exception on shutdown', e)
-      } finally {
-        process.exit(failure ? 1 : 0)
-      }
-    }
-
     consumer.on(consumer.events.CRASH, ({ payload: { restart } }) => {
       if (!restart) {
         shutdown(true)
       }
     })
-
-    process.once('SIGUSR2', () => shutdown())
-    process.once('SIGINT', () => shutdown())
-    process.once('SIGTERM', () => shutdown())
   } catch (e) {
     console.error(e)
     process.exit(1)
