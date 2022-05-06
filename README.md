@@ -74,6 +74,9 @@ You can access the following administration interfaces with the URL patterns not
 
 If you want to deploy this into the cloud, see [`docs/deploy.md`](docs/deploy.md).
 
+It's also possible to do a deployment with git and docker-compose by simply cloning this repository,
+then use `deploy/compose/docker-compose.yml` directly or as a template and run it from the root directory.
+
 ## License
 
 [Unlicense](./UNLICENSE)
