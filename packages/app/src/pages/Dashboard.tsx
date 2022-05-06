@@ -1,9 +1,19 @@
 import ReconnectingWebSocket from 'reconnecting-websocket'
 import React, { useEffect, useState } from 'react'
 import { useKeycloak } from '@react-keycloak/web'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faRotateRight,
+  faPlus,
+  faChevronUp,
+  faChevronDown,
+  faPlay,
+  faStop,
+  faBan,
+} from '@fortawesome/free-solid-svg-icons'
 import { capitalize } from 'lodash-es'
 import { useGlobalProvider, ClientInstance } from '../store'
-import { formattedTimestamp, classNames } from '../utils'
+import { formattedTimestamp } from '../utils'
 import {
   createClient,
   deleteClient,
@@ -136,12 +146,7 @@ function ListBox({ item }: { item: ClientInstance }) {
           onClick={onToggle}
         >
           <div className="flex items-center text-xs text-gray-500">
-            <i
-              className={classNames(
-                'fa',
-                `fa-chevron-${expanded ? 'up' : 'down'}`
-              )}
-            />
+            <FontAwesomeIcon icon={expanded ? faChevronUp : faChevronDown} />
           </div>
           <div className="grow">
             <span>{item.uuid}</span>
@@ -176,14 +181,14 @@ function ListBox({ item }: { item: ClientInstance }) {
             ].includes(item.state)}
             onClick={() => onClientAction(item, 'start')}
           >
-            <i className="fa fa-play" />
+            <FontAwesomeIcon icon={faPlay} />
           </Button>
           <Button
             title="Stop"
             disabled={['stopping', 'stopped'].includes(item.state)}
             onClick={() => onClientAction(item, 'stop')}
           >
-            <i className="fa fa-stop" />
+            <FontAwesomeIcon icon={faStop} />
           </Button>
           <Button
             title="Restart"
@@ -195,7 +200,7 @@ function ListBox({ item }: { item: ClientInstance }) {
             ].includes(item.state)}
             onClick={() => onClientAction(item, 'restart')}
           >
-            <i className="fa fa-rotate-right" />
+            <FontAwesomeIcon icon={faRotateRight} />
           </Button>
           <Button
             title="Delete"
@@ -203,7 +208,7 @@ function ListBox({ item }: { item: ClientInstance }) {
             className="bg-red-400 text-white"
             onClick={() => onDeleteClient(item)}
           >
-            <i className="fa fa-ban" />
+            <FontAwesomeIcon icon={faBan} />
           </Button>
         </div>
       </div>
@@ -239,14 +244,14 @@ function Actions() {
     <div className="flex justify-end">
       <div className="space-x-4">
         <Button className="bg-white" onClick={onReload}>
-          <i className="fa fa-rotate-right" />
+          <FontAwesomeIcon icon={faRotateRight} />
           <span>Reload</span>
         </Button>
         <Button
           className="bg-blue-500 font-bold text-white"
           onClick={onCreateClient}
         >
-          <i className="fa fa-plus" />
+          <FontAwesomeIcon icon={faPlus} />
           <span>Create</span>
         </Button>
       </div>
