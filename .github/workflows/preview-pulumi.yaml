@@ -24,6 +24,8 @@ jobs:
           config: ${{ secrets.PULUMI_CONFIG }}
           passphrase: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           stack: vultr
+      - run: |
+          echo "${{ secrets.PULUMI_CONFIG_PASSPHRASE || '' }}" > /tmp/pulumi_passphrase
       - uses: pulumi/actions@v3
         with:
           command: preview
@@ -32,4 +34,4 @@ jobs:
           comment-on-pr: true
         env:
           PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CONFIG_PASSPHRASE: ""
+          PULUMI_CONFIG_PASSPHRASE_FILE: "/tmp/pulumi_passphrase"
