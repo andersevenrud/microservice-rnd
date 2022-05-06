@@ -24,6 +24,7 @@ import Heading from '../components/Heading'
 import StatusIndicator from '../components/StatusIndicator'
 import Box from '../components/Box'
 import Button from '../components/Button'
+import config from '../config'
 
 function useWebsocket() {
   let ws: ReconnectingWebSocket | undefined
@@ -65,10 +66,7 @@ function useWebsocket() {
   const onError = () => addToast({ type: 'error', message: 'Connection error' })
 
   const connect = () => {
-    ws = new ReconnectingWebSocket(
-      window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
-    )
-
+    ws = new ReconnectingWebSocket(config.webSocketUrl)
     ws.addEventListener('open', onOpen)
     ws.addEventListener('close', onClose)
     ws.addEventListener('error', onError)
@@ -265,7 +263,7 @@ export default function DashboardPage() {
   const [connect, disconnect] = useWebsocket()
 
   useEffect(() => {
-    document.cookie = `rnd_token=${keycloak.token}`
+    document.cookie = `${config.cookieName}=${keycloak.token}`
   }, [initialized])
 
   useEffect(() => {

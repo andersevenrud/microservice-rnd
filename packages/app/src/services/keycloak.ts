@@ -1,9 +1,6 @@
 import Keycloak from 'keycloak-js'
+import config from '../config'
 
-const keycloak = new Keycloak({
-  url: import.meta.env.VITE_KEYCLOAK_URL || 'https://auth.rnd.lvh.me/',
-  realm: import.meta.env.VITE_KEYCLOAK_REALM || 'rnd',
-  clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'rnd-client',
-})
+const keycloak = new Keycloak(config.keycloak)
 
 export default keycloak
