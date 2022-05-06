@@ -1,5 +1,6 @@
 name: Lint CLI
 on:
+  workflow_dispatch:
   push:
     branches-ignore:
       - main

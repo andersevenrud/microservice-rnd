@@ -1,5 +1,6 @@
 name: Lint App
 on:
+  workflow_dispatch:
   push:
     branches-ignore:
       - main
