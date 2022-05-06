@@ -1,18 +1,22 @@
 # microservice-rnd
 
-Microservice architecture demonstration with nodejs (typescript) and [Kafka](https://kafka.apache.org/).
+Microservice architecture demonstration with Node.js (TypeScript) and Kafka.
 
 ## About
 
 This is a personal research project used for learning more about microservice architectures,
 structuring and good practices related to development on Docker and deployment onto a
-Kubernetes Cluster. Uses Github Actions for CI and CD and [Pulumi](https://www.pulumi.com/)
-deploy onto the cloud.
+Kubernetes Cluster.
 
-Provides a basic frontend interface and API that interacts with a runner service that
-spawns processes to demonstrate usage of event streams, etc, along with some administration
-interfaces to inspect the underlying services. [Keycloak](https://www.keycloak.org/) is used
-for authentication and authorization.
+[Kafka](https://kafka.apache.org/) is used to connect all services using event streams.
+
+Provides a basic dashboard interface and REST API that interacts with a runner service that
+handles processes to demonstrate event streams, etc. [Keycloak](https://www.keycloak.org/)
+handles for authentication and authorization.
+
+Uses Github Actions for CI and CD, [Pulumi](https://www.pulumi.com/) for deployments and
+[Tilt](https://tilt.dev/) & [minikube](https://minikube.sigs.k8s.io/docs/) for local development.
+An alternative docker-compose setup is also provided.
 
 **Please note that the out-of-the-box configurations are not safe for a production environment.**
 
@@ -27,9 +31,9 @@ One of the following configurations:
 
 1. Local [Kubernetes Cluster](#kubernetes)
     * `docker`
-    * [`minikube`](https://minikube.sigs.k8s.io/docs/)
-    * [`tilt`](https://tilt.dev/)
-    * [`pulumi`](https://www.pulumi.com/) (optional)
+    * `minikube`
+    * `tilt`
+    * `pulumi` (optional)
 2. Local [Docker Compose](#docker-compose)
     * `docker`
     * `docker-compose`
@@ -65,10 +69,10 @@ The default username is `admin` and password `admin`.
 
 You can access the following administration interfaces with the URL patterns noted above:
 
-* `kowl` - Kafka events
-* `mailhog` - Mail messages
+* `kowl` - Kafka inspection
+* `mailhog` - Mail preview
 * `adminer` - Database administration
-* `auth` - Authentication administration
+* `auth` - Keycloak administration
 
 ## Deployment
 
