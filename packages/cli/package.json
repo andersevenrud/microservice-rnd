@@ -10,7 +10,8 @@
     "topics": "ts-node --transpile-only scripts/topics.ts",
     "cleanup": "ts-node --transpile-only scripts/cleanup.ts",
     "start": "ts-node --transpile-only src/cron.ts",
-    "lint": "eslint 'src/**/*.{ts,tsx}'"
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "typecheck": "tsc --noEmit"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "UNLICENSED",

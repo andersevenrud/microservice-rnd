@@ -6,7 +6,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint 'src/**/*.{ts,tsx}'"
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "typecheck": "exit 0"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
   "license": "UNLICENSED",

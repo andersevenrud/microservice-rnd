@@ -16,3 +16,6 @@ runs:
     - run: npm run lint
       shell: bash
       working-directory: ./packages/${{inputs.package_name}}
+    - run: npm run typecheck
+      shell: bash
+      working-directory: ./packages/${{inputs.package_name}}
