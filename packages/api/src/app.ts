@@ -23,13 +23,7 @@ export interface ApplicationContext {
   kafka: Kafka
 }
 
-const auther = auth({
-  ...config.auth,
-})
-
-function createRouter({ producer }: ApplicationContext) {
-  const router = express.Router()
-
+function createController({ producer }: ApplicationContext) {
   const publishClientAction = async (action: string, client: ClientInstance) =>
     producer.send({
       topic: 'clientAction',
@@ -58,23 +52,17 @@ function createRouter({ producer }: ApplicationContext) {
       ],
     })
 
-  router.get(
-    '/client',
-    auther,
-    withErrorWrapper(async (req: Request, res: Response) => {
+  return {
+    async getClients(req: Request, res: Response) {
       const em = RequestContext.getEntityManager()!
       const list = await em.find(ClientInstance, {
         deletedAt: null,
       })
 
       res.json(list)
-    })
-  )
+    },
 
-  router.post(
-    '/client',
-    auther,
-    withErrorWrapper(async (req: Request, res: Response) => {
+    async createClient(req: Request, res: Response) {
       const em = RequestContext.getEntityManager()!
       const client = new ClientInstance()
 
@@ -83,13 +71,9 @@ function createRouter({ producer }: ApplicationContext) {
       await publishEmailNotification('user@email.net')
 
       res.send('OK')
-    })
-  )
+    },
 
-  router.delete(
-    '/client/:uuid',
-    auther,
-    withErrorWrapper(async (req: Request, res: Response) => {
+    async deleteClient(req: Request, res: Response) {
       const em = RequestContext.getEntityManager()!
       const client = await em.findOneOrFail(ClientInstance, {
         uuid: req.params.uuid,
@@ -102,13 +86,9 @@ function createRouter({ producer }: ApplicationContext) {
       await publishClientAction('delete', client)
 
       res.send('OK')
-    })
-  )
+    },
 
-  router.post(
-    '/client/:uuid/:action',
-    auther,
-    withErrorWrapper(async (req: Request, res: Response) => {
+    async clientAction(req: Request, res: Response) {
       const { uuid, action } = req.params
       if (!['start', 'stop', 'restart'].includes(action)) {
         throw new TypeError(`Invalid action '${action}'`)
@@ -122,6 +102,26 @@ function createRouter({ producer }: ApplicationContext) {
       await publishClientAction(action, client)
 
       res.send('OK')
+    },
+  }
+}
+
+function createRouter(ctx: ApplicationContext) {
+  const gate = auth(config.auth)
+  const ctrl = createController(ctx)
+  const router = express.Router()
+  const wrap = withErrorWrapper
+
+  router.get('/client', gate, wrap(ctrl.getClients))
+  router.post('/client', gate, wrap(ctrl.createClient))
+  router.delete('/client/:uuid', gate, wrap(ctrl.deleteClient))
+  router.post('/client/:uuid/:action', gate, wrap(ctrl.clientAction))
+
+  router.ws('/logs', (ws, upgradeReq) =>
+    fakeAuthCall(gate, upgradeReq, (error?: any) => {
+      if (error) {
+        ws.close(1011, 'Unauthorized')
+      }
     })
   )
 
@@ -141,14 +141,6 @@ function createExpress(ctx: ApplicationContext) {
   app.use((_, __, next) => {
     RequestContext.create(ctx.orm.em, next)
   })
-
-  app.ws('/logs', (ws, upgradeReq) =>
-    fakeAuthCall(auther, upgradeReq, (error?: any) => {
-      if (error) {
-        ws.close(1011, 'Unauthorized')
-      }
-    })
-  )
 
   app.use(router)
 
