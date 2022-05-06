@@ -8,6 +8,12 @@ import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
 import { RequestContext } from '@mikro-orm/core'
 import { ClientInstance } from './entities'
+import {
+  ExpressError,
+  ExpressNotFoundError,
+  withErrorWrapper,
+  fakeAuthCall,
+} from './utils/express'
 import config from './config'
 
 export interface ApplicationContext {
@@ -17,27 +23,9 @@ export interface ApplicationContext {
   kafka: Kafka
 }
 
-class ExpressError extends Error {
-  status = 500
-}
-
-class ExpressNotFoundError extends ExpressError {
-  status = 404
-}
-
 const auther = auth({
   ...config.auth,
 })
-
-const withErrorWrapper =
-  (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) =>
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      await fn(req, res, next)
-    } catch (e) {
-      next(e)
-    }
-  }
 
 function createRouter({ producer }: ApplicationContext) {
   const router = express.Router()
@@ -154,24 +142,13 @@ function createExpress(ctx: ApplicationContext) {
     RequestContext.create(ctx.orm.em, next)
   })
 
-  app.ws('/logs', (ws, upgradeReq) => {
-    // FIXME: This is just a hack to get authentication on the websocket via JWT.
-    auther(
-      {
-        ...upgradeReq,
-        headers: {
-          authorization: `Bearer ${upgradeReq.cookies.rnd_token}`,
-        },
-        is: () => false,
-      } as any,
-      {} as any,
-      (error?: any) => {
-        if (error) {
-          ws.close(1011, 'Unauthorized')
-        }
+  app.ws('/logs', (ws, upgradeReq) =>
+    fakeAuthCall(auther, upgradeReq, (error?: any) => {
+      if (error) {
+        ws.close(1011, 'Unauthorized')
       }
-    )
-  })
+    })
+  )
 
   app.use(router)
 
