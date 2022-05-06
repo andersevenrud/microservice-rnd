@@ -14,7 +14,10 @@ async function main() {
     })
 
     const producer = kafka.producer()
-    const consumer = kafka.consumer({ groupId: 'instance' })
+    const consumer = kafka.consumer({
+      groupId: 'instance',
+      allowAutoTopicCreation: false,
+    })
     const logger = createWinston(`instance-${uuid}`, producer)
 
     const sendMessage = (action: string) =>
