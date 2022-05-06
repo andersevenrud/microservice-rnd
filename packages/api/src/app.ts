@@ -2,6 +2,7 @@ import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
+import { Server } from 'ws'
 import { auth } from 'express-oauth2-jwt-bearer'
 import { Kafka, Producer, CompressionTypes } from 'kafkajs'
 import { Logger } from 'winston'
@@ -23,33 +24,30 @@ export interface ApplicationContext {
   kafka: Kafka
 }
 
+const createPublisher = (producer: Producer) => (topic: string, value: any) =>
+  producer.send({
+    topic,
+    compression: CompressionTypes.GZIP,
+    messages: [
+      {
+        value: JSON.stringify(value),
+      },
+    ],
+  })
+
 function createController({ producer }: ApplicationContext) {
+  const publish = createPublisher(producer)
+
   const publishClientAction = async (action: string, client: ClientInstance) =>
-    producer.send({
-      topic: 'clientAction',
-      compression: CompressionTypes.GZIP,
-      messages: [
-        {
-          value: JSON.stringify({
-            action,
-            args: { uuid: client.uuid },
-          }),
-        },
-      ],
+    publish('clientAction', {
+      action,
+      args: { uuid: client.uuid },
     })
 
   const publishEmailNotification = async (to: string) =>
-    producer.send({
-      topic: 'mailNotification',
-      compression: CompressionTypes.GZIP,
-      messages: [
-        {
-          value: JSON.stringify({
-            template: 'welcome',
-            to,
-          }),
-        },
-      ],
+    publish('mailNotification', {
+      template: 'welcome',
+      to,
     })
 
   return {
@@ -161,10 +159,7 @@ function createExpress(ctx: ApplicationContext) {
   return { app, wss }
 }
 
-export async function createApplication(ctx: ApplicationContext) {
-  const { kafka } = ctx
-  const { app, wss } = createExpress(ctx)
-
+function createBroadcaster({ kafka }: ApplicationContext, wss: Server) {
   const broadcast = (data: string) =>
     Array.from(wss.clients)
       .filter((client) => client.readyState === 1)
@@ -202,6 +197,15 @@ export async function createApplication(ctx: ApplicationContext) {
     })
   }
 
+  return {
+    subscribe,
+    consumer,
+  }
+}
+
+export async function createApplication(ctx: ApplicationContext) {
+  const { app, wss } = createExpress(ctx)
+  const { subscribe, consumer } = createBroadcaster(ctx, wss)
   return { app, subscribe, consumer }
 }
 
