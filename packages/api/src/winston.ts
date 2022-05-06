@@ -3,41 +3,41 @@ import Transport from 'winston-transport'
 import { Producer, CompressionTypes } from 'kafkajs'
 
 class KafkaTransport extends Transport {
+  private readonly name: string
   private readonly producer: Producer
 
-  constructor(producer: Producer) {
+  constructor(name: string, producer: Producer) {
     super()
+    this.name = name
     this.producer = producer
   }
 
   async log(info: any, callback: (error?: Error) => void) {
-    try {
-      const { level, message, ...meta } = info
+    const { level, message, ...meta } = info
 
-      await this.producer.send({
+    this.producer
+      .send({
         topic: 'logs',
         compression: CompressionTypes.GZIP,
         messages: [
           {
             value: JSON.stringify({ level, message, meta }),
             headers: {
-              service: 'api',
+              service: this.name,
             },
           },
         ],
       })
-    } catch (e) {
-      console.error(e)
-    } finally {
-      callback()
-    }
+      .catch((e) => console.error('Error sending log to Kafka', e))
+
+    callback()
   }
 }
 
-export const createWinston = (producer: Producer) =>
+export const createWinston = (name: string, producer: Producer) =>
   winston.createLogger({
     transports: [
       new winston.transports.Console({}),
-      new KafkaTransport(producer),
+      new KafkaTransport(name, producer),
     ],
   })

@@ -13,10 +13,10 @@ class KafkaTransport extends Transport {
   }
 
   async log(info: any, callback: (error?: Error) => void) {
-    try {
-      const { level, message, ...meta } = info
+    const { level, message, ...meta } = info
 
-      await this.producer.send({
+    this.producer
+      .send({
         topic: 'logs',
         compression: CompressionTypes.GZIP,
         messages: [
@@ -28,11 +28,9 @@ class KafkaTransport extends Transport {
           },
         ],
       })
-    } catch (e) {
-      console.error(e)
-    } finally {
-      callback()
-    }
+      .catch((e) => console.error('Error sending log to Kafka', e))
+
+    callback()
   }
 }
 

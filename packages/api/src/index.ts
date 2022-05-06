@@ -19,7 +19,7 @@ async function main() {
     const kafka = new Kafka(config.kafka)
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()
-    const logger = createWinston(producer)
+    const logger = createWinston('api', producer)
 
     await producer.connect()
     await orm.connect()
