@@ -33,8 +33,6 @@ async function main() {
 
     let interval: NodeJS.Timer
 
-    logger.info('Instance is running...', { uuid })
-
     useShutdown(
       () => [
         () => {
@@ -52,6 +50,8 @@ async function main() {
     await consumer.connect()
     await producer.connect()
     await sendMessage('online')
+
+    logger.info('Instance is running...', { uuid })
 
     interval = setInterval(() => sendMessage('ping'), 30 * 1000)
   } catch (e) {
