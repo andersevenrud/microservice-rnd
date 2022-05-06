@@ -6,7 +6,7 @@ import Layout from './components/Layout'
 import DashboardPage from './pages/Dashboard'
 import LoginPage from './pages/Login'
 import LogoutPage from './pages/Logout'
-import client from './keycloak'
+import client from './services/keycloak'
 
 function ProtectedRoute({ children }: PropsWithChildren<any>) {
   const { keycloak } = useKeycloak()

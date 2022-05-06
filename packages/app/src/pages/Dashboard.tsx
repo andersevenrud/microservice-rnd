@@ -3,8 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { useKeycloak } from '@react-keycloak/web'
 import { capitalize } from 'lodash-es'
 import { useGlobalProvider, ClientInstance } from '../store'
-import { createClient, deleteClient, performClientAction } from '../api'
 import { formattedTimestamp, classNames } from '../utils'
+import {
+  createClient,
+  deleteClient,
+  performClientAction,
+} from '../services/api'
 import Timestamp from '../components/Timestamp'
 import Heading from '../components/Heading'
 import StatusIndicator from '../components/StatusIndicator'

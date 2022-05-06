@@ -6,7 +6,7 @@ import React, {
   useContext,
   PropsWithChildren,
 } from 'react'
-import { fetchClients } from './api'
+import { fetchClients } from './services/api'
 
 export type ToastMessageType = 'info' | 'warning' | 'error'
 
