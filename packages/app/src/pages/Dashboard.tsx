@@ -15,6 +15,69 @@ import StatusIndicator from '../components/StatusIndicator'
 import Box from '../components/Box'
 import Button from '../components/Button'
 
+function useWebsocket() {
+  let ws: ReconnectingWebSocket | undefined
+  let settleTimeout = -1
+  const { load, addLog, addToast } = useGlobalProvider()
+
+  const onMessage = (event: MessageEvent<any>) => {
+    const data = JSON.parse(event.data)
+
+    if (['clientState'].includes(data.topic)) {
+      load()
+    } else {
+      addLog(data)
+    }
+  }
+
+  const onOpen = () => {
+    clearTimeout(settleTimeout)
+
+    settleTimeout = setTimeout(() => {
+      addToast({ type: 'info', message: 'Connected' })
+      load()
+    }, 500)
+  }
+
+  const onClose = (ev: any) => {
+    clearTimeout(settleTimeout)
+
+    if (ev.code === 1000) {
+      addToast({ type: 'warning', message: 'Closed connection' })
+    } else {
+      addToast({
+        type: 'error',
+        message: `Closed failure ${ev.code} (${ev.reason || 'unknown reason'})`,
+      })
+    }
+  }
+
+  const onError = () => addToast({ type: 'error', message: 'Connection error' })
+
+  const connect = () => {
+    ws = new ReconnectingWebSocket(
+      window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
+    )
+
+    ws.addEventListener('open', onOpen)
+    ws.addEventListener('close', onClose)
+    ws.addEventListener('error', onError)
+    ws.addEventListener('message', onMessage)
+  }
+
+  const disconnect = () => {
+    if (ws) {
+      ws.removeEventListener('open', onOpen)
+      ws.removeEventListener('close', onClose)
+      ws.removeEventListener('error', onError)
+      ws.removeEventListener('message', onMessage)
+      ws.close()
+    }
+  }
+
+  return [connect, disconnect]
+}
+
 function Logs() {
   const { logs } = useGlobalProvider()
 
@@ -192,70 +255,20 @@ function Actions() {
 }
 
 export default function DashboardPage() {
-  const { load, addLog, addToast } = useGlobalProvider()
+  const { load } = useGlobalProvider()
   const { keycloak, initialized } = useKeycloak()
-
-  const onMessage = (event: MessageEvent<any>) => {
-    const data = JSON.parse(event.data)
-
-    if (['clientState'].includes(data.topic)) {
-      load()
-    } else {
-      addLog(data)
-    }
-  }
+  const [connect, disconnect] = useWebsocket()
 
   useEffect(() => {
     document.cookie = `rnd_token=${keycloak.token}`
   }, [initialized])
 
   useEffect(() => {
-    let settleTimeout = -1
-
-    const ws = new ReconnectingWebSocket(
-      window.location.origin.replace(/^http/, 'ws') + '/api/logs/'
-    )
-
-    const onOpen = () => {
-      clearTimeout(settleTimeout)
-
-      settleTimeout = setTimeout(() => {
-        addToast({ type: 'info', message: 'Connected' })
-        load()
-      }, 500)
-    }
-
-    const onClose = (ev: any) => {
-      clearTimeout(settleTimeout)
-
-      if (ev.code === 1000) {
-        addToast({ type: 'warning', message: 'Closed connection' })
-      } else {
-        addToast({
-          type: 'error',
-          message: `Closed failure ${ev.code} (${
-            ev.reason || 'unknown reason'
-          })`,
-        })
-      }
-    }
-
-    const onError = () =>
-      addToast({ type: 'error', message: 'Connection error' })
-
-    ws.addEventListener('open', onOpen)
-    ws.addEventListener('close', onClose)
-    ws.addEventListener('error', onError)
-    ws.addEventListener('message', onMessage)
-
+    connect()
     load()
 
     return () => {
-      ws.removeEventListener('open', onOpen)
-      ws.removeEventListener('close', onClose)
-      ws.removeEventListener('error', onError)
-      ws.removeEventListener('message', onMessage)
-      ws.close()
+      disconnect()
     }
   }, [])
 
