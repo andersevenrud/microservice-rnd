@@ -30,6 +30,9 @@ runs:
         password: ${{ inputs.token }}
     - uses: docker/build-push-action@v2
       with:
+        push: true
         tags: ghcr.io/andersevenrud/microservice-rnd-${{inputs.package_name}}:${{inputs.version}}
         context: ./packages/${{inputs.package_name}}
-        # build-args: ${{ inputs.args }}
+        build-args: ${{ inputs.args }}
+        secrets: |
+          GIT_AUTH_TOKEN=${{ inputs.token }}
