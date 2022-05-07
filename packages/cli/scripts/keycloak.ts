@@ -183,7 +183,7 @@ async function main() {
     const { baseUrl, realmName, options } = config.keycloak
 
     await waitOn({
-      resources: [baseUrl],
+      resources: [baseUrl.replace(/^https?:\/\//, 'tcp:')],
       log: true,
       timeout: 60 * 1000,
     })
