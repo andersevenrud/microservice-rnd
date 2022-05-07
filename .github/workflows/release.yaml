@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: ${{ github.event.inputs.version }}
           args: |
-            VITE_KEYCLOAK_URL=https://auth.rnd.lvh.me/
+            VITE_KEYCLOAK_URL=${{ secrets.KEYCLOAK_URL || 'https://auth.rnd.lvh.me/' }}
             VITE_KEYCLOAK_REALM=rnd
             VITE_KEYCLOAK_CLIENT_ID=rnd-client
   cli:
