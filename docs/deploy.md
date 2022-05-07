@@ -108,3 +108,4 @@ The following secrets are required:
 * `PULUMI_ACCESS_TOKEN` - Access token for the Pulumi stack
 * `PULUMI_CONFIG_PASSPHRASE` - The passphrase used for the stack (can be empty)
 * `PULUMI_CONFIG` - A `Pulumi.yaml` file that includes the configuration entry `rnd:kubeconfig` that contains `config.yaml` from your k8s provider.
+* `KEYCLOAK_URL` - The URL of the Keycloak service
