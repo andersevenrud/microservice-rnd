@@ -14,6 +14,13 @@ Download the account configuration from your k8s provider.
 
 > In this case named `config.yaml`.
 
+On your cluster:
+
+```bash
+KUBECONFIG="config.yaml" kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.7.0/cert-manager.yaml
+KUBECONFIG="config.yaml" kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
+```
+
 Also make sure that the application (`app`) has been built with the following env variables:
 
 ```
