@@ -10,7 +10,9 @@ deploy_cert_manager()
 
 k8s_yaml(listdir('deploy/dev/1-manifest'))
 
-k8s_resource(workload = 'migrations', labels = 'jobs', trigger_mode = TRIGGER_MODE_MANUAL)
+k8s_resource(workload = 'db-migrations', labels = 'jobs', trigger_mode = TRIGGER_MODE_MANUAL)
+k8s_resource(workload = 'topic-migrations', labels = 'jobs', trigger_mode = TRIGGER_MODE_MANUAL)
+k8s_resource(workload = 'keycloak-migrations', labels = 'jobs', trigger_mode = TRIGGER_MODE_MANUAL)
 k8s_resource(workload = 'cleanup', labels = 'jobs')
 k8s_resource(workload = 'mailer', labels = 'app')
 k8s_resource(workload = 'runner', labels = 'app')

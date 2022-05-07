@@ -40,15 +40,15 @@ export const cleanup = (config: Configuration, provider?: k8s.Provider) =>
     { provider }
   )
 
-export const migration = (config: Configuration, provider?: k8s.Provider) =>
+export const dbMigrations = (config: Configuration, provider?: k8s.Provider) =>
   new k8s.batch.v1.Job(
-    'migration-job',
+    'db-migration-job',
     {
       metadata: {
         labels: {
           job: 'migrations',
         },
-        name: 'migrations',
+        name: 'db-migrations',
         namespace: 'rnd',
       },
       spec: {
@@ -62,12 +62,66 @@ export const migration = (config: Configuration, provider?: k8s.Provider) =>
                 command: ['npm', 'run', 'migrate'],
                 env: [...dbEnv(config), ...kafkaEnv(config)],
               },
+            ],
+          },
+        },
+      },
+    },
+    { provider }
+  )
+
+export const topicMigrations = (
+  config: Configuration,
+  provider?: k8s.Provider
+) =>
+  new k8s.batch.v1.Job(
+    'topic-migration-job',
+    {
+      metadata: {
+        labels: {
+          job: 'migrations',
+        },
+        name: 'topic-migrations',
+        namespace: 'rnd',
+      },
+      spec: {
+        template: {
+          spec: {
+            restartPolicy: 'OnFailure',
+            containers: [
               {
                 name: 'cli-topic-migrations',
                 image: githubImage(config, 'cli'),
                 command: ['npm', 'run', 'topics'],
                 env: [...dbEnv(config), ...kafkaEnv(config)],
               },
+            ],
+          },
+        },
+      },
+    },
+    { provider }
+  )
+
+export const keycloakMigrations = (
+  config: Configuration,
+  provider?: k8s.Provider
+) =>
+  new k8s.batch.v1.Job(
+    'keycloak-migration-job',
+    {
+      metadata: {
+        labels: {
+          job: 'migrations',
+        },
+        name: 'keycloak-migrations',
+        namespace: 'rnd',
+      },
+      spec: {
+        template: {
+          spec: {
+            restartPolicy: 'OnFailure',
+            containers: [
               {
                 name: 'cli-keycloak-migrations',
                 image: githubImage(config, 'cli'),
@@ -79,11 +133,11 @@ export const migration = (config: Configuration, provider?: k8s.Provider) =>
                   },
                   {
                     name: 'KEYCLOAK_USERNAME',
-                    value: 'admin',
+                    value: config.keycloak.username,
                   },
                   {
                     name: 'KEYCLOAK_PASSWORD',
-                    value: 'admin',
+                    value: config.keycloak.password,
                   },
                   {
                     name: 'KEYCLOAK_REALM',

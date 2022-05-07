@@ -55,7 +55,9 @@ export default function createKubernetes(
   runner.deployment(config, provider)
 
   jobs.cleanup(config, provider)
-  jobs.migration(config, provider)
+  jobs.dbMigrations(config, provider)
+  jobs.topicMigrations(config, provider)
+  jobs.keycloakMigrations(config, provider)
 
   mailhog.deployment(config, provider)
   mailhog.service(config, provider)
