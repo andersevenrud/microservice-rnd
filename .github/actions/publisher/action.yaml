@@ -32,4 +32,4 @@ runs:
       with:
         tags: ghcr.io/andersevenrud/microservice-rnd-${{inputs.package_name}}:${{inputs.version}}
         context: ./packages/${{inputs.package_name}}
-        build-args: ${{ inputs.args }}
+        # build-args: ${{ inputs.args }}
