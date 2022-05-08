@@ -1,8 +1,8 @@
 import * as k8s from '@pulumi/kubernetes'
 import { Configuration } from '../config'
 
-export const deployment = (config: Configuration, provider?: k8s.Provider) =>
-  new k8s.apps.v1.Deployment(
+export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
+  new k8s.apps.v1.StatefulSet(
     'db-deployment',
     {
       metadata: {
@@ -13,15 +13,17 @@ export const deployment = (config: Configuration, provider?: k8s.Provider) =>
         namespace: 'rnd',
       },
       spec: {
+        serviceName: 'db',
         replicas: 1,
         selector: {
           matchLabels: {
             backend: 'db-pod',
           },
         },
-        strategy: {
-          type: 'Recreate',
+        updateStrategy: {
+          type: 'RollingUpdate',
         },
+        podManagementPolicy: 'Parallel',
         template: {
           metadata: {
             labels: {
@@ -66,16 +68,23 @@ export const deployment = (config: Configuration, provider?: k8s.Provider) =>
                 ],
               },
             ],
-            volumes: [
-              {
-                name: 'db-data',
-                persistentVolumeClaim: {
-                  claimName: 'db-data',
-                },
-              },
-            ],
           },
         },
+        volumeClaimTemplates: [
+          {
+            metadata: {
+              name: 'db-data',
+            },
+            spec: {
+              accessModes: ['ReadWriteOnce'],
+              resources: {
+                requests: {
+                  storage: config.db_storage_size,
+                },
+              },
+            },
+          },
+        ],
       },
     },
     { provider }
@@ -101,29 +110,6 @@ export const service = (config: Configuration, provider?: k8s.Provider) =>
         ],
         selector: {
           backend: 'db-pod',
-        },
-      },
-    },
-    { provider }
-  )
-
-export const pvc = (config: Configuration, provider?: k8s.Provider) =>
-  new k8s.core.v1.PersistentVolumeClaim(
-    'db-pvc',
-    {
-      metadata: {
-        labels: {
-          backend: 'db',
-        },
-        name: 'db-data',
-        namespace: 'rnd',
-      },
-      spec: {
-        accessModes: ['ReadWriteOnce'],
-        resources: {
-          requests: {
-            storage: config.db_storage_size,
-          },
         },
       },
     },

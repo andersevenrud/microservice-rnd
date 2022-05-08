@@ -23,9 +23,8 @@ export default function createKubernetes(
 
   certs.cert(config, provider)
 
-  keycloak.dbDeployment(config, provider)
+  keycloak.dbStatefulSet(config, provider)
   keycloak.dbService(config, provider)
-  keycloak.dbPvc(config, provider)
   keycloak.statefulSet(config, provider)
   keycloak.service(config, provider)
   keycloak.ingress(config, provider)
@@ -36,9 +35,8 @@ export default function createKubernetes(
   kafka.statefulSet(config, provider)
   kafka.service(config, provider)
 
-  db.deployment(config, provider)
+  db.statefulSet(config, provider)
   db.service(config, provider)
-  db.pvc(config, provider)
 
   api.deployment(config, provider)
   api.service(config, provider)

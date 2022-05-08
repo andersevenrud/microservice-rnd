@@ -182,8 +182,8 @@ export const ingress = (config: Configuration, provider?: k8s.Provider) =>
     { provider }
   )
 
-export const dbDeployment = (config: Configuration, provider?: k8s.Provider) =>
-  new k8s.apps.v1.Deployment(
+export const dbStatefulSet = (config: Configuration, provider?: k8s.Provider) =>
+  new k8s.apps.v1.StatefulSet(
     'keycloak-db-deployment',
     {
       metadata: {
@@ -195,13 +195,14 @@ export const dbDeployment = (config: Configuration, provider?: k8s.Provider) =>
       },
       spec: {
         replicas: 1,
+        serviceName: 'keycloak-db',
+        updateStrategy: {
+          type: 'RollingUpdate',
+        },
         selector: {
           matchLabels: {
             backend: 'keycloak-db-pod',
           },
-        },
-        strategy: {
-          type: 'Recreate',
         },
         template: {
           metadata: {
@@ -253,6 +254,21 @@ export const dbDeployment = (config: Configuration, provider?: k8s.Provider) =>
             ],
           },
         },
+        volumeClaimTemplates: [
+          {
+            metadata: {
+              name: 'keycloak-db-data',
+            },
+            spec: {
+              accessModes: ['ReadWriteOnce'],
+              resources: {
+                requests: {
+                  storage: config.keycloak_db_storage_size,
+                },
+              },
+            },
+          },
+        ],
       },
     },
     { provider }
