@@ -52,7 +52,8 @@ pulumi config set name my-stack
 pulumi config set mode production
 pulumi config set version latest
 pulumi config set host my.domain.name
-pulumi config set env.APP_URL https://my.domain.name
+pulumi config set app_url https://my.domain.name
+pulumi config set keycloak.password abc123
 
 # Override default storage allocation (optional)
 pulumi config set zookeeper_storage_size 10Gi
