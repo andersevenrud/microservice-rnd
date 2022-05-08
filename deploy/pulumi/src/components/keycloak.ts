@@ -88,14 +88,6 @@ export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
                     name: 'KC_HOSTNAME_STRICT_BACKCHANNEL',
                     value: 'true',
                   },
-                  {
-                    name: 'KC_HTTP_ENABLED',
-                    value: 'true',
-                  },
-                  {
-                    name: 'PROXY_ADDRESS_FORWARDING',
-                    value: 'true',
-                  },
                 ],
                 volumeMounts: [
                   {
