@@ -1,9 +1,17 @@
 import { Configuration } from '../config'
 
-export const createIngress = (config: Configuration, paths: any[], subdomain?: string) => {
+export const createIngress = (
+  config: Configuration,
+  paths: any[],
+  subdomain?: string
+) => {
   const annotations = {}
-  const secretName = config.dev ? 'selfsigned-root-secret' : 'letsencrypt-prod'
   const host = subdomain ? `${subdomain}.${config.host}` : config.host
+  const cert = subdomain || 'root'
+  const issuer = `${cert}-prod-cluster-issuer`
+  const secretName = config.dev
+    ? 'selfsigned-root-secret'
+    : `${cert}-letsencrypt-prod`
 
   if (config.dev) {
     Object.assign(annotations, {
@@ -11,7 +19,7 @@ export const createIngress = (config: Configuration, paths: any[], subdomain?: s
     })
   } else {
     Object.assign(annotations, {
-      'cert-manager.io/cluster-issuer': 'prod-cluster-issuer',
+      'cert-manager.io/cluster-issuer': issuer,
       'kubernetes.io/ingress.class': 'nginx',
     })
   }

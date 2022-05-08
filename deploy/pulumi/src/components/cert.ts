@@ -11,12 +11,22 @@ export function cert(config: Configuration, provider?: k8s.Provider) {
       { provider }
     )
   } else {
-    new k8s.yaml.ConfigFile(
-      'prod-cert',
-      {
-        file: 'src/prod/cert.yaml',
-      },
-      { provider }
-    )
+    const certs = ['root', 'auth']
+
+    for (const cert of certs) {
+      new k8s.yaml.ConfigFile(
+        `${cert}-prod-cert`,
+        {
+          file: 'src/prod/cert.yaml',
+          transformations: [
+            (o: any) => {
+              o.metadata.name = `${cert}-prod-cluster-issuer`
+              o.spec.acme.privateKeySecretRef.name = `${cert}-letsencrypt-prod`
+            },
+          ],
+        },
+        { provider }
+      )
+    }
   }
 }
