@@ -21,15 +21,16 @@ KUBECONFIG="config.yaml" kubectl apply -f https://github.com/jetstack/cert-manag
 KUBECONFIG="config.yaml" kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.1.1/deploy/static/provider/cloud/deploy.yaml
 ```
 
-Also make sure that the application (`app`) has been built with the following env variables:
+Also make sure that the application (`app`) docker image has been built with the following variables:
+
+The `app` docker image has the following variables available on build:
+
+> Note that these are all empty by default as the values shown are the fallbacks used on runtime:
 
 ```
-# Required
-env.VITE_KEYCLOAK_URL https://auth.my.domain.name/
-
-# Optional
-env.VITE_KEYCLOAK_REALM rnd
-env.VITE_KEYCLOAK_CLIENT_ID rnd-client
+VITE_KEYCLOAK_URL https://auth.my.domain.name/
+VITE_KEYCLOAK_REALM rnd
+VITE_KEYCLOAK_CLIENT_ID rnd-client
 ```
 
 ## Create configurations
