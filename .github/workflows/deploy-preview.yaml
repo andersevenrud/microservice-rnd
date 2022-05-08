@@ -1,4 +1,4 @@
-name: Preview Pulumi
+name: Deploy Preview
 on:
   workflow_dispatch:
   pull_request:
