@@ -63,6 +63,10 @@ export const deployment = (config: Configuration, provider?: k8s.Provider) =>
                     name: 'HEALTH_READINESS_PROBE_DELAY',
                     value: '30000',
                   },
+
+                  // FIXME: This is just because I haven't yet figured out a way to
+                  // make api calls to keycloak server behind an ingress with self-signed
+                  // certificates work.
                   {
                     name: 'NODE_TLS_REJECT_UNAUTHORIZED',
                     value: config.dev ? '0' : '1',
