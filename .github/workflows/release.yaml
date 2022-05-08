@@ -98,7 +98,8 @@ jobs:
           config: ${{ secrets.PULUMI_CONFIG }}
           passphrase: ${{ secrets.PULUMI_CONFIG_PASSPHRASE }}
           stack: ${{ github.event.inputs.stack }}
-      - run: |
+      - name: Pulumi passphrase
+        run: |
           echo "${{ secrets.PULUMI_CONFIG_PASSPHRASE || '' }}" > /tmp/pulumi_passphrase
       - uses: pulumi/actions@v3
         with:
