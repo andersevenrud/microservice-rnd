@@ -143,6 +143,10 @@ export const keycloakMigrations = (
                     name: 'KEYCLOAK_REALM',
                     value: 'rnd',
                   },
+                  {
+                    name: 'APP_URL',
+                    value: config.appUrl,
+                  },
                 ],
               },
             ],
