@@ -84,6 +84,10 @@ export const statefulSet = (config: Configuration, provider?: k8s.Provider) =>
                     value: config.keycloak.proxy,
                   },
                   {
+                    name: 'KC_HTTP_ENABLED',
+                    value: 'true',
+                  },
+                  {
                     // Use configured hostname
                     name: 'KC_HOSTNAME_STRICT_BACKCHANNEL',
                     value: 'true',

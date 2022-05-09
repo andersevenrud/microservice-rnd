@@ -56,7 +56,7 @@ export default function createConfig(config: Config): Configuration {
   const version = config.get('version') || 'latest'
   const sha = config.get('sha') || 'HEAD'
   const host = config.get('host') || 'rnd.lvh.me'
-  const appUrl = config.get('app_url') || `http://${host}/`
+  const appUrl = config.get('app_url') || `https://${host}/`
 
   return {
     host,

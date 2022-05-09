@@ -3,7 +3,7 @@ kind: StatefulSet
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","backend":"keycloak"},"name":"keycloak","namespace":"rnd"},"spec":{"podManagementPolicy":"Parallel","replicas":1,"selector":{"matchLabels":{"backend":"keycloak-pod"}},"serviceName":"keycloak","template":{"metadata":{"labels":{"backend":"keycloak-pod"}},"spec":{"containers":[{"args":["start-dev"],"env":[{"name":"KEYCLOAK_ADMIN","value":"admin"},{"name":"KEYCLOAK_ADMIN_PASSWORD","value":"admin"},{"name":"KC_DB","value":"postgres"},{"name":"KC_DB_URL","value":"jdbc:postgresql://keycloak-db/db"},{"name":"KC_DB_USERNAME","value":"db"},{"name":"KC_DB_PASSWORD","value":"db"},{"name":"KC_HOSTNAME","value":"auth.rnd.lvh.me"},{"name":"KC_PROXY","value":"edge"},{"name":"KC_HOSTNAME_STRICT_BACKCHANNEL","value":"true"}],"image":"quay.io/keycloak/keycloak:18.0.0","imagePullPolicy":"IfNotPresent","name":"keycloak","ports":[{"containerPort":8080}],"volumeMounts":[{"mountPath":"/opt/keycloak/data","name":"keycloak-data"}]}],"restartPolicy":"Always","securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}}},"updateStrategy":{"type":"RollingUpdate"},"volumeClaimTemplates":[{"metadata":{"name":"keycloak-data"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}}}}]}}
+      {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","backend":"keycloak"},"name":"keycloak","namespace":"rnd"},"spec":{"podManagementPolicy":"Parallel","replicas":1,"selector":{"matchLabels":{"backend":"keycloak-pod"}},"serviceName":"keycloak","template":{"metadata":{"labels":{"backend":"keycloak-pod"}},"spec":{"containers":[{"args":["start-dev"],"env":[{"name":"KEYCLOAK_ADMIN","value":"admin"},{"name":"KEYCLOAK_ADMIN_PASSWORD","value":"admin"},{"name":"KC_DB","value":"postgres"},{"name":"KC_DB_URL","value":"jdbc:postgresql://keycloak-db/db"},{"name":"KC_DB_USERNAME","value":"db"},{"name":"KC_DB_PASSWORD","value":"db"},{"name":"KC_HOSTNAME","value":"auth.rnd.lvh.me"},{"name":"KC_PROXY","value":"edge"},{"name":"KC_HTTP_ENABLED","value":"true"},{"name":"KC_HOSTNAME_STRICT_BACKCHANNEL","value":"true"}],"image":"quay.io/keycloak/keycloak:18.0.0","imagePullPolicy":"IfNotPresent","name":"keycloak","ports":[{"containerPort":8080}],"volumeMounts":[{"mountPath":"/opt/keycloak/data","name":"keycloak-data"}]}],"restartPolicy":"Always","securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}}},"updateStrategy":{"type":"RollingUpdate"},"volumeClaimTemplates":[{"metadata":{"name":"keycloak-data"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"1Gi"}}}}]}}
   labels:
     app.kubernetes.io/managed-by: pulumi
     backend: keycloak
@@ -41,6 +41,8 @@ spec:
           value: auth.rnd.lvh.me
         - name: KC_PROXY
           value: edge
+        - name: KC_HTTP_ENABLED
+          value: "true"
         - name: KC_HOSTNAME_STRICT_BACKCHANNEL
           value: "true"
         image: quay.io/keycloak/keycloak:18.0.0

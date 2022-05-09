@@ -3,7 +3,7 @@ kind: Job
 metadata:
   annotations:
     kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"batch/v1","kind":"Job","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","job":"migrations"},"name":"keycloak-migrations","namespace":"rnd"},"spec":{"template":{"spec":{"containers":[{"command":["npm","run","keycloak"],"env":[{"name":"KEYCLOAK_URL","value":"http://keycloak:8080"},{"name":"KEYCLOAK_USERNAME","value":"admin"},{"name":"KEYCLOAK_PASSWORD","value":"admin"},{"name":"KEYCLOAK_REALM","value":"rnd"},{"name":"APP_URL","value":"http://rnd.lvh.me/"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-keycloak-migrations"}],"restartPolicy":"OnFailure"}}}}
+      {"apiVersion":"batch/v1","kind":"Job","metadata":{"labels":{"app.kubernetes.io/managed-by":"pulumi","job":"migrations"},"name":"keycloak-migrations","namespace":"rnd"},"spec":{"template":{"spec":{"containers":[{"command":["npm","run","keycloak"],"env":[{"name":"KEYCLOAK_URL","value":"http://keycloak:8080"},{"name":"KEYCLOAK_USERNAME","value":"admin"},{"name":"KEYCLOAK_PASSWORD","value":"admin"},{"name":"KEYCLOAK_REALM","value":"rnd"},{"name":"APP_URL","value":"https://rnd.lvh.me/"}],"image":"ghcr.io/andersevenrud/microservice-rnd-cli:latest","name":"cli-keycloak-migrations"}],"restartPolicy":"OnFailure"}}}}
   labels:
     app.kubernetes.io/managed-by: pulumi
     job: migrations
@@ -27,7 +27,7 @@ spec:
         - name: KEYCLOAK_REALM
           value: rnd
         - name: APP_URL
-          value: http://rnd.lvh.me/
+          value: https://rnd.lvh.me/
         image: ghcr.io/andersevenrud/microservice-rnd-cli:latest
         name: cli-keycloak-migrations
       restartPolicy: OnFailure
