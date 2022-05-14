@@ -1,3 +1,7 @@
+#
+# Production Dockerfile
+#
+
 # Create initial layer from entire source
 FROM node:16-alpine AS build
 WORKDIR /usr/src/mailer

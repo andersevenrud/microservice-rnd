@@ -1,3 +1,7 @@
+#
+# Production Dockerfile
+#
+
 FROM node:16-alpine
 
 ARG VITE_KEYCLOAK_URL

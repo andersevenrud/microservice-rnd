@@ -1,12 +1,35 @@
 load('ext://cert_manager', 'deploy_cert_manager')
 
-docker_build('ghcr.io/andersevenrud/microservice-rnd-cli:latest', 'packages/cli')
-docker_build('ghcr.io/andersevenrud/microservice-rnd-app:latest', 'packages/app')
-docker_build('ghcr.io/andersevenrud/microservice-rnd-api:latest', 'packages/api')
-docker_build('ghcr.io/andersevenrud/microservice-rnd-mailer:latest', 'packages/mailer')
-docker_build('ghcr.io/andersevenrud/microservice-rnd-runner:latest', 'packages/runner')
+def live_docker_build(name, prod = False):
+    if prod:
+        docker_build(
+          'ghcr.io/andersevenrud/microservice-rnd-%s:latest' % name,
+          'packages/%s' % name,
+        )
+    else:
+        docker_build(
+          'ghcr.io/andersevenrud/microservice-rnd-%s:latest' % name,
+          'packages/%s' % name,
+          dockerfile = 'packages/%s/Dockerfile.dev' % name,
+          live_update = [
+              fall_back_on([
+                  'packages/%s/package.json' % name,
+                  'packages/%s/package-lock.json' % name
+              ]),
+              sync(
+                  'packages/%s' % name,
+                  '/usr/src/%s' % name
+              )
+          ]
+        )
 
 deploy_cert_manager()
+
+live_docker_build('app')
+live_docker_build('api')
+live_docker_build('mailer')
+live_docker_build('runner')
+live_docker_build('cli', True)
 
 k8s_yaml(listdir('deploy/dev/1-manifest'))
 

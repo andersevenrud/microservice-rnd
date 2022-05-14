@@ -1,0 +1,11 @@
+#
+# Development Dockerfile
+#
+
+FROM node:16-alpine
+ENV VITE_HMR_PORT 443
+
+WORKDIR /usr/src/app
+COPY . .
+RUN npm ci --silent --no-audit --no-fund
+ENTRYPOINT npm run dev

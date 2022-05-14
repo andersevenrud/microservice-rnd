@@ -10,6 +10,7 @@ export default defineConfig({
     strictPort: true,
     hmr: {
       port: 8080,
+      clientPort: process.env.VITE_HMR_PORT || undefined,
     }
   }
 })
