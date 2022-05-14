@@ -74,6 +74,10 @@ You can access the following administration interfaces with the URL patterns not
 * `adminer` - Database administration
 * `auth` - Keycloak administration
 
+## Development
+
+See [`docs/development.md`](docs/development.md) for more information.
+
 ## Deployment
 
 If you want to deploy this into the cloud, see [`docs/deploy.md`](docs/deploy.md).

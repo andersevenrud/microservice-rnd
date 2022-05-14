@@ -1,0 +1,45 @@
+# Development Documentation
+
+## Environments
+
+Supported environments:
+
+| Environment     | Development | Production | Live Reload | Scalable |
+| --------------- | ----------- | ---------- | ----------- | -------- |
+| Docker Compose  | Yes         | Yes        | Yes         | No       |
+| Tilt (k8s)      | Yes         | Yes        | Yes         | Yes      |
+
+## Structuring
+
+Standard monorepo, node and React practices.
+
+## Code style
+
+Uses standard/recommended rulesets for both ESLint and Prettier.
+
+## Commit messages
+
+Follow https://www.conventionalcommits.org/en/v1.0.0/ message spec.
+
+## Git hooks
+
+Git hooks are provided to do preliminary code checks before it enters CI.
+
+Simply run: `npm install` in the root directory and checks will be run on the pre-commit hook.
+
+## Installing dependencies
+
+It's highly recommended that you run package installation from within a docker context
+to prevent any compatability issues.
+
+Example:
+
+```bash
+docker run --rm -v $(pwd)/packages/<package>:/usr/src/node -w /usr/src/node node:16-alpine npm install <name>
+```
+
+Or if you're on docker-compose:
+
+```bash
+docker-compose exec <package> npm install <name>
+```
