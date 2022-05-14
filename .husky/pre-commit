@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+(cd packages/api && npm run lint && npm run typecheck) &
+(cd packages/app && npm run lint && npm run typecheck) &
+(cd packages/cli && npm run lint && npm run typecheck) &
+(cd packages/mailer && npm run lint && npm run typecheck) &
+(cd packages/runner && npm run lint && npm run typecheck) &
+
+wait
