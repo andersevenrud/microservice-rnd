@@ -23,9 +23,9 @@ Follow https://www.conventionalcommits.org/en/v1.0.0/ message spec.
 
 ## Git hooks
 
-Git hooks are provided to do preliminary code checks before it enters CI.
+Git hooks are provided to do preliminary checks before it enters CI.
 
-Simply run: `npm install` in the root directory and checks will be run on the pre-commit hook.
+Simply run: `npm install` in the root directory and hooks will be run on any git action.
 
 ## Installing dependencies
 
