@@ -83,7 +83,7 @@ See [`docs/development.md`](docs/development.md) for more information.
 If you want to deploy this into the cloud, see [`docs/deploy.md`](docs/deploy.md).
 
 It's also possible to do a deployment with git and docker-compose by simply cloning this repository,
-then use `deploy/compose/docker-compose.yml` directly or as a template and run it from the root directory.
+then use `deploy/compose/docker-compose.yaml` directly or as a template and run it from the root directory.
 
 ## License
 

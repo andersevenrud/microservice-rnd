@@ -1,7 +1,6 @@
 #!/bin/sh
 #
-# This is only used for development enviroments
-# Like the docker-compose.yml setup
+# This is only used for docker-compose development enviroments
 #
 
 if [ -z "$1" ]; then
