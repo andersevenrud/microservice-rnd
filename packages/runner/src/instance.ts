@@ -5,6 +5,8 @@ import { useShutdown } from './utils/shutdown'
 import config from './config'
 
 async function main() {
+  const shutdown = useShutdown(0, ['SIGUSR2', 'SIGINT'])
+
   try {
     const { uuid } = minimist(process.argv.slice(2))
 
@@ -36,19 +38,15 @@ async function main() {
 
     let interval: NodeJS.Timer
 
-    useShutdown(
-      () => [
-        () => {
-          logger.info('Instance is shutting down...', { uuid })
-          clearInterval(interval)
-        },
-        () => sendMessage('offline'),
-        () => consumer.disconnect(),
-        () => producer.disconnect(),
-      ],
-      0,
-      ['SIGUSR2', 'SIGINT']
-    )
+    shutdown.add(() => [
+      () => {
+        logger.info('Instance is shutting down...', { uuid })
+        clearInterval(interval)
+      },
+      () => sendMessage('offline'),
+      () => consumer.disconnect(),
+      () => producer.disconnect(),
+    ])
 
     await consumer.connect()
     await producer.connect()
@@ -59,7 +57,7 @@ async function main() {
     interval = setInterval(() => sendMessage('ping'), 30 * 1000)
   } catch (e) {
     console.error(e)
-    process.exit(1)
+    shutdown.down(true)
   }
 }
 

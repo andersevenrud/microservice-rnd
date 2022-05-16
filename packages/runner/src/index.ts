@@ -10,6 +10,8 @@ import mikroConfig from '../mikro-orm.config'
 import config from './config'
 
 async function main() {
+  const shutdown = useShutdown()
+
   try {
     await waitOn(config.waitOn)
 
@@ -38,27 +40,24 @@ async function main() {
 
     logger.info('Runner is running...')
 
-    const shutdown = useShutdown(
-      () => [
-        () => logger.info('Runner is shutting down...'),
-        () => destroy(),
-        () => manager.kill(),
-        () => manager.disconnect(),
-        () => consumer.disconnect(),
-        () => producer.disconnect(),
-        () => orm.close(),
-      ],
-      0 // FIXME
-    )
+    shutdown.add(() => [
+      () => logger.info('Runner is shutting down...'),
+      () => destroy(),
+      () => manager.kill(),
+      () => manager.disconnect(),
+      () => consumer.disconnect(),
+      () => producer.disconnect(),
+      () => orm.close(),
+    ])
 
     consumer.on(consumer.events.CRASH, ({ payload: { restart } }) => {
       if (!restart) {
-        shutdown(true)
+        shutdown.down(true)
       }
     })
   } catch (e) {
     console.error(e)
-    process.exit(1)
+    shutdown.down(true)
   }
 }
 

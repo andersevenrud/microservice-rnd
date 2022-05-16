@@ -7,6 +7,8 @@ import { createConsumer } from './mail/sendmail'
 import config from './config'
 
 async function main() {
+  const shutdown = useShutdown()
+
   try {
     await waitOn(config.waitOn)
 
@@ -22,23 +24,20 @@ async function main() {
       transporter,
     })
 
-    const shutdown = useShutdown(
-      () => [
-        () => logger.info('Mailer is shutting down...'),
-        () => consumer.disconnect(),
-        () => producer.disconnect(),
-        () => transporter.close(),
-      ],
-      0 // FIXME
-    )
+    shutdown.add(() => [
+      () => logger.info('Mailer is shutting down...'),
+      () => consumer.disconnect(),
+      () => producer.disconnect(),
+      () => transporter.close(),
+    ])
 
     await producer.connect()
-    await subscribe(() => shutdown(true))
+    await subscribe(() => shutdown.down(true))
 
     logger.info('Mailer is running...')
   } catch (e) {
     console.error(e)
-    process.exit(1)
+    shutdown.down(true)
   }
 }
 

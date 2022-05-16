@@ -13,6 +13,8 @@ import mikroConfig from '../mikro-orm.config'
 import config from './config'
 
 async function main() {
+  const shutdown = useShutdown(config.shutdown.delay)
+
   try {
     const health = await createHealthCheck()
 
@@ -45,29 +47,27 @@ async function main() {
 
     const terminator = createHttpTerminator({ server })
 
-    const shutdown = useShutdown(
-      () => [
-        async () => {
-          logger.info('API is shutting down...')
-          await health.destroy()
-        },
-        () => terminator.terminate(),
-        () => producer.disconnect(),
-        () => consumer.disconnect(),
-        () => orm.close(),
-      ],
-      config.shutdown.delay
-    )
+    shutdown.add(async () => {
+      logger.info('API is shutting down...')
+      await health.destroy()
+    }, true)
+
+    shutdown.add([
+      () => terminator.terminate(),
+      () => producer.disconnect(),
+      () => consumer.disconnect(),
+      () => orm.close(),
+    ])
 
     health.ready()
 
     logger.info('API is running...')
 
     // NOTE: Start late because this blocks the bootstrapping
-    await subscribe(() => shutdown(true))
+    await subscribe(() => shutdown.down(true))
   } catch (e) {
     console.error(e)
-    process.exit(1)
+    shutdown.down(true)
   }
 }
 
