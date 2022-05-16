@@ -1,6 +1,7 @@
 import http from 'http'
 import waitOn from 'wait-on'
 import { Kafka } from 'kafkajs'
+import { auth } from 'express-oauth2-jwt-bearer'
 import { MikroORM } from '@mikro-orm/core'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { createHttpTerminator } from 'http-terminator'
@@ -20,6 +21,7 @@ async function main() {
 
     await waitOn(config.waitOn)
 
+    const gate = auth(config.auth)
     const kafka = new Kafka(config.kafka)
     const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
     const producer = kafka.producer()
@@ -29,6 +31,7 @@ async function main() {
     await orm.connect()
 
     const ctx = {
+      gate,
       producer,
       orm,
       logger,

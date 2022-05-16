@@ -4,7 +4,6 @@ import { Kafka } from 'kafkajs'
 import { MessageContext } from './messages'
 import { MailNotification, MailMetadata } from '../types'
 import * as mail from './messages'
-import config from '../config'
 
 const messageTemplates: Record<
   string,
@@ -37,16 +36,16 @@ export function createConsumer({
   kafka,
   logger,
   transporter,
+  metadata,
 }: {
   kafka: Kafka
   logger: Logger
   transporter: Transporter
-}) {
-  const metadata = {
-    from: config.from,
-    appUrl: config.appUrl,
+  metadata: {
+    from: string
+    appUrl: string
   }
-
+}) {
   const consumer = kafka.consumer({
     groupId: 'mailer',
     allowAutoTopicCreation: false,

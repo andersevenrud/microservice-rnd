@@ -22,6 +22,10 @@ async function main() {
       kafka,
       logger,
       transporter,
+      metadata: {
+        from: config.from,
+        appUrl: config.appUrl,
+      },
     })
 
     shutdown.add(() => [
