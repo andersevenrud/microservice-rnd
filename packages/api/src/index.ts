@@ -5,7 +5,9 @@ import { MikroORM } from '@mikro-orm/core'
 import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { createHttpTerminator } from 'http-terminator'
 import { createWinston } from './utils/winston'
-import { createApplication, createHealthCheck } from './app'
+import { createExpress } from './http/express'
+import { createBroadcaster } from './http/broadcast'
+import { createHealthCheck } from './http/health'
 import { useShutdown } from './utils/shutdown'
 import mikroConfig from '../mikro-orm.config'
 import config from './config'
@@ -24,12 +26,15 @@ async function main() {
     await producer.connect()
     await orm.connect()
 
-    const { app, subscribe, consumer } = await createApplication({
+    const ctx = {
       producer,
       orm,
       logger,
       kafka,
-    })
+    }
+
+    const { app, wss } = createExpress(ctx)
+    const { subscribe, consumer } = createBroadcaster(ctx, wss)
 
     const server = await new Promise<http.Server>((resolve, reject) => {
       const server = app.listen(8080, () => {
