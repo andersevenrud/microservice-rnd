@@ -12,7 +12,7 @@ import {
   MjmlButton,
   MjmlImage,
 } from 'mjml-react'
-import config from './config'
+import { MailMetadata } from '../types'
 
 export interface MessageContext {
   html: string
@@ -35,7 +35,7 @@ function renderMessage(subject: string, node: ReactElement) {
   return { html, subject, text }
 }
 
-export const createWelcomeMessage = () =>
+export const createWelcomeMessage = ({ appUrl }: MailMetadata) =>
   renderMessage(
     'Welcome',
     <Mjml>
@@ -51,11 +51,7 @@ export const createWelcomeMessage = () =>
         </MjmlSection>
         <MjmlSection>
           <MjmlColumn>
-            <MjmlButton
-              padding="20px"
-              backgroundColor="#346DB7"
-              href={config.appUrl}
-            >
+            <MjmlButton padding="20px" backgroundColor="#346DB7" href={appUrl}>
               View my instance
             </MjmlButton>
           </MjmlColumn>
