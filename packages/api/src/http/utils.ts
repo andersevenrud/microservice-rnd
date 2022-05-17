@@ -1,13 +1,5 @@
 import { Request, Response, NextFunction, Handler } from 'express'
 
-export class ExpressError extends Error {
-  status = 500
-}
-
-export class ExpressNotFoundError extends ExpressError {
-  status = 404
-}
-
 export const withErrorWrapper =
   (fn: (req: Request, res: Response, next: NextFunction) => Promise<void>) =>
   async (req: Request, res: Response, next: NextFunction) => {

@@ -3,7 +3,7 @@ import cookieParser from 'cookie-parser'
 import expressWs from 'express-ws'
 import express, { Request, Response, NextFunction } from 'express'
 import { RequestContext } from '@mikro-orm/core'
-import { ExpressError, ExpressNotFoundError } from '../utils/express'
+import { ExpressError, ExpressNotFoundError } from './errors'
 import { ApplicationContext } from '../types'
 import { createRouter } from './router'
 

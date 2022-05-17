@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { withErrorWrapper, fakeAuthCall } from '../utils/express'
+import { withErrorWrapper, fakeAuthCall } from './utils'
 import { ApplicationContext } from '../types'
 import clientController from './controllers/client'
 
