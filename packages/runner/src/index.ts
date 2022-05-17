@@ -1,12 +1,10 @@
 import waitOn from 'wait-on'
 import { Kafka } from 'kafkajs'
-import { MariaDbDriver } from '@mikro-orm/mariadb'
-import { MikroORM } from '@mikro-orm/core'
 import { createApplication } from './app'
 import { PM2Manager } from './manager'
 import { createWinston } from './utils/winston'
 import { useShutdown } from './utils/shutdown'
-import mikroConfig from '../mikro-orm.config'
+import createMikroOrm from './db/mikro'
 import config from './config'
 
 async function main() {
@@ -17,7 +15,7 @@ async function main() {
 
     const kafka = new Kafka(config.kafka)
     const manager = new PM2Manager()
-    const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
+    const orm = await createMikroOrm(config.db)
     const producer = kafka.producer()
     const consumer = kafka.consumer({
       groupId: 'runner',

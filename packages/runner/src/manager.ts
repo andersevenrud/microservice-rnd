@@ -41,7 +41,7 @@ export class PM2Manager {
       if (process.env.NODE_ENV === 'production') {
         pm2.start(
           {
-            script: 'dist/src/instance.js',
+            script: 'dist/instance.js',
             name: `client:${uuid}`,
             args: `--uuid ${uuid}`,
             interpreter: 'node',

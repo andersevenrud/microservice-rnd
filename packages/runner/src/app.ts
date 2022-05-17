@@ -1,7 +1,7 @@
 import { Logger } from 'winston'
 import { MikroORM } from '@mikro-orm/core'
 import { Producer, Consumer, CompressionTypes } from 'kafkajs'
-import { ClientInstance } from './entities'
+import { ClientInstance } from './db/entities'
 import { PM2Manager } from './manager'
 
 interface ApplicationContext {
