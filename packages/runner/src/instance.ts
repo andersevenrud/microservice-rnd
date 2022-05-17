@@ -1,6 +1,6 @@
 import minimist from 'minimist'
 import { Kafka, CompressionTypes } from 'kafkajs'
-import { createWinston } from './utils/winston'
+import { createWinston } from './services/winston'
 import { useShutdown } from './utils/shutdown'
 import config from './config'
 
