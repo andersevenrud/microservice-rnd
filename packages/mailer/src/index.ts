@@ -1,7 +1,7 @@
 import waitOn from 'wait-on'
 import nodemailer from 'nodemailer'
 import { Kafka } from 'kafkajs'
-import { createWinston } from './utils/winston'
+import { createWinston } from './services/winston'
 import { useShutdown } from './utils/shutdown'
 import { createConsumer } from './mail/sendmail'
 import config from './config'
