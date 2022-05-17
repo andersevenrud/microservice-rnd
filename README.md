@@ -10,13 +10,15 @@ Kubernetes Cluster.
 
 [Kafka](https://kafka.apache.org/) is used to connect all services using event streams.
 
-Provides a basic dashboard interface and REST API that interacts with a runner service that
-handles processes to demonstrate event streams, etc. [Keycloak](https://www.keycloak.org/)
-handles for authentication and authorization.
+Provides a basic dashboard interface in [React](https://reactjs.org/) and REST API that
+interacts with a runner service that handles processes to demonstrate event streams, etc.
+[Keycloak](https://www.keycloak.org/) handles for authentication and authorization.
 
-Uses Github Actions for CI and CD, [Pulumi](https://www.pulumi.com/) for deployments and
-[Tilt](https://tilt.dev/) & [minikube](https://minikube.sigs.k8s.io/docs/) for local development.
-An alternative docker-compose setup is also provided.
+Uses Github Actions for CI and CD, [Pulumi](https://www.pulumi.com/) for deployments.
+[Tilt](https://tilt.dev/) & [minikube](https://minikube.sigs.k8s.io/docs/) for local development
+and [Husky](https://typicode.github.io/husky/#/) for git hooks.
+
+An alternative docker-compose setup is provided that mirrors the k8s cluster, albeit without the scaling.
 
 **Please note that the out-of-the-box configurations are not safe for a production environment.**
 
