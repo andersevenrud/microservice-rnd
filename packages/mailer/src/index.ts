@@ -28,7 +28,7 @@ async function main() {
       },
     })
 
-    shutdown.add(() => [
+    shutdown.add([
       () => logger.info('Mailer is shutting down...'),
       () => consumer.disconnect(),
       () => producer.disconnect(),
