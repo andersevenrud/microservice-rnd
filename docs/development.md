@@ -4,10 +4,10 @@
 
 Supported environments:
 
-| Environment     | Development | Production | Live Reload | Scalable |
-| --------------- | ----------- | ---------- | ----------- | -------- |
-| Docker Compose  | Yes         | Yes        | Yes         | No       |
-| Tilt (k8s)      | Yes         | Yes        | Yes         | Yes      |
+| Environment     | Development | Production | Live Reload | Scalable | SSL  |
+| --------------- | ----------- | ---------- | ----------- | -------- | ---- |
+| Docker Compose  | Yes         | Yes        | Yes         | No       | No   |
+| Tilt (k8s)      | Yes         | Yes        | Yes         | Yes      | Yes  |
 
 ## Structuring
 
@@ -15,7 +15,10 @@ Standard monorepo, node and React practices.
 
 ## Code style
 
-Uses standard/recommended rulesets for both ESLint and Prettier.
+Uses standard/recommended rulesets for both ESLint and Prettier with the following customizations:
+
+* No semicolons
+* Prefer single quotes
 
 ## Commit messages
 
