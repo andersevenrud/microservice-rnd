@@ -38,7 +38,7 @@ async function main() {
 
     logger.info('Runner is running...')
 
-    shutdown.add(() => [
+    shutdown.add([
       () => logger.info('Runner is shutting down...'),
       () => destroy(),
       () => manager.kill(),

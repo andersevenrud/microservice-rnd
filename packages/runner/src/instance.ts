@@ -38,7 +38,7 @@ async function main() {
 
     let interval: NodeJS.Timer
 
-    shutdown.add(() => [
+    shutdown.add([
       () => {
         logger.info('Instance is shutting down...', { uuid })
         clearInterval(interval)
