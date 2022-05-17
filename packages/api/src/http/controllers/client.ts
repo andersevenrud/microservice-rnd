@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Producer, CompressionTypes } from 'kafkajs'
 import { RequestContext } from '@mikro-orm/core'
-import { ClientInstance } from '../../entities'
+import { ClientInstance } from '../../db/entities'
 import { ApplicationContext } from '../../types'
 
 const createPublisher = (producer: Producer) => (topic: string, value: any) =>

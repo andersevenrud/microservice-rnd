@@ -32,4 +32,4 @@ COPY --chown=node:node --from=build /usr/src/api/UNLICENSE /usr/src/api/UNLICENS
 COPY --chown=node:node --from=build /usr/src/api/README.md /usr/src/api/README.md
 
 # Make sure we don't run node on PID 1
-CMD ["dumb-init", "node", "dist/src/index.js"]
+CMD ["dumb-init", "node", "dist/index.js"]

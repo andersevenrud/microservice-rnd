@@ -2,15 +2,13 @@ import http from 'http'
 import waitOn from 'wait-on'
 import { Kafka } from 'kafkajs'
 import { auth } from 'express-oauth2-jwt-bearer'
-import { MikroORM } from '@mikro-orm/core'
-import { MariaDbDriver } from '@mikro-orm/mariadb'
 import { createHttpTerminator } from 'http-terminator'
 import { createWinston } from './utils/winston'
 import { createExpress } from './http/express'
 import { createBroadcaster } from './http/broadcast'
 import { createHealthCheck } from './http/health'
 import { useShutdown } from './utils/shutdown'
-import mikroConfig from '../mikro-orm.config'
+import createMikroOrm from './db/mikro'
 import config from './config'
 
 async function main() {
@@ -23,7 +21,7 @@ async function main() {
 
     const gate = auth(config.auth)
     const kafka = new Kafka(config.kafka)
-    const orm = await MikroORM.init<MariaDbDriver>(mikroConfig)
+    const orm = await createMikroOrm(config.db)
     const producer = kafka.producer()
     const logger = createWinston('api', producer)
 
