@@ -7,17 +7,17 @@ on:
     branches:
       - main
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/linter
+      - uses: ./.github/actions/tester
         with:
           package_name: runner
   publish:
-    needs: [lint]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

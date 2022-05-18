@@ -8,12 +8,12 @@ on:
     paths:
       - packages/cli/**
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: ./.github/actions/linter
+      - uses: ./.github/actions/tester
         with:
           package_name: cli
