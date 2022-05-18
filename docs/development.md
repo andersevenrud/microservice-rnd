@@ -20,6 +20,10 @@ Uses standard/recommended rulesets for both ESLint and Prettier with the followi
 * No semicolons
 * Prefer single quotes
 
+## Testing
+
+Testing framework of choice is Jest.
+
 ## Commit messages
 
 Follow https://www.conventionalcommits.org/en/v1.0.0/ message spec.
