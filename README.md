@@ -18,6 +18,9 @@ Uses Github Actions for CI and CD, [Pulumi](https://www.pulumi.com/) for deploym
 [Tilt](https://tilt.dev/) & [minikube](https://minikube.sigs.k8s.io/docs/) for local development
 and [Husky](https://typicode.github.io/husky/#/) for git hooks.
 
+[ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Jest](https://jestjs.io/) for
+code style guidelines and testing.
+
 An alternative docker-compose setup is provided that mirrors the k8s cluster, albeit without the scaling.
 
 **Please note that the out-of-the-box configurations are not safe for a production environment.**
