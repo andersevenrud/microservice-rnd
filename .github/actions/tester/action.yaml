@@ -1,4 +1,4 @@
-name: Lint Package
+name: Test Package
 inputs:
   package_name:
     required: true
@@ -37,3 +37,4 @@ runs:
         token: ${{inputs.coverage_token}}
         directory: ./packages/${{inputs.package_name}}/coverage/
         name: ${{inputs.package_name}}
+        flags: ${{inputs.package_name}}
