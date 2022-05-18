@@ -24,8 +24,12 @@ const convertToText = compile({
   wordwrap: 120,
 })
 
-function renderMessage(subject: string, node: ReactElement) {
-  const { html, errors } = render(node, { validationLevel: 'soft' })
+export function renderMessage(subject: string, node: ReactElement) {
+  const { html, errors } = render(node, {
+    validationLevel: 'soft',
+    minify: false,
+  })
+
   const text = convertToText(html)
 
   if (errors.length) {

@@ -10,5 +10,6 @@
     "emitDecoratorMetadata": true,
     "esModuleInterop": true,
     "jsx": "react"
-  }
+  },
+  "exclude": ["src/**/*.test.ts"]
 }
