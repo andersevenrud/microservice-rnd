@@ -16,6 +16,7 @@ jobs:
       - uses: ./.github/actions/linter
         with:
           package_name: mailer
+          coverage_token: ${{ secrets.CODECOV_TOKEN }}
   publish:
     needs: [lint]
     runs-on: ubuntu-latest

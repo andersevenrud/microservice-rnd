@@ -3,10 +3,10 @@ inputs:
   package_name:
     required: true
     type: string
-  coverage:
+  coverage_token:
     required: false
-    type: boolean
-    default: false
+    type: string
+    default: ""
 runs:
   using: "composite"
   steps:
@@ -23,17 +23,17 @@ runs:
     - run: npm run typecheck
       shell: bash
       working-directory: ./packages/${{inputs.package_name}}
-    - if: ${{ inputs.coverage == 'false' }}
+    - if: ${{ inputs.coverage_token == '' }}
       run: npm run test
       shell: bash
       working-directory: ./packages/${{inputs.package_name}}
-    - if: ${{ inputs.coverage == 'true' }}
+    - if: ${{ inputs.coverage_token != '' }}
       run: npm run test -- --coverage
       shell: bash
       working-directory: ./packages/${{inputs.package_name}}
-    - if: ${{ inputs.coverage == 'true' }}
+    - if: ${{ inputs.coverage_token != '' }}
       uses: codecov/codecov-action@v2
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{inputs.coverage_token}}
         directory: ./packages/${{inputs.package_name}}/coverage/
         name: ${{inputs.package_name}}
