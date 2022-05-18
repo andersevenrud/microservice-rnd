@@ -28,7 +28,7 @@ import config from '../config'
 
 function useWebsocket() {
   let ws: ReconnectingWebSocket | undefined
-  let settleTimeout = -1
+  let settleTimeout: any
   const { load, addLog, addToast } = useGlobalProvider()
 
   const onMessage = (event: MessageEvent<any>) => {
