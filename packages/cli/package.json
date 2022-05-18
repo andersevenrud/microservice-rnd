@@ -11,6 +11,7 @@
     "cleanup": "ts-node --transpile-only scripts/cleanup.ts",
     "start": "ts-node --transpile-only src/cron.ts",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "test": "exit 0",
     "typecheck": "tsc --noEmit"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",

@@ -19,3 +19,6 @@ runs:
     - run: npm run typecheck
       shell: bash
       working-directory: ./packages/${{inputs.package_name}}
+    - run: npm run test
+      shell: bash
+      working-directory: ./packages/${{inputs.package_name}}
