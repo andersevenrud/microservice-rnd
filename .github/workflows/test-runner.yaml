@@ -17,5 +17,4 @@ jobs:
       - uses: ./.github/actions/tester
         with:
           package_name: runner
-          token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          config: ${{ secrets.PULUMI_CONFIG }}
+          coverage_token: ${{ secrets.CODECOV_TOKEN }}

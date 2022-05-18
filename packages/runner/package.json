@@ -8,7 +8,7 @@
     "dev": "ts-node-dev src/index.ts",
     "start": "node dist/index.js",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
-    "test": "exit 0",
+    "test": "jest",
     "typecheck": "tsc --noEmit"
   },
   "author": "Anders Evenrud <andersevenrud@gmail.com>",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.2",
+    "@types/jest": "^27.5.1",
     "@types/wait-on": "^5.3.1",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
@@ -31,6 +32,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.6.2",
+    "ts-jest": "^28.0.2",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.3"
   },
@@ -63,5 +65,9 @@
   "prettier": {
     "semi": false,
     "singleQuote": true
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   }
 }
