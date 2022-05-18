@@ -17,3 +17,4 @@ jobs:
       - uses: ./.github/actions/tester
         with:
           package_name: app
+          coverage_token: ${{ secrets.CODECOV_TOKEN }}
