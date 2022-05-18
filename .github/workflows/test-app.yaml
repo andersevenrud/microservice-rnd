@@ -1,4 +1,4 @@
-name: Lint Mailer
+name: Test App
 on:
   workflow_dispatch:
   push:
@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     paths:
-      - packages/mailer/**
+      - packages/app/**
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,4 +16,4 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/linter
         with:
-          package_name: mailer
+          package_name: app

@@ -1,4 +1,4 @@
-name: Lint CLI
+name: Test API
 on:
   workflow_dispatch:
   push:
@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     paths:
-      - packages/cli/**
+      - packages/api/**
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,4 +16,4 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/linter
         with:
-          package_name: cli
+          package_name: api

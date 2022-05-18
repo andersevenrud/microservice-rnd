@@ -1,4 +1,4 @@
-name: Lint API
+name: Test Runner
 on:
   workflow_dispatch:
   push:
@@ -6,7 +6,7 @@ on:
       - main
   pull_request:
     paths:
-      - packages/api/**
+      - packages/runner/**
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,4 +16,6 @@ jobs:
           fetch-depth: 0
       - uses: ./.github/actions/linter
         with:
-          package_name: api
+          package_name: runner
+          token: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          config: ${{ secrets.PULUMI_CONFIG }}
