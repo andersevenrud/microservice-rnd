@@ -2,5 +2,6 @@
 *Dockerfile*
 *docker-compose*
 node_modules
+coverage
 dist
 entrypoint.sh
