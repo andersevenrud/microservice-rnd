@@ -21,7 +21,7 @@ and [Husky](https://typicode.github.io/husky/#/) for git hooks.
 [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) and [Jest](https://jestjs.io/) for
 code style guidelines and testing.
 
-An alternative docker-compose setup is provided that mirrors the k8s cluster, albeit without the scaling.
+An alternative docker compose setup is provided that mirrors the k8s cluster, albeit without the scaling.
 
 **Please note that the out-of-the-box configurations are not safe for a production environment.**
 
@@ -41,7 +41,7 @@ One of the following configurations:
     * `pulumi` (optional)
 2. Local [Docker Compose](#docker-compose)
     * `docker`
-    * `docker-compose`
+    * `compose` docker plugin
 
 ## Installation
 
@@ -60,8 +60,8 @@ tilt up
 > Runs on http://localhost:8080 (and `/<admin-service>/`)
 
 ```bash
-docker-compose run --rm cli sh scripts/migrations.sh
-docker-compose up
+docker compose run --rm cli sh scripts/migrations.sh
+docker compose up
 ```
 
 ## Dashboard
@@ -87,7 +87,7 @@ See [`docs/development.md`](docs/development.md) for more information.
 
 If you want to deploy this into the cloud, see [`docs/deploy.md`](docs/deploy.md).
 
-It's also possible to do a deployment with git and docker-compose by simply cloning this repository,
+It's also possible to do a deployment with git and docker compose by simply cloning this repository,
 then use `deploy/compose/docker-compose.yaml` directly or as a template and run it from the root directory.
 
 ## License

@@ -45,8 +45,8 @@ Example:
 docker run --rm -v $(pwd)/packages/<package>:/usr/src/node -w /usr/src/node node:16-alpine npm install <name>
 ```
 
-Or if you're on docker-compose:
+Or if you're on docker compose:
 
 ```bash
-docker-compose exec <package> npm install <name>
+docker compose exec <package> npm install <name>
 ```

@@ -2,7 +2,7 @@ import { spawn } from 'child_process'
 import { schedule } from 'node-cron'
 
 /*
- * This is only used in the docker-compose development environment.
+ * This is only used in the docker compose development environment.
  * On a kubernetes cluster this is not used. Instead a cron job is applied
  * to the kubernetes cluster.
  */
