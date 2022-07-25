@@ -9,10 +9,10 @@ COPY . .
 
 # Install dependencies and build
 RUN npm config set update-notifier false
-RUN npm ci --silent --no-audit --no-fund --production
+RUN npm ci --quiet --no-audit --no-fund --production
 
 # Removes any non-essential files
-RUN npm install --silent --no-audit --no-fund -g clean-modules@2.0.4 && \
+RUN npm install --quiet --no-audit --no-fund -g clean-modules@2.0.4 && \
       clean-modules -y && \
       npm remove -g clean-modules
 RUN npm cache clean --force

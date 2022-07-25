@@ -14,7 +14,7 @@ ENV VITE_KEYCLOAK_CLIENT_ID=${VITE_KEYCLOAK_CLIENT_ID}
 WORKDIR /usr/src/app
 COPY . .
 
-RUN npm ci --silent --no-audit --no-fund
+RUN npm ci --quiet --no-audit --no-fund
 RUN npm run build
 
 # Start a fresh layer to explicitly add the required files. This avoids any caches etc.
